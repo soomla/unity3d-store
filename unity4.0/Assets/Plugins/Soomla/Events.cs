@@ -5,50 +5,36 @@ namespace com.soomla.unity
 {
 	public class Events
 	{
-		public delegate void MarketPurchaseDelegate(MarketItem marketItem);
-		public static MarketPurchaseDelegate OnMarketPurchase;
+		public delegate void Action();
 		
-		public delegate void MarketRefundDelegate(MarketItem marketItem);
-		public static MarketRefundDelegate OnMarketRefund;
+		public static Action<MarketItem> OnMarketPurchase = delegate {};
 		
-		public delegate void VirtualGoodPurchasedDelegate(VirtualGood good);
-		public static VirtualGoodPurchasedDelegate OnVirtualGoodPurchased;
+		public static Action<MarketItem> OnMarketRefund = delegate {};
 		
-		public delegate void VirtualGoodEquippedDelegate(VirtualGood good);
-		public static VirtualGoodEquippedDelegate OnVirtualGoodEquipped;
+		public static Action<VirtualGood> OnVirtualGoodPurchased = delegate {};
 		
-		public delegate void VirtualGoodUnEquippedDelegate(VirtualGood good);
-		public static VirtualGoodUnEquippedDelegate OnVirtualGoodUnEquipped;
+		public static Action<VirtualGood> OnVirtualGoodEquipped = delegate {};
 		
-		public delegate void BillingSupportedDelegate();
-		public static BillingSupportedDelegate OnBillingSupported;
+		public static Action<VirtualGood> OnVirtualGoodUnEquipped = delegate {};
 		
-		public delegate void BillingNotSupportedDelegate();
-		public static BillingNotSupportedDelegate OnBillingNotSupported;
+		public static Action OnBillingSupported = delegate {};
 		
-		public delegate void MarketPurchaseProcessStartedDelegate(MarketItem marketItem);
-		public static MarketPurchaseProcessStartedDelegate OnMarketPurchaseProcessStarted;
+		public static Action OnBillingNotSupported = delegate {};
 		
-		public delegate void GoodsPurchaseProcessStartedDelegate();
-		public static GoodsPurchaseProcessStartedDelegate OnGoodsPurchaseProcessStarted;
+		public static Action<MarketItem> OnMarketPurchaseProcessStarted = delegate {};
 		
-		public delegate void ClosingStoreDelegate();
-		public static ClosingStoreDelegate OnClosingStore;
+		public static Action OnGoodsPurchaseProcessStarted = delegate {};
 		
-		public delegate void OpeningStoreDelegate();
-		public static OpeningStoreDelegate OnOpeningStore;
+		public static Action OnClosingStore = delegate {};
 		
-		public delegate void UnexpectedErrorInStoreDelegate();
-		public static UnexpectedErrorInStoreDelegate OnUnexpectedErrorInStore;
+		public static Action OnOpeningStore = delegate {};
 		
-		public delegate void CurrencyBalanceChangedDelegate(VirtualCurrency virtualCurrency, int balance);
-		public static CurrencyBalanceChangedDelegate OnCurrencyBalanceChanged;
+		public static Action OnUnexpectedErrorInStore = delegate {};
 		
-		public delegate void GoodBalanceChangedDelegate(VirtualGood virtualGood, int balance);
-		public static GoodBalanceChangedDelegate OnGoodBalanceChanged;
-
-		public delegate void MarketPurchaseCancelledDelegate(MarketItem marketItem);
-		public static MarketPurchaseCancelledDelegate OnMarketPurchaseCancelled;
+		public static Action<VirtualCurrency, int> OnCurrencyBalanceChanged = delegate {};
+		
+		public static Action<VirtualGood, int> OnGoodBalanceChanged = delegate {};
+		
+		public static Action<MarketItem> OnMarketPurchaseCancelled = delegate {};
 	}
 }
-
