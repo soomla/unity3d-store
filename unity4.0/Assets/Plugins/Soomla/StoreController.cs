@@ -26,6 +26,10 @@ namespace com.soomla.unity
 		private static extern void storeController_TransactionsAlreadyRestored(out bool outResult);
 		[DllImport ("__Internal")]
 		private static extern void storeController_SetSoomSec(string soomSec);
+		[DllImport ("__Internal")]
+		private static extern void storeController_SetServerVerifyEnable(string serverVerifyEnable);
+        [DllImport ("__Internal")]
+		private static extern void storeController_SetVerifyURL(string verifyURL);
 #endif
 		
 #if UNITY_ANDROID
@@ -62,6 +66,13 @@ namespace com.soomla.unity
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 #elif UNITY_IOS
 			storeController_SetSoomSec(Soomla.GetInstance().soomSec);
+			if (Soomla.GetInstance().serverVerifyMode) {
+                storeController_SetServerVerifyEnable("true");
+            } else {
+                storeController_SetServerVerifyEnable("false");
+            }
+            
+            storeController_SetVerifyURL(Soomla.GetInstance().verifyURL);
 #endif
 			
 			StoreInfo.Initialize(storeAssets);

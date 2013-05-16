@@ -74,5 +74,13 @@ extern "C"{
 	void storeController_TransactionsAlreadyRestored(bool* outResult){
 		*outResult = [StoreController transactionsAlreadyRestored];
 	}
+
+	void storeController_SetServerVerifyEnable(const char* serverVerifyEnable) {
+		[[StoreController getInstance] setServerVerifyEnable:[NSString stringWithUTF8String:serverVerifyEnable]];
+	}
+	
+	void storeController_SetVerifyURL(const char* verifyURL) {
+		[[StoreController getInstance] setVerifyURL:[NSString stringWithUTF8String:verifyURL]];
+	}
 	
 }

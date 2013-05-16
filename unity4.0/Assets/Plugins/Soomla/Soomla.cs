@@ -24,6 +24,8 @@ namespace com.soomla.unity {
 		public string androidPublicKey = AND_PUB_KEY_DEFAULT;
 		public bool androidTestMode = false;
 		public string soomSec = ONLY_ONCE_DEFAULT;
+		public bool serverVerifyMode = false;
+        public string verifyURL = "http://YOUR_IAP_VerifyReceipt_URL";
 		
 		public static Soomla GetInstance(){
 			return instance;
