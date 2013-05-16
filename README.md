@@ -1,5 +1,4 @@
 
-
 *This project is a part of [The SOOMLA Project](http://project.soom.la) which is a series of open source initiatives with a joint goal to help mobile game developers get better stores and more in-app purchases.*
 
 Haven't you ever wanted an in-app purchase one liner that looks like this ?!
@@ -20,7 +19,7 @@ Want to learn more about modelV3? Try these:
 The unity3d-store is the Unity3D flavour of The SOOMLA Project. This project uses [android-store](https://github.com/soomla/android-store) and [ios-store](https://github.com/soomla/ios-store) in order to provide game developers with in-app billing for their **Unity3D** projects.
     
 **Before you start**, we suggest that you go over the information in ios-store and android-store so you get acquainted with the SOOMLA framework:
-- ios-store [project](https://github.com/soomla/ios-store) [wiki](https://github.com/soomla/ios-store/wiki)
+- ios-store [project](https://github.com/wesgt/ios-store) [wiki](https://github.com/wesgt/ios-store/wiki)
 - android-store [project](https://github.com/soomla/android-store) [wiki](https://github.com/soomla/android-store/wiki)
 
 >If you also want to create a **storefront** you can do that using SOOMLA's [Store Designer](http://designer.soom.la).
