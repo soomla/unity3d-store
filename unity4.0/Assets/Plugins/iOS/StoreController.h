@@ -70,4 +70,6 @@
  * Answers the question: "Were transactions already restored for this game?"
  */
 - (BOOL)transactionsAlreadyRestored;
+- (void) setServerVerifyEnable:(NSString*) serverVerifyEnable;
+- (void) setVerifyURL:(NSString*) verifyURL;
 @end
