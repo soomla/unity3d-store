@@ -135,21 +135,21 @@ public class Soomla : MonoBehaviour {
 		Events.OnMarketPurchaseStarted(pvi);
 	}
 	
-	public static void onMarketRefund(string message) {
+	public void onMarketRefund(string message) {
 		StoreUtils.LogDebug(TAG, "SOOMLA/UNITY onMarketRefund:" + message);
 		
 		PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(message);
 		Events.OnMarketPurchaseStarted(pvi);
 	}
 	
-	public static void onRestoreTransactions(string message) {
+	public void onRestoreTransactions(string message) {
 		StoreUtils.LogDebug(TAG, "SOOMLA/UNITY onRestoreTransactions:" + message);
 		
 		bool success = Convert.ToBoolean(int.Parse(message));
 		Events.OnRestoreTransactions(success);
 	}
 	
-	public static void onRestoreTransactionsStarted(string message) {
+	public void onRestoreTransactionsStarted(string message) {
 		StoreUtils.LogDebug(TAG, "SOOMLA/UNITY onRestoreTransactionsStarted");
 		
 		Events.OnRestoreTransactionsStarted();
