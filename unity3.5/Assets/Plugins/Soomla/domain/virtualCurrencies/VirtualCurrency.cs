@@ -40,7 +40,7 @@ namespace com.soomla.unity{
 		{
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public VirtualCurrency(AndroidJavaObject jniVirtualCurrency) 
 			: base(jniVirtualCurrency)
 		{

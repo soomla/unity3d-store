@@ -58,7 +58,7 @@ namespace com.soomla.unity{
 			this.Price = price;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public MarketItem(AndroidJavaObject jniMarketItem) {
 			ProductId = jniMarketItem.Call<string>("getProductId");
 			Price = jniMarketItem.Call<double>("getPrice");

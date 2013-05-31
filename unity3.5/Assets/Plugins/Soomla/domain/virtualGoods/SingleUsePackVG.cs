@@ -69,7 +69,7 @@ namespace com.soomla.unity{
 			this.GoodAmount = amount;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public SingleUsePackVG(AndroidJavaObject jniSingleUsePackVG) 
 			: base(jniSingleUsePackVG)
 		{

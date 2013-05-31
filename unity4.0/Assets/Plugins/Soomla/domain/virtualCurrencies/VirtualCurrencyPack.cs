@@ -70,7 +70,7 @@ namespace com.soomla.unity{
 			this.CurrencyItemId = currencyItemId;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public VirtualCurrencyPack(AndroidJavaObject jniVirtualCurrencyPack) 
 			: base(jniVirtualCurrencyPack)
 		{

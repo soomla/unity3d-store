@@ -93,7 +93,7 @@ namespace com.soomla.unity{
 			this.Equipping = equippingModel;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public EquippableVG(AndroidJavaObject jniEquippableVG) 
 			: base(jniEquippableVG)
 		{

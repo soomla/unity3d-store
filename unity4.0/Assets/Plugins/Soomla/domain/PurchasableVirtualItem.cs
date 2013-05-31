@@ -46,7 +46,7 @@ namespace com.soomla.unity
 			this.PurchaseType = purchaseType;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		protected PurchasableVirtualItem(AndroidJavaObject jniVirtualItem) :
 			base(jniVirtualItem)
 		{

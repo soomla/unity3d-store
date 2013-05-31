@@ -54,7 +54,7 @@ namespace com.soomla.unity{
 		{
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public LifetimeVG(AndroidJavaObject jniLifetimeVG) 
 			: base(jniLifetimeVG)
 		{

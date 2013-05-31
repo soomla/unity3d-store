@@ -78,7 +78,7 @@ namespace com.soomla.unity{
 			this.NextItemId = nextItemId;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public UpgradeVG(AndroidJavaObject jniUpgradeVG) 
 			: base(jniUpgradeVG)
 		{

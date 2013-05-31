@@ -11,7 +11,7 @@ namespace com.soomla.unity
 	{
 		private const string TAG = "SOOMLA StoreInventory";
 		
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
 		private static extern int storeInventory_BuyItem(string itemId);
 		[DllImport ("__Internal")]
@@ -45,13 +45,13 @@ namespace com.soomla.unity
 		public static void BuyItem(string itemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling BuyItem with: " + itemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "buy", itemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_BuyItem(itemId);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -68,7 +68,7 @@ namespace com.soomla.unity
 		public static int GetItemBalance(string itemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling GetItemBalance with: " + itemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				int balance = 0;
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
@@ -76,7 +76,7 @@ namespace com.soomla.unity
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
 				return balance;
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int balance = 0;
 				int err = storeInventory_GetItemBalance(itemId, out balance);
 				
@@ -91,13 +91,13 @@ namespace com.soomla.unity
 		public static void GiveItem(string itemId, int amount) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling GiveItem with itedId: " + itemId + " and amount: " + amount);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "giveVirtualItem", itemId, amount);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_GiveItem(itemId, amount);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -108,13 +108,13 @@ namespace com.soomla.unity
 		public static void TakeItem(string itemId, int amount) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling TakeItem with itedId: " + itemId + " and amount: " + amount);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "takeVirtualItem", itemId, amount);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_TakeItem(itemId, amount);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -132,13 +132,13 @@ namespace com.soomla.unity
 		public static void EquipVirtualGood(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling EquipVirtualGood with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "equipVirtualGood", goodItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_EquipVirtualGood(goodItemId);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -149,13 +149,13 @@ namespace com.soomla.unity
 		public static void UnEquipVirtualGood(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling UnEquipVirtualGood with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "unEquipVirtualGood", goodItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_UnEquipVirtualGood(goodItemId);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -166,7 +166,7 @@ namespace com.soomla.unity
 		public static bool IsVirtualGoodEquipped(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling IsVirtualGoodEquipped with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				bool result = false;
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
@@ -174,7 +174,7 @@ namespace com.soomla.unity
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
 				return result;
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				bool result = false;
 				int err = storeInventory_IsVirtualGoodEquipped(goodItemId, out result);
 				
@@ -189,7 +189,7 @@ namespace com.soomla.unity
 		public static int GetGoodUpgradeLevel(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling GetGoodUpgradeLevel with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				int level = 0;
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
@@ -197,7 +197,7 @@ namespace com.soomla.unity
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
 				return level;
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int level = 0;
 				int err = storeInventory_GetGoodUpgradeLevel(goodItemId, out level);
 				
@@ -212,7 +212,7 @@ namespace com.soomla.unity
 		public static string GetGoodCurrentUpgrade(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling GetGoodCurrentUpgrade with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				string currentItemId = "";
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
@@ -220,7 +220,7 @@ namespace com.soomla.unity
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
 				return currentItemId;
-#elif UNITY_IOS				
+#elif UNITY_IOS && !UNITY_EDITOR				
 				IntPtr p = IntPtr.Zero;
 				int err = storeInventory_GetGoodCurrentUpgrade(goodItemId, out p);
 					
@@ -238,13 +238,13 @@ namespace com.soomla.unity
 		public static void UpgradeGood(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling UpgradeGood with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "upgradeVirtualGood", goodItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS				
+#elif UNITY_IOS && !UNITY_EDITOR				
 				int err = storeInventory_UpgradeGood(goodItemId);
 					
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -255,13 +255,13 @@ namespace com.soomla.unity
 		public static void RemoveGoodUpgrades(string goodItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling RemoveGoodUpgrades with: " + goodItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "removeUpgrades", goodItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS				
+#elif UNITY_IOS && !UNITY_EDITOR				
 				int err = storeInventory_RemoveGoodUpgrades(goodItemId);
 					
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -278,7 +278,7 @@ namespace com.soomla.unity
 		public static bool NonConsumableItemExists(string nonConsItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling NonConsumableItemExists with: " + nonConsItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				bool result = false;
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
@@ -286,7 +286,7 @@ namespace com.soomla.unity
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
 				return result;
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				bool result = false;
 				int err = storeInventory_NonConsumableItemExists(nonConsItemId, out result);
 				
@@ -301,13 +301,13 @@ namespace com.soomla.unity
 		public static void AddNonConsumableItem(string nonConsItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling AddNonConsumableItem with: " + nonConsItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "addNonConsumableItem", nonConsItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_AddNonConsumableItem(nonConsItemId);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);
@@ -318,13 +318,13 @@ namespace com.soomla.unity
 		public static void RemoveNonConsumableItem(string nonConsItemId) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling RemoveNonConsumableItem with: " + nonConsItemId);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
 					AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "removeNonConsumableItem", nonConsItemId);
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				int err = storeInventory_RemoveNonConsumableItem(nonConsItemId);
 				
 				IOS_ErrorCodes.CheckAndThrowException(err);

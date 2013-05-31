@@ -11,7 +11,7 @@ namespace com.soomla.unity
 	public class StoreController
 	{
 		private const string TAG = "SOOMLA StoreController";
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
 		private static extern void storeController_Init(string customSecret);
 		[DllImport ("__Internal")]
@@ -28,7 +28,7 @@ namespace com.soomla.unity
 		private static extern void storeController_SetSoomSec(string soomSec);
 #endif
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		private static AndroidJavaObject jniStoreController = null;
 //		private static AndroidJavaObject jniUnityEventHandler = null;
 #endif
@@ -44,7 +44,7 @@ namespace com.soomla.unity
 				throw new ExitGUIException();
 			}
 			//init SOOM_SEC
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 			if (string.IsNullOrEmpty(Soomla.GetInstance().androidPublicKey)) {
 				StoreUtils.LogError(TAG, "SOOMLA/UNITY MISSING publickKey !!! Stopping here !!");
 				throw new ExitGUIException();
@@ -60,12 +60,12 @@ namespace com.soomla.unity
 				jniStoreAssets.CallStatic("setSoomSec", Soomla.GetInstance().soomSec);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 			storeController_SetSoomSec(Soomla.GetInstance().soomSec);
 #endif
 			
 			StoreInfo.Initialize(storeAssets);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniStoreAssetsInstance = new AndroidJavaObject("com.soomla.unity.StoreAssets")) {
 				using(AndroidJavaClass jniStoreControllerClass = new AndroidJavaClass("com.soomla.store.StoreController")) {
@@ -81,14 +81,14 @@ namespace com.soomla.unity
 			
 			// setting test mode on Android
 			SetAndroidTestMode(Soomla.GetInstance().androidTestMode);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 			storeController_Init(Soomla.GetInstance().customSecret);
 #endif
 		}
 		
 		
 		public static void BuyMarketItem(string productId) {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniPurchasableItem = AndroidJNIHandler.CallStatic<AndroidJavaObject>(
 				new AndroidJavaClass("com.soomla.unity.StoreInfo"),"getPurchasableItem", productId)) {
@@ -97,14 +97,14 @@ namespace com.soomla.unity
 					"");
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 			storeController_BuyMarketItem(productId);
 #endif
 		}
 		
 		public static void StoreOpening() {
 			if(!Application.isEditor){
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				using(AndroidJavaClass jniUnityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer")){
 					using(AndroidJavaObject jniCurrentActivity = jniUnityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity")) {
@@ -112,7 +112,7 @@ namespace com.soomla.unity
 					}
 				}
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				storeController_StoreOpening();
 #endif
 			}
@@ -120,11 +120,11 @@ namespace com.soomla.unity
 		
 		public static void StoreClosing() {
 			if(!Application.isEditor){
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				jniStoreController.Call("storeClosing");
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				storeController_StoreClosing();
 #endif
 			}
@@ -132,11 +132,11 @@ namespace com.soomla.unity
 		
 		public static void RestoreTransactions() {
 			if(!Application.isEditor){
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				jniStoreController.Call("restoreTransactions");
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				storeController_RestoreTransactions();
 #endif
 			}
@@ -145,18 +145,18 @@ namespace com.soomla.unity
 		public static bool TransactionsAlreadyRestored() {
 			bool restored = false;
 			if(!Application.isEditor){
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 				AndroidJNI.PushLocalFrame(100);
 				restored = jniStoreController.Call<bool>("transactionsAlreadyRestored");
 				AndroidJNI.PopLocalFrame(IntPtr.Zero);
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
 				storeController_TransactionsAlreadyRestored(out restored);
 #endif
 			}
 			return restored;
 		}
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public static void SetAndroidTestMode(bool testMode) {
 				AndroidJNI.PushLocalFrame(100);
 				jniStoreController.Call("setTestMode", testMode);

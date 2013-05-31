@@ -47,7 +47,7 @@ namespace com.soomla.unity
 			this.ItemId = itemId;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		protected VirtualItem(AndroidJavaObject jniVirtualItem) {
 			this.Name = jniVirtualItem.Call<string>("getName");
 			this.Description = jniVirtualItem.Call<string>("getDescription");
@@ -103,7 +103,7 @@ namespace com.soomla.unity
 			return null;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		private static bool isInstanceOf(AndroidJavaObject jniItem, string classJniStr) {
 			System.IntPtr cls = AndroidJNI.FindClass(classJniStr);
 			return AndroidJNI.IsInstanceOf(jniItem.GetRawObject(), cls);

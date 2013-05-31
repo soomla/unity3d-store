@@ -46,7 +46,7 @@ namespace com.soomla.unity{
 		{
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public VirtualGood(AndroidJavaObject jniVirtualGood) 
 			: base(jniVirtualGood)
 		{

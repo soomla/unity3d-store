@@ -45,7 +45,7 @@ namespace com.soomla.unity{
 			this.GoodItemIds = goodItemIds;
 		}
 		
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public VirtualCategory(AndroidJavaObject jniVirtualCategory) {
 			this.Name = jniVirtualCategory.Call<string>("getName");
 			

@@ -5,7 +5,7 @@ namespace com.soomla.unity
 {
 	public static class AndroidJNIHandler
 	{
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		public static void CallVoid(AndroidJavaObject jniObject, string method, string arg0) {
 			if(!Application.isEditor){
 				jniObject.Call(method, arg0);
