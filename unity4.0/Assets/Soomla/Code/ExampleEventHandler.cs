@@ -27,7 +27,7 @@ namespace com.soomla.unity.example
 			Events.OnRestoreTransactions += onRestoreTransactions;
 		}
 		
-		public void onMarketPurchase(PurchasableVirtualItem pvi) {
+		public void onMarketPurchase(PurchasableVirtualItem pvi, string transactionReceipt) {
 			
 		}
 		

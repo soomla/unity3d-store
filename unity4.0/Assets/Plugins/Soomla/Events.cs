@@ -31,7 +31,7 @@ namespace com.soomla.unity
 		
 		public static Action<PurchasableVirtualItem> OnMarketPurchaseCancelled = delegate {};	
 		
-		public static Action<PurchasableVirtualItem> OnMarketPurchase = delegate {};
+		public static Action<PurchasableVirtualItem, string> OnMarketPurchase = delegate {};
 		
 		public static Action<PurchasableVirtualItem> OnMarketPurchaseStarted = delegate {};
 		

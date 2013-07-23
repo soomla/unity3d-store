@@ -125,9 +125,10 @@ namespace com.soomla.unity {
 
 		public void onMarketPurchase(string message) {
 			Debug.Log ("SOOMLA/UNITY onMarketPurchase:" + message);
-			
-			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(message);
-			Events.OnMarketPurchase(pvi);
+			string[] vars = Regex.Split(message, "#SOOM#");
+			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(vars[0]);
+			string transactionReceipt = vars[1];
+			Events.OnMarketPurchase(pvi, transactionReceipt);
 		}
 		
 		public void onMarketPurchaseStarted(string message) {

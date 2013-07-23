@@ -73,7 +73,8 @@
     }
 	else if ([notification.name isEqualToString:EVENT_APPSTORE_PURCHASED]) {
         PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
-        UnitySendMessage("Soomla", "onMarketPurchase", [pvi.itemId UTF8String]);
+        NSString *receipt = [notification.userInfo objectForKey:DICT_ELEMENT_RECEIPT];
+        UnitySendMessage("Soomla", "onMarketPurchase", [[NSString stringWithFormat:@"%@#SOOM#%@", pvi.itemId, receipt] UTF8String]);
     }
     else if ([notification.name isEqualToString:EVENT_APPSTORE_PURCHASE_STARTED]) {
 	    PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];

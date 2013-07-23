@@ -52,6 +52,7 @@
 #define DICT_ELEMENT_EquippableVG      @"EquippableVG"
 #define DICT_ELEMENT_UpgradeVG         @"UpgradeVG"
 #define DICT_ELEMENT_PURCHASABLE       @"PurchasableVirtualItem"
+#define DICT_ELEMENT_RECEIPT           @"receipt"
 #define DICT_ELEMENT_SUCCESS           @"success"
 
 
@@ -77,7 +78,7 @@
 + (void)postItemPurchased:(PurchasableVirtualItem*)item;
 + (void)postOpeningStore;
 + (void)postAppStorePurchaseCancelled:(PurchasableVirtualItem*)purchasableVirtualItem;
-+ (void)postAppStorePurchase:(PurchasableVirtualItem*)purchasableVirtualItem;
++ (void)postAppStorePurchase:(PurchasableVirtualItem*)purchasableVirtualItem withReceipt:(NSString *)transactionReceipt;
 + (void)postAppStorePurchaseStarted:(PurchasableVirtualItem*)purchasableVirtualItem;
 + (void)postTransactionRestored:(BOOL)success;
 + (void)postTransactionRestoreStarted;

@@ -4,7 +4,9 @@ using UnityEditor.Callbacks;
 using UnityEditor;
 using System.Diagnostics;
 
-public class PostProcessScriptStarter : MonoBehaviour {
+namespace com.softstar.unity.editor.soomla
+{
+	public class PostProcessScriptStarter : MonoBehaviour {
 	[PostProcessBuild]
 	public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject) {
 #if UNITY_IOS
@@ -29,3 +31,5 @@ public class PostProcessScriptStarter : MonoBehaviour {
 #endif
     }
 }
+}
+
