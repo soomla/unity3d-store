@@ -41,7 +41,7 @@ namespace com.soomla.unity{
  	/// In case you purchase this item in Google Play or the App Store(PurchaseWithMarket), You need to define the item in Google
  	/// Play Developer Console or in iTunesConnect. (https://play.google.com/apps/publish) (https://itunesconnect.apple.com)
 	/// </summary>
-	public class EquippableVG : VirtualGood{
+	public class EquippableVG : LifetimeVG{
 		
 		public sealed class EquippingModel {
 

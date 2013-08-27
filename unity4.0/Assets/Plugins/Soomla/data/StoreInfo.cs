@@ -209,7 +209,7 @@ namespace com.soomla.unity
 			UpgradeVG vgu = null;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniUpgradeVG = AndroidJNIHandler.CallStatic<AndroidJavaObject>(
-				new AndroidJavaClass("com.soomla.unity.StoreInfo"),"getGoodFirstUpgrade", goodItemId)) {
+                new AndroidJavaClass("com.soomla.store.data.StoreInfo"),"getGoodFirstUpgrade", goodItemId)) {
 				vgu = new UpgradeVG(jniUpgradeVG);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
@@ -235,7 +235,7 @@ namespace com.soomla.unity
 			UpgradeVG vgu = null;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniUpgradeVG = AndroidJNIHandler.CallStatic<AndroidJavaObject>(
-				new AndroidJavaClass("com.soomla.unity.StoreInfo"),"getGoodLastUpgrade", goodItemId)) {
+                new AndroidJavaClass("com.soomla.store.data.StoreInfo"),"getGoodLastUpgrade", goodItemId)) {
 				vgu = new UpgradeVG(jniUpgradeVG);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
@@ -261,7 +261,7 @@ namespace com.soomla.unity
 			List<UpgradeVG> vgus = new List<UpgradeVG>();
 #if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
-			using(AndroidJavaObject jniUpgradeVGs = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getGoodUpgrades")) {
+			using(AndroidJavaObject jniUpgradeVGs = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getGoodUpgrades", goodItemId)) {
 				for(int i=0; i<jniUpgradeVGs.Call<int>("size"); i++) {
 					using(AndroidJavaObject jnivgu = jniUpgradeVGs.Call<AndroidJavaObject>("get", i)) {
 						vgus.Add(new UpgradeVG(jnivgu));
