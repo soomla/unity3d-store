@@ -143,6 +143,22 @@ namespace Soomla {
 			
 			Events.OnStoreControllerInitialized();
 		}
+
+        public void onItemDetailsRetrieved(string message)
+        {
+            StoreUtils.LogDebug(TAG, "SOOMLA/UNITY onItemDetailsRetrieved");
+
+            string[] vars = Regex.Split(message, "#SOOM#");
+
+            Events.OnItemDetailsRetrieved(new MarketItemDetails(vars[0], vars[1], vars[2], vars[3]), Boolean.Parse(vars[4]));
+        }
+
+        public void onItemDetailsRetrievedFailedEvent(string message)
+        {
+            StoreUtils.LogDebug(TAG, "SOOMLA/UNITY ItemDetailsRetrievedFailedEvent");
+
+            Events.OnItemDetailsRetrievedFailed();
+        }
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
 		public void onIabServiceStarted(string message) {
