@@ -110,7 +110,7 @@ namespace Soomla
 			}
 		}
 
-        public static void GetItemDetails(string[] productIds)
+        public static void GetItemDetails(params string[] productIds)
         {
             if (!Application.isEditor)
             {

@@ -110,6 +110,20 @@ namespace Soomla
 			}
 		}
 
+        public static void GetItemDetails(params string[] productIds)
+        {
+            if (!Application.isEditor)
+            {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                object[] _productIds = new object[] { productIds }; //workaround so that we can pass a string[] to the native Java
+
+				AndroidJNI.PushLocalFrame(100);
+				jniStoreController.Call("getItemDetails", _productIds);
+				AndroidJNI.PopLocalFrame(IntPtr.Zero);
+#endif
+            }
+        }
+
 #if UNITY_IOS && !UNITY_EDITOR	
 		public static bool TransactionsAlreadyRestored() {
 			bool restored = false;
