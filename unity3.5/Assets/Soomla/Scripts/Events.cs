@@ -42,6 +42,10 @@ namespace Soomla
 		public static Action OnStoreControllerInitialized = delegate {};
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+        public static Action<MarketItemDetails, bool> OnItemDetailsRetrieved = delegate { };
+
+        public static Action OnItemDetailsRetrievedFailed = delegate { };
+
 		public static Action OnIabServiceStarted = delegate {};
 		
 		public static Action OnIabServiceStopped = delegate {};

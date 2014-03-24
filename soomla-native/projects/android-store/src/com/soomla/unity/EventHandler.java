@@ -121,5 +121,22 @@ public class EventHandler {
         String msg = unexpectedStoreErrorEvent.getMessage();
         UnityPlayer.UnitySendMessage("StoreEvents", "onUnexpectedErrorInStore", (msg == null ? "" : msg));
     }
+    
+    @Subscribe
+    public void onItemDetailsRetrieved(ItemDetailsRetrievedEvent itemDetailsRetrievedEvent) {
+    	
+    	String msg = 	itemDetailsRetrievedEvent.getProductId() + "#SOOM#" + 
+    					itemDetailsRetrievedEvent.getPrice() + "#SOOM#" +
+    					itemDetailsRetrievedEvent.getTitle() + "#SOOM#" + 
+    					itemDetailsRetrievedEvent.getDescription()+ "#SOOM#" + 
+    					itemDetailsRetrievedEvent.isFinished();
+    	
+        UnityPlayer.UnitySendMessage("StoreEvents", "onItemDetailsRetrieved", msg);
+    }
+    
+    @Subscribe
+    public void onItemDetailsRetrievedFailed(ItemDetailsRetrievedFailedEvent itemDetailsRetrievedFailedEvent) {
+        UnityPlayer.UnitySendMessage("StoreEvents", "onItemDetailsRetrievedFailed", "");
+    }
 
 }
