@@ -14,7 +14,13 @@ namespace Soomla
 		private const string TAG = "SOOMLA StoreInventory";
 
 #if UNITY_EDITOR
+		private class Upgrade {
+			public int level;
+			public string itemId;
+		}
+
 		private static Dictionary<string, int> localItems = new Dictionary<string, int> ();
+		private static Dictionary<string, Upgrade> localUpgrades = new Dictionary<string, Upgrade>();
 		private static HashSet<string> equippedGoods = new HashSet<string>();
 		private static HashSet<string> nonConsumables = new HashSet<string>();
 
@@ -289,9 +295,10 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			//				VirtualGood good = StoreInfo.GetVirtualGoods().FirstOrDefault(g => g.ItemId == goodItemId);
-			//
-			//				StoreInfo.GetUpgradesForVirtualGood(goodItemId);
+			Upgrade upgrade;
+			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
+				return upgrade.level;
+			}
 #endif
 			return 0;
 		}
@@ -319,6 +326,13 @@ namespace Soomla
 				return result;
 #endif
 			}
+#if UNITY_EDITOR
+			Upgrade upgrade;
+			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
+				return upgrade.itemId;
+			}
+#endif
+
 			return null;
 		}
 		
@@ -337,6 +351,25 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			Upgrade upgrade;
+			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
+				UpgradeVG up = RequireItem<UpgradeVG>(upgrade.itemId, "UpgradeItemId");
+
+				if (!string.IsNullOrEmpty(up.NextItemId)) {
+					UpgradeVG next = RequireItem<UpgradeVG>(up.NextItemId, "UpgradeItemId");
+					next.Buy();
+					upgrade.itemId = next.ItemId;
+					upgrade.level++;
+				}
+			} else {
+				UpgradeVG first = StoreInfo.GetFirstUpgradeForVirtualGood(goodItemId);
+				if (first != null) {
+					first.Buy();
+					localUpgrades.Add(goodItemId, new Upgrade { itemId = first.ItemId, level = 1 });
+				}
+			}
+#endif
 		}
 		
 		public static void RemoveGoodUpgrades(string goodItemId) {
@@ -354,6 +387,9 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			localUpgrades.Remove(goodItemId);
+#endif
 		}
 		
 		
@@ -436,12 +472,16 @@ namespace Soomla
 		}
 
 #if UNITY_EDITOR
-		private static VirtualItem RequireItem(string itemId, string lookupBy = "ItemId") {
-			VirtualItem virtualItem = StoreInfo.GetItemByItemId (itemId);
+		private static T RequireItem<T>(string itemId, string lookupBy = "ItemId") where T : VirtualItem {
+			T virtualItem = StoreInfo.GetItemByItemId (itemId) as T;
 			if (virtualItem == null)
 				throw new VirtualItemNotFoundException(lookupBy, itemId);
 
 			return virtualItem;
+		}
+
+		private static VirtualItem RequireItem(string itemId, string lookupBy = "ItemId") {
+			return RequireItem<VirtualItem>(itemId, lookupBy);
 		}
 #endif
 	}
