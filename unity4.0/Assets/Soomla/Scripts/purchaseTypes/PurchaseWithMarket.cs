@@ -50,6 +50,12 @@ namespace Soomla
 		{
 			this.MarketItem = marketItem;
 		}
+
+#if UNITY_EDITOR
+		public override void Buy()
+		{
+		}
+#endif
 	}
 }
 

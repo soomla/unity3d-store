@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Soomla
 {
@@ -16,7 +17,20 @@ namespace Soomla
 	public static class StoreInfo
 	{
 		private const string TAG = "SOOMLA StoreInfo";
-		
+
+#if UNITY_EDITOR
+		// Create a local copy of VirtualGoods for display in the Unity editor window 
+		private static VirtualCurrency[] localCurrencies;
+		private static VirtualCurrencyPack[] localCurrencyPacks;
+		private static VirtualGood[] localVirtualGoods;
+		private static VirtualCategory[] localCategories;
+		private static NonConsumableItem[] localNonConsumableItems;
+
+		private static Dictionary<String, VirtualItem> localVirtualItems = new Dictionary<String, VirtualItem>();
+		private static Dictionary<String, PurchasableVirtualItem> localPurchasableItems = new Dictionary<String, PurchasableVirtualItem>();
+		private static Dictionary<String, VirtualCategory> localGoodsCategories = new Dictionary<String, VirtualCategory>();
+		private static Dictionary<String, List<UpgradeVG>> localGoodsUpgrades = new Dictionary<String, List<UpgradeVG>>();
+#endif
 #if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
 		private static extern int storeInfo_GetItemByItemId(string itemId, out IntPtr json);
@@ -45,7 +59,63 @@ namespace Soomla
 #endif
 			
 		public static void Initialize(IStoreAssets storeAssets) {
+#if UNITY_EDITOR
+			// Initialise lists of local data for viewing in the Unity editor
+			localCurrencies = storeAssets.GetCurrencies();
+			localCurrencyPacks = storeAssets.GetCurrencyPacks();
+			localVirtualGoods = storeAssets.GetGoods();
+			localCategories = storeAssets.GetCategories();
+			localNonConsumableItems = storeAssets.GetNonConsumableItems();
+
+			// rewritten from android java code
+			foreach (VirtualCurrency vi in localCurrencies) {
+				localVirtualItems.Add(vi.ItemId, vi);
+			}
 			
+			foreach (VirtualCurrencyPack vi in localCurrencyPacks) {
+				localVirtualItems.Add(vi.ItemId, vi);
+				
+				PurchaseType purchaseType = vi.PurchaseType;
+				if (purchaseType is PurchaseWithMarket) {
+					localPurchasableItems.Add(((PurchaseWithMarket) purchaseType).MarketItem.ProductId, vi);
+				}
+			}
+
+			foreach (VirtualGood vi in localVirtualGoods) {
+				localVirtualItems.Add(vi.ItemId, vi);
+				
+				if (vi is UpgradeVG) {
+					List<UpgradeVG> upgrades;
+					if (!localGoodsUpgrades.TryGetValue(((UpgradeVG) vi).ItemId, out upgrades)) {
+						upgrades = new List<UpgradeVG>();
+						localGoodsUpgrades.Add(((UpgradeVG) vi).ItemId, upgrades);
+					}
+					upgrades.Add((UpgradeVG) vi);
+				}
+				
+				PurchaseType purchaseType = vi.PurchaseType;
+				if (purchaseType is PurchaseWithMarket) {
+					localPurchasableItems.Add(((PurchaseWithMarket) purchaseType).MarketItem.ProductId, vi);
+				}
+			}
+
+			foreach (NonConsumableItem vi in localNonConsumableItems) {
+				localVirtualItems.Add(vi.ItemId, vi);
+				
+				PurchaseType purchaseType = vi.PurchaseType;
+				if (purchaseType is PurchaseWithMarket) {
+					localPurchasableItems.Add(((PurchaseWithMarket) purchaseType).MarketItem.ProductId, vi);
+				}
+			}
+			
+			foreach (VirtualCategory category in localCategories) {
+				foreach (string goodItemId in category.GoodItemIds) {
+					localGoodsCategories.Add(goodItemId, category);
+				}
+			}
+#endif
+
+
 //			StoreUtils.LogDebug(TAG, "Adding currency");
 			JSONObject currencies = new JSONObject(JSONObject.Type.ARRAY);
 			foreach(VirtualCurrency vi in storeAssets.GetCurrencies()) {
@@ -144,6 +214,10 @@ namespace Soomla
 			JSONObject obj = new JSONObject(json);
 			return VirtualItem.factoryItemFromJSONObject(obj);
 #else
+			VirtualItem item;
+			if (localVirtualItems.TryGetValue(itemId, out item))
+				return item;
+
 			return null;
 #endif
 		}
@@ -170,6 +244,10 @@ namespace Soomla
 			JSONObject obj = new JSONObject(nonConsJson);
 			return (PurchasableVirtualItem)VirtualItem.factoryItemFromJSONObject(obj);
 #else
+			PurchasableVirtualItem item;
+			if (localPurchasableItems.TryGetValue(productId, out item))
+				return item;
+			
 			return null;
 #endif
 		}
@@ -196,6 +274,10 @@ namespace Soomla
 			JSONObject obj = new JSONObject(json);
 			return new VirtualCategory(obj);
 #else
+			VirtualCategory category;
+			if (localGoodsCategories.TryGetValue(goodItemId, out category))
+				return category;
+			
 			return null;
 #endif
 		}
@@ -222,6 +304,10 @@ namespace Soomla
 			JSONObject obj = new JSONObject(json);
 			return new UpgradeVG(obj);
 #else
+			List<UpgradeVG> upgrades;
+			if (localGoodsUpgrades.TryGetValue(goodItemId, out upgrades))
+				return upgrades.FirstOrDefault(up => string.IsNullOrEmpty(up.PrevItemId));
+			
 			return null;
 #endif
 		}
@@ -248,6 +334,10 @@ namespace Soomla
 			JSONObject obj = new JSONObject(json);
 			return new UpgradeVG(obj);
 #else
+			List<UpgradeVG> upgrades;
+			if (localGoodsUpgrades.TryGetValue(goodItemId, out upgrades))
+				return upgrades.FirstOrDefault(up => string.IsNullOrEmpty(up.NextItemId));
+			
 			return null;
 #endif
 		}
@@ -280,6 +370,10 @@ namespace Soomla
 			foreach(JSONObject obj in upgradesArr.list) {
 				vgus.Add(new UpgradeVG(obj));
 			}
+#else
+			List<UpgradeVG> upgrades;
+			if (localGoodsUpgrades.TryGetValue(goodItemId, out upgrades))
+				vgus = upgrades;
 #endif
 			return vgus;
 		}
@@ -312,6 +406,8 @@ namespace Soomla
 			foreach(JSONObject obj in currenciesArr.list) {
 				vcs.Add(new VirtualCurrency(obj));
 			}
+#elif UNITY_EDITOR
+			vcs = localCurrencies.ToList();
 #endif
 			return vcs;
 		}
@@ -346,6 +442,8 @@ namespace Soomla
 			foreach(JSONObject obj in goodsArr.list) {
 				virtualGoods.Add((VirtualGood)VirtualItem.factoryItemFromJSONObject(obj));
 			}
+#elif UNITY_EDITOR
+			virtualGoods = localVirtualGoods.ToList();
 #endif
 			return virtualGoods;
 		}
@@ -378,6 +476,8 @@ namespace Soomla
 			foreach(JSONObject obj in packsArr.list) {
 				vcps.Add(new VirtualCurrencyPack(obj));
 			}
+#elif UNITY_EDITOR
+			vcps = localCurrencyPacks.ToList();
 #endif
 			return vcps;
 		}
@@ -410,6 +510,8 @@ namespace Soomla
 			foreach(JSONObject obj in nonConsArr.list) {
 				nonConsumableItems.Add(new NonConsumableItem(obj));
 			}
+#elif UNITY_EDITOR
+			nonConsumableItems = localNonConsumableItems.ToList();
 #endif
 			return nonConsumableItems;
 		}
@@ -442,6 +544,8 @@ namespace Soomla
 			foreach(JSONObject obj in categoriesArr.list) {
 				virtualCategories.Add(new VirtualCategory(obj));
 			}
+#elif UNITY_EDITOR
+			virtualCategories = localCategories.ToList();
 #endif
 			return virtualCategories;
 		}

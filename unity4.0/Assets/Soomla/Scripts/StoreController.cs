@@ -79,6 +79,13 @@ namespace Soomla
 			
 #elif UNITY_IOS && !UNITY_EDITOR
 			storeController_Init(SoomSettings.CustomSecret);
+#elif UNITY_EDITOR
+			// Trigger the OnStoreControllerInitialized event wich, in turn, calls ExampleLocalStoreInfo.Init()
+			var storeEvents = GameObject.FindObjectOfType<StoreEvents> ();
+			if (storeEvents != null)
+				storeEvents.onStoreControllerInitialized(null);
+			else
+				Debug.LogError("SOOMLA/UNITY StoreEvents Component not found in scene");
 #endif
 		}
 		
@@ -95,6 +102,12 @@ namespace Soomla
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 #elif UNITY_IOS && !UNITY_EDITOR
 			storeController_BuyMarketItem(productId);
+#elif UNITY_EDITOR
+			PurchasableVirtualItem item = StoreInfo.GetPurchasableItemWithProductId(productId);
+			if (item == null)
+				throw new VirtualItemNotFoundException("ProductId", productId);
+
+			StoreInventory.BuyItem(item.ItemId);
 #endif
 		}
 		

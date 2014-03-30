@@ -77,6 +77,15 @@ namespace Soomla{
 			GoodAmount = jniSingleUsePackVG.Call<int>("getGoodAmount");
 		}
 #endif
+
+#if UNITY_EDITOR
+		public override void Buy()
+		{
+			PurchaseType.Buy();
+			StoreInventory.GiveItem(GoodItemId, GoodAmount);
+		}
+#endif
+
 		/// <summary>
 		/// see parent
 		/// </summary>

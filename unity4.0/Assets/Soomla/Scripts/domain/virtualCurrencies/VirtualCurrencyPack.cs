@@ -80,6 +80,15 @@ namespace Soomla{
 			CurrencyItemId = jniVirtualCurrencyPack.Call<string>("getCurrencyItemId");
 		}
 #endif
+
+#if UNITY_EDITOR
+		public override void Buy()
+		{
+			PurchaseType.Buy();
+			StoreInventory.GiveItem(CurrencyItemId, CurrencyAmount);
+		}
+#endif
+
 		/// <summary>
 		/// see parent
 		/// </summary>

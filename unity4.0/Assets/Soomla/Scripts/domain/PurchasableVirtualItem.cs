@@ -45,7 +45,15 @@ namespace Soomla
 		{
 			this.PurchaseType = purchaseType;
 		}
-		
+
+#if UNITY_EDITOR
+		public virtual void Buy ()
+		{
+				PurchaseType.Buy ();
+				StoreInventory.GiveItem (ItemId, 1);
+		}
+#endif
+
 #if UNITY_ANDROID && !UNITY_EDITOR
 		protected PurchasableVirtualItem(AndroidJavaObject jniVirtualItem) :
 			base(jniVirtualItem)

@@ -40,6 +40,13 @@ namespace Soomla
 			this.ItemId = itemId;
 			this.Amount = amount;
 		}
+
+#if UNITY_EDITOR
+		public override void Buy()
+		{
+			StoreInventory.TakeItem(ItemId, Amount);
+		}
+#endif
 	}
 }
 

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Soomla
 {
@@ -10,7 +12,15 @@ namespace Soomla
 	public class StoreInventory
 	{
 		private const string TAG = "SOOMLA StoreInventory";
-		
+
+#if UNITY_EDITOR
+		private static Dictionary<string, int> localItems = new Dictionary<string, int> ();
+		private static HashSet<string> equippedGoods = new HashSet<string>();
+		private static HashSet<string> nonConsumables = new HashSet<string>();
+
+		private static StoreEvents Evt { get { return GameObject.FindObjectOfType<StoreEvents>(); }}
+#endif
+
 #if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
 		private static extern int storeInventory_BuyItem(string itemId);
@@ -57,6 +67,11 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			VirtualItem item = RequireItem(itemId);
+
+			((PurchasableVirtualItem)item).Buy();
+#endif
 		}
 		
 		
@@ -85,6 +100,13 @@ namespace Soomla
 				return balance;
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(itemId);
+
+			int amount;
+			if (localItems.TryGetValue(itemId, out amount))
+				return amount;
+#endif
 			return 0;
 		}
 		
@@ -103,6 +125,24 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			VirtualItem item = RequireItem(itemId);
+
+			int itemAmount;
+			if (localItems.TryGetValue (itemId, out itemAmount)) {
+					itemAmount += amount;
+					localItems [itemId] = itemAmount;
+			} else {
+					itemAmount = amount;
+					localItems [itemId] = amount;
+			}
+
+			string change = itemId + "#SOOM#" + itemAmount + "#SOOM#" + amount;
+			if (item is VirtualCurrency)
+				Evt.onCurrencyBalanceChanged(change);
+			else
+				Evt.onGoodBalanceChanged(change);
+#endif
 		}
 		
 		public static void TakeItem(string itemId, int amount) {
@@ -120,6 +160,28 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+
+#if UNITY_EDITOR
+			VirtualItem item = RequireItem(itemId);
+
+			int itemAmount;
+			if (localItems.TryGetValue(itemId, out itemAmount) && itemAmount >= amount) {
+				itemAmount -= amount;
+				
+				localItems[itemId] = itemAmount;
+			} else {
+				if (item is VirtualCurrency)
+					throw new InsufficientFundsException(itemId);
+				else
+					throw new NotEnoughGoodsException(itemId);
+			}
+
+			string change = itemId + "#SOOM#" + itemAmount + "#SOOM#" + (-amount);
+			if (item is VirtualCurrency)
+				Evt.onCurrencyBalanceChanged(change);
+			else
+				Evt.onGoodBalanceChanged(change);
+#endif
 		}
 				
 		
@@ -144,6 +206,13 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(goodItemId, "GoodItemId");
+
+			equippedGoods.Add(goodItemId);
+			
+			Evt.onGoodEquipped(goodItemId);
+#endif
 		}
 		
 		public static void UnEquipVirtualGood(string goodItemId) {
@@ -161,6 +230,13 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(goodItemId, "GoodItemId");
+
+			equippedGoods.Remove(goodItemId);
+			
+			Evt.onGoodUnequipped(goodItemId);
+#endif
 		}
 		
 		public static bool IsVirtualGoodEquipped(string goodItemId) {
@@ -183,7 +259,13 @@ namespace Soomla
 				return result;
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(goodItemId, "GoodItemId");
+
+			return equippedGoods.Contains(goodItemId);
+#else
 			return false;
+#endif
 		}
 		
 		public static int GetGoodUpgradeLevel(string goodItemId) {
@@ -206,6 +288,11 @@ namespace Soomla
 				return level;
 #endif
 			}
+#if UNITY_EDITOR
+			//				VirtualGood good = StoreInfo.GetVirtualGoods().FirstOrDefault(g => g.ItemId == goodItemId);
+			//
+			//				StoreInfo.GetUpgradesForVirtualGood(goodItemId);
+#endif
 			return 0;
 		}
 		
@@ -295,7 +382,13 @@ namespace Soomla
 				return result;
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(nonConsItemId, "NonConsItemId");
+
+			return nonConsumables.Contains(nonConsItemId);
+#else
 			return false;
+#endif
 		}
 		
 		public static void AddNonConsumableItem(string nonConsItemId) {
@@ -313,6 +406,11 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(nonConsItemId, "NonConsItemId");
+
+			nonConsumables.Add(nonConsItemId);
+#endif
 		}
 		
 		public static void RemoveNonConsumableItem(string nonConsItemId) {
@@ -330,7 +428,22 @@ namespace Soomla
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+#if UNITY_EDITOR
+			RequireItem(nonConsItemId, "NonConsItemId");
+
+			nonConsumables.Remove(nonConsItemId);
+#endif
 		}
+
+#if UNITY_EDITOR
+		private static VirtualItem RequireItem(string itemId, string lookupBy = "ItemId") {
+			VirtualItem virtualItem = StoreInfo.GetItemByItemId (itemId);
+			if (virtualItem == null)
+				throw new VirtualItemNotFoundException(lookupBy, itemId);
+
+			return virtualItem;
+		}
+#endif
 	}
 }
 
