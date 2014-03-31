@@ -22,7 +22,6 @@ namespace Soomla
 		private static Dictionary<string, int> localItemBalances = new Dictionary<string, int> ();
 		private static Dictionary<string, Upgrade> localUpgrades = new Dictionary<string, Upgrade>();
 		private static HashSet<string> localEquippedGoods = new HashSet<string>();
-		private static HashSet<string> localNonConsumables = new HashSet<string>();
 
 		private static StoreEvents Evt { get { return GameObject.FindObjectOfType<StoreEvents>(); }}
 #endif
@@ -116,8 +115,12 @@ namespace Soomla
 #endif
 			return 0;
 		}
-		
+
 		public static void GiveItem(string itemId, int amount) {
+			GiveItem(itemId, amount, true);
+		}
+
+		private static void GiveItem(string itemId, int amount, bool notify) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling GiveItem with itedId: " + itemId + " and amount: " + amount);
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -144,15 +147,16 @@ namespace Soomla
 					localItemBalances[itemId] = amount;
 			}
 
-			string change = itemId + "#SOOM#" + itemAmount + "#SOOM#" + amount;
-			if (item is VirtualCurrency)
-				Evt.onCurrencyBalanceChanged(change);
-			else
-				Evt.onGoodBalanceChanged(change);
+			if (notify)
+				NotifyChange(item, itemAmount, amount);
 #endif
 		}
 		
 		public static void TakeItem(string itemId, int amount) {
+			TakeItem(itemId, amount, true);
+		}
+
+		private static void TakeItem(string itemId, int amount, bool notify) {
 			if(!Application.isEditor){
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Calling TakeItem with itedId: " + itemId + " and amount: " + amount);
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -183,15 +187,20 @@ namespace Soomla
 					throw new NotEnoughGoodsException(itemId);
 			}
 
-			string change = itemId + "#SOOM#" + itemAmount + "#SOOM#" + (-amount);
-			if (item is VirtualCurrency)
-				Evt.onCurrencyBalanceChanged(change);
-			else
-				Evt.onGoodBalanceChanged(change);
+			if (notify)
+				NotifyChange(item, itemAmount, -amount);
 #endif
 		}
 				
-		
+#if UNITY_EDITOR
+		private static void NotifyChange(VirtualItem item, int amount, int change) {
+			string changeHash = item.ItemId + "#SOOM#" + amount + "#SOOM#" + change;
+			if (item is VirtualCurrency)
+				Evt.onCurrencyBalanceChanged(changeHash);
+			else if (item is VirtualGood)
+				Evt.onGoodBalanceChanged(changeHash);
+		}
+#endif
 		
 		
 		
@@ -216,9 +225,8 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(goodItemId, "GoodItemId");
 
-			localEquippedGoods.Add(goodItemId);
-			
-			Evt.onGoodEquipped(goodItemId);
+			if (localEquippedGoods.Add(goodItemId))
+				Evt.onGoodEquipped(goodItemId);
 #endif
 		}
 		
@@ -238,11 +246,11 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(goodItemId, "GoodItemId");
 
-			localEquippedGoods.Remove(goodItemId);
-			
-			Evt.onGoodUnequipped(goodItemId);
+			if (!localEquippedGoods.Remove(goodItemId))
+				RequireItem(goodItemId, "GoodItemId");
+			else
+				Evt.onGoodUnequipped(goodItemId);
 #endif
 		}
 		
@@ -267,9 +275,11 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(goodItemId, "GoodItemId");
+			bool contains = localEquippedGoods.Contains(goodItemId);
+			if (!contains)
+				RequireItem (goodItemId, "GoodItemId");
 
-			return localEquippedGoods.Contains(goodItemId);
+			return contains;
 #else
 			return false;
 #endif
@@ -297,9 +307,8 @@ namespace Soomla
 			}
 #if UNITY_EDITOR
 			Upgrade upgrade;
-			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
+			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) 
 				return upgrade.level;
-			}
 #endif
 			return 0;
 		}
@@ -329,11 +338,9 @@ namespace Soomla
 			}
 #if UNITY_EDITOR
 			Upgrade upgrade;
-			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
+			if (localUpgrades.TryGetValue(goodItemId, out upgrade))
 				return upgrade.itemId;
-			}
 #endif
-
 			return null;
 		}
 		
@@ -393,7 +400,26 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
+			// try get current good upgrade
+			string upgradeId = GetGoodCurrentUpgrade(goodItemId);
+			if (string.IsNullOrEmpty(upgradeId))
+				return;
+
+			// downgrade good while it has upgrades
+			UpgradeVG upgrade;
+			while (true) {
+				TakeItem(upgradeId, 1);
+
+				upgrade = RequireItem<UpgradeVG>(upgradeId);
+				if (!string.IsNullOrEmpty(upgrade.PrevItemId))
+					upgradeId = upgrade.ItemId;
+				else
+					break;
+			}
+			// remove all info about upgrades
 			localUpgrades.Remove(goodItemId);
+
+			Evt.onGoodUpgrade(goodItemId + "#SOOM#");
 #endif
 		}
 		
@@ -424,9 +450,7 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(nonConsItemId, "NonConsItemId");
-
-			return localNonConsumables.Contains(nonConsItemId);
+			return GetItemBalance(nonConsItemId) > 0;
 #else
 			return false;
 #endif
@@ -448,9 +472,8 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(nonConsItemId, "NonConsItemId");
-
-			localNonConsumables.Add(nonConsItemId);
+			if (!NonConsumableItemExists(nonConsItemId))
+				GiveItem(nonConsItemId, 1, false);
 #endif
 		}
 		
@@ -470,9 +493,7 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(nonConsItemId, "NonConsItemId");
-
-			localNonConsumables.Remove(nonConsItemId);
+			TakeItem(nonConsItemId, 1, false);
 #endif
 		}
 
