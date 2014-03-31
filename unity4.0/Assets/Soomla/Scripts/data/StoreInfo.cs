@@ -86,9 +86,9 @@ namespace Soomla
 				
 				if (vi is UpgradeVG) {
 					List<UpgradeVG> upgrades;
-					if (!localGoodsUpgrades.TryGetValue(((UpgradeVG) vi).ItemId, out upgrades)) {
+					if (!localGoodsUpgrades.TryGetValue(((UpgradeVG) vi).GoodItemId, out upgrades)) {
 						upgrades = new List<UpgradeVG>();
-						localGoodsUpgrades.Add(((UpgradeVG) vi).ItemId, upgrades);
+						localGoodsUpgrades.Add(((UpgradeVG) vi).GoodItemId, upgrades);
 					}
 					upgrades.Add((UpgradeVG) vi);
 				}

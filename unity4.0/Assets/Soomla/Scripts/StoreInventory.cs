@@ -19,10 +19,10 @@ namespace Soomla
 			public string itemId;
 		}
 
-		private static Dictionary<string, int> localItems = new Dictionary<string, int> ();
+		private static Dictionary<string, int> localItemBalances = new Dictionary<string, int> ();
 		private static Dictionary<string, Upgrade> localUpgrades = new Dictionary<string, Upgrade>();
-		private static HashSet<string> equippedGoods = new HashSet<string>();
-		private static HashSet<string> nonConsumables = new HashSet<string>();
+		private static HashSet<string> localEquippedGoods = new HashSet<string>();
+		private static HashSet<string> localNonConsumables = new HashSet<string>();
 
 		private static StoreEvents Evt { get { return GameObject.FindObjectOfType<StoreEvents>(); }}
 #endif
@@ -107,11 +107,12 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			RequireItem(itemId);
-
 			int amount;
-			if (localItems.TryGetValue(itemId, out amount))
+			if (localItemBalances.TryGetValue(itemId, out amount))
 				return amount;
+
+			// check if item exists only if it's balance is not found
+			RequireItem(itemId);
 #endif
 			return 0;
 		}
@@ -135,12 +136,12 @@ namespace Soomla
 			VirtualItem item = RequireItem(itemId);
 
 			int itemAmount;
-			if (localItems.TryGetValue (itemId, out itemAmount)) {
+			if (localItemBalances.TryGetValue (itemId, out itemAmount)) {
 					itemAmount += amount;
-					localItems [itemId] = itemAmount;
+					localItemBalances[itemId] = itemAmount;
 			} else {
 					itemAmount = amount;
-					localItems [itemId] = amount;
+					localItemBalances[itemId] = amount;
 			}
 
 			string change = itemId + "#SOOM#" + itemAmount + "#SOOM#" + amount;
@@ -171,10 +172,10 @@ namespace Soomla
 			VirtualItem item = RequireItem(itemId);
 
 			int itemAmount;
-			if (localItems.TryGetValue(itemId, out itemAmount) && itemAmount >= amount) {
+			if (localItemBalances.TryGetValue(itemId, out itemAmount) && itemAmount >= amount) {
 				itemAmount -= amount;
 				
-				localItems[itemId] = itemAmount;
+				localItemBalances[itemId] = itemAmount;
 			} else {
 				if (item is VirtualCurrency)
 					throw new InsufficientFundsException(itemId);
@@ -215,7 +216,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(goodItemId, "GoodItemId");
 
-			equippedGoods.Add(goodItemId);
+			localEquippedGoods.Add(goodItemId);
 			
 			Evt.onGoodEquipped(goodItemId);
 #endif
@@ -239,7 +240,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(goodItemId, "GoodItemId");
 
-			equippedGoods.Remove(goodItemId);
+			localEquippedGoods.Remove(goodItemId);
 			
 			Evt.onGoodUnequipped(goodItemId);
 #endif
@@ -268,7 +269,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(goodItemId, "GoodItemId");
 
-			return equippedGoods.Contains(goodItemId);
+			return localEquippedGoods.Contains(goodItemId);
 #else
 			return false;
 #endif
@@ -361,12 +362,16 @@ namespace Soomla
 					next.Buy();
 					upgrade.itemId = next.ItemId;
 					upgrade.level++;
+
+					Evt.onGoodUpgrade(goodItemId + "#SOOM#" + next.ItemId);
 				}
 			} else {
 				UpgradeVG first = StoreInfo.GetFirstUpgradeForVirtualGood(goodItemId);
 				if (first != null) {
 					first.Buy();
 					localUpgrades.Add(goodItemId, new Upgrade { itemId = first.ItemId, level = 1 });
+
+					Evt.onGoodUpgrade(goodItemId + "#SOOM#" + first.ItemId);
 				}
 			}
 #endif
@@ -421,7 +426,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(nonConsItemId, "NonConsItemId");
 
-			return nonConsumables.Contains(nonConsItemId);
+			return localNonConsumables.Contains(nonConsItemId);
 #else
 			return false;
 #endif
@@ -445,7 +450,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(nonConsItemId, "NonConsItemId");
 
-			nonConsumables.Add(nonConsItemId);
+			localNonConsumables.Add(nonConsItemId);
 #endif
 		}
 		
@@ -467,13 +472,13 @@ namespace Soomla
 #if UNITY_EDITOR
 			RequireItem(nonConsItemId, "NonConsItemId");
 
-			nonConsumables.Remove(nonConsItemId);
+			localNonConsumables.Remove(nonConsItemId);
 #endif
 		}
 
 #if UNITY_EDITOR
 		private static T RequireItem<T>(string itemId, string lookupBy = "ItemId") where T : VirtualItem {
-			T virtualItem = StoreInfo.GetItemByItemId (itemId) as T;
+			T virtualItem = StoreInfo.GetItemByItemId(itemId) as T;
 			if (virtualItem == null)
 				throw new VirtualItemNotFoundException(lookupBy, itemId);
 
