@@ -42,9 +42,14 @@ namespace Soomla
 		}
 
 #if UNITY_EDITOR
-		public override void Buy()
+		public override void Buy(string itemId)
 		{
+			StoreEvents.instance.onItemPurchaseStarted(itemId);
 			StoreInventory.TakeItem(ItemId, Amount);
+		}
+
+		public override void Success(string itemId) {
+			StoreEvents.instance.onItemPurchased(itemId);
 		}
 #endif
 	}

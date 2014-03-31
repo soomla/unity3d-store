@@ -74,6 +74,13 @@ namespace Soomla{
 		public override JSONObject toJSONObject() {
 			return base.toJSONObject();
 		}
+#if UNITY_EDITOR
+		public override void Buy() {
+			// buy only if we have no such item
+			if (StoreInventory.GetItemBalance(ItemId) < 1)
+				base.Buy();
+		}
+#endif
 
 	}
 }

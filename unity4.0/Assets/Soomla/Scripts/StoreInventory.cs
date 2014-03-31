@@ -73,9 +73,7 @@ namespace Soomla
 #endif
 			}
 #if UNITY_EDITOR
-			VirtualItem item = RequireItem(itemId);
-
-			((PurchasableVirtualItem)item).Buy();
+			RequireItem<PurchasableVirtualItem>(itemId).Buy();
 #endif
 		}
 		

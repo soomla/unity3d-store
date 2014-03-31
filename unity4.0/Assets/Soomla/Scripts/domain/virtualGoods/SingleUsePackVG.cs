@@ -81,8 +81,9 @@ namespace Soomla{
 #if UNITY_EDITOR
 		public override void Buy()
 		{
-			PurchaseType.Buy();
+			PurchaseType.Buy(ItemId);
 			StoreInventory.GiveItem(GoodItemId, GoodAmount);
+			PurchaseType.Success(ItemId);
 		}
 #endif
 

@@ -47,10 +47,11 @@ namespace Soomla
 		}
 
 #if UNITY_EDITOR
-		public virtual void Buy ()
+		public virtual void Buy()
 		{
-				PurchaseType.Buy ();
-				StoreInventory.GiveItem (ItemId, 1);
+			PurchaseType.Buy(ItemId);
+			StoreInventory.GiveItem(ItemId, 1);
+			PurchaseType.Success(ItemId);
 		}
 #endif
 

@@ -28,7 +28,8 @@ namespace Soomla
 		}
 
 #if UNITY_EDITOR
-		public abstract void Buy();
+		public abstract void Buy(string itemId);
+		public abstract void Success(string itemId);
 #endif
 	}
 	
