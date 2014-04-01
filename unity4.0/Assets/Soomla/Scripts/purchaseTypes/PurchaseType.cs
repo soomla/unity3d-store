@@ -26,6 +26,11 @@ namespace Soomla
 		public PurchaseType ()
 		{
 		}
+
+#if UNITY_EDITOR
+		public abstract void Buy(string itemId);
+		public abstract void Success(string itemId);
+#endif
 	}
 	
 	

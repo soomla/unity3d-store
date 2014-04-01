@@ -50,6 +50,17 @@ namespace Soomla
 		{
 			this.MarketItem = marketItem;
 		}
+
+#if UNITY_EDITOR
+		public override void Buy(string itemId)
+		{
+			StoreEvents.instance.onMarketPurchaseStarted(itemId);
+		}
+
+		public override void Success(string itemId) {
+			StoreEvents.instance.onMarketPurchase(itemId);
+		}
+#endif
 	}
 }
 
