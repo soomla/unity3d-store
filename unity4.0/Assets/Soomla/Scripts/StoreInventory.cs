@@ -16,7 +16,8 @@ namespace Soomla
 #if UNITY_EDITOR
 		private class Upgrade {
 			public int level;
-			public string itemId;
+			public string goodItemId;
+			public string currentUpgradeItemId;
 		}
 
 		private static Dictionary<string, int> localItemBalances = new Dictionary<string, int> ();
@@ -174,19 +175,20 @@ namespace Soomla
 			VirtualItem item = RequireItem(itemId);
 
 			int itemAmount;
-			if (localItemBalances.TryGetValue(itemId, out itemAmount) && itemAmount >= amount) {
+			if (localItemBalances.TryGetValue(itemId, out itemAmount)) {
+				int tmpAmount = itemAmount;
 				itemAmount -= amount;
-				
-				localItemBalances[itemId] = itemAmount;
-			} else {
-				if (item is VirtualCurrency)
-					throw new InsufficientFundsException(itemId);
-				else
-					throw new NotEnoughGoodsException(itemId);
-			}
 
-			if (notify)
-				NotifyChange(item, itemAmount, -amount);
+				if (itemAmount > 0) {
+					localItemBalances[itemId] = itemAmount;
+				} else {
+					itemAmount = 0;
+					localItemBalances.Remove(itemId);
+				}
+
+				if (notify)
+					NotifyChange(item, itemAmount, tmpAmount - itemAmount);
+			}
 #endif
 		}
 				
@@ -337,7 +339,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			Upgrade upgrade;
 			if (localUpgrades.TryGetValue(goodItemId, out upgrade))
-				return upgrade.itemId;
+				return upgrade.currentUpgradeItemId;
 #endif
 			return null;
 		}
@@ -360,12 +362,12 @@ namespace Soomla
 #if UNITY_EDITOR
 			Upgrade upgrade;
 			if (localUpgrades.TryGetValue(goodItemId, out upgrade)) {
-				UpgradeVG up = RequireItem<UpgradeVG>(upgrade.itemId, "UpgradeItemId");
+				UpgradeVG up = RequireItem<UpgradeVG>(upgrade.currentUpgradeItemId, "UpgradeItemId");
 
 				if (!string.IsNullOrEmpty(up.NextItemId)) {
 					UpgradeVG next = RequireItem<UpgradeVG>(up.NextItemId, "UpgradeItemId");
 					next.Buy();
-					upgrade.itemId = next.ItemId;
+					upgrade.currentUpgradeItemId = next.ItemId;
 					upgrade.level++;
 
 					Evt.onGoodUpgrade(goodItemId + "#SOOM#" + next.ItemId);
@@ -374,7 +376,7 @@ namespace Soomla
 				UpgradeVG first = StoreInfo.GetFirstUpgradeForVirtualGood(goodItemId);
 				if (first != null) {
 					first.Buy();
-					localUpgrades.Add(goodItemId, new Upgrade { itemId = first.ItemId, level = 1 });
+					localUpgrades.Add(goodItemId, new Upgrade { goodItemId = goodItemId, currentUpgradeItemId = first.ItemId, level = 1 });
 
 					Evt.onGoodUpgrade(goodItemId + "#SOOM#" + first.ItemId);
 				}
