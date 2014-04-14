@@ -59,7 +59,8 @@ namespace Soomla
 		}
 
 		public override void Success(string itemId) {
-			StoreEvents.instance.onMarketPurchase(itemId);
+			var purchaseToken = System.Guid.NewGuid();
+			StoreEvents.instance.onMarketPurchase(itemId + "#SOOM#" + purchaseToken.ToString());
 		}
 #endif
 	}
