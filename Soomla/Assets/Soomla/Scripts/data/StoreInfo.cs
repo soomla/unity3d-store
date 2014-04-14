@@ -279,8 +279,6 @@ namespace Soomla
 				return category;
 			else
 				throw new VirtualItemNotFoundException("GoodItemId", goodItemId);
-			
-			return null;
 #endif
 		}
 		

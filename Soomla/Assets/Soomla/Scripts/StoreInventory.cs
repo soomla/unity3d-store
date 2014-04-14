@@ -158,15 +158,13 @@ namespace Soomla
 			VirtualItem item = RequireItem(itemId);
 
 			int itemAmount;
-			if (localItemBalances.TryGetValue(itemId, out itemAmount) && itemAmount >= amount) {
+			if (localItemBalances.TryGetValue(itemId, out itemAmount)) {
 				itemAmount -= amount;
-				
-				localItemBalances[itemId] = itemAmount;
-			} else {
-				if (item is VirtualCurrency)
-					throw new InsufficientFundsException(itemId);
+
+				if (itemAmount > 0)
+					localItemBalances[itemId] = itemAmount;
 				else
-					throw new NotEnoughGoodsException(itemId);
+					localItemBalances.Remove(itemId);
 			}
 
 			if (notify)
