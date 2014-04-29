@@ -6,8 +6,13 @@ namespace Soomla {
 	public class StoreEvents : MonoBehaviour {
 
 		private const string TAG = "SOOMLA StoreEvents";
-		
+
+
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public static StoreEvents instance { get; private set; }
+#else
 		private static StoreEvents instance = null;
+#endif
 		
 		void Awake(){
 			if(instance == null){ 	// making sure we only initialize one instance.

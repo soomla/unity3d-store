@@ -116,6 +116,16 @@ namespace Soomla
 			
 			return null;
 		}
+
+		public override bool Equals(object obj)	{
+			return 
+				obj.GetType() == this.GetType() &&
+				((VirtualItem)obj).ItemId == ItemId;
+		}
+
+		public override int GetHashCode () {
+			return base.GetHashCode ();
+		}
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
 		private static bool isInstanceOf(AndroidJavaObject jniItem, string classJniStr) {
