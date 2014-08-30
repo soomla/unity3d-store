@@ -16,7 +16,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace Soomla {	
+namespace Soomla.Store {	
 	
 	/// <summary>
 	/// A <c>SingleUsePackVG</c> is just a bundle of <c>SingleUseVG</c>s.
@@ -61,11 +61,11 @@ namespace Soomla {
 		}
 
 #if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
-		public override void Buy()
+		public override void Buy(string payload)
 		{
 			PurchaseType.Buy(ItemId);
 			StoreInventory.GiveItem(GoodItemId, GoodAmount);
-			PurchaseType.Success(ItemId);
+			PurchaseType.Success(ItemId, payload);
 		}
 #endif
 		
@@ -103,7 +103,7 @@ namespace Soomla {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("SingleUsePackVG");
 		}

@@ -1,0 +1,24 @@
+//
+// Prefix header
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+#endif
+
+#include "UnityTrampolineConfigure.h"
+#include "iPhone_Common.h"
+#include "UnityInterface.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void UnitySendMessage(const char* obj, const char* method, const char* msg);
+
+#ifdef __cplusplus
+}
+#endif
+
+#define printf_console printf

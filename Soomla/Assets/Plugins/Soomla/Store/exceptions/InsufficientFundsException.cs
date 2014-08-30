@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This exception is thrown when a user tries to make a purchase and does not have enough funds.

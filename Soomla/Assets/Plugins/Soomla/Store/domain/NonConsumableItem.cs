@@ -15,7 +15,7 @@
 using System;
 using UnityEngine;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// A representation of a non-consumable item in the Market. These kinds of items are bought by the
@@ -72,6 +72,10 @@ namespace Soomla {
 			return base.toJSONObject();
 		}
 
+		public override void save() 
+		{
+			save("NonConsumableItem");
+		}
 	}
 }
 

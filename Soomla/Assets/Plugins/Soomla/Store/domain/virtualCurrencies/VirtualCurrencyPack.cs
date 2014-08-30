@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Soomla{	
+namespace Soomla.Store{	
 	
 	/// <summary>
 	/// Every game has its virtual currencies. This class represents a pack of <c>VirtualCurrency</c>s.
@@ -52,11 +52,11 @@ namespace Soomla{
 		}
 
 #if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
-		public override void Buy()
+		public override void Buy(string payload)
 		{
 			PurchaseType.Buy(ItemId);
 			StoreInventory.GiveItem(CurrencyItemId, CurrencyAmount);
-			PurchaseType.Success(ItemId);
+			PurchaseType.Success(ItemId, payload);
 		}
 #endif
 
@@ -97,7 +97,7 @@ namespace Soomla{
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("VirtualCurrencyPack");
 		}

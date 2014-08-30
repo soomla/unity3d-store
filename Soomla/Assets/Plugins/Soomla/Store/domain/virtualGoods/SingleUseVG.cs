@@ -16,7 +16,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace Soomla {	
+namespace Soomla.Store {	
 
 	/// <summary>
 	/// Single use virtual goods are the most common type of <c>VirtualGood</c>.
@@ -74,7 +74,7 @@ namespace Soomla {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("SingleUseVG");
 		}

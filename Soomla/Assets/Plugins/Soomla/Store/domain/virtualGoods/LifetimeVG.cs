@@ -16,7 +16,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace Soomla {	
+namespace Soomla.Store {	
 	
 	/// <summary>
 	/// A <c>LifetimeVG</c> is a virtual good that is bought once and kept forever.
@@ -50,10 +50,10 @@ namespace Soomla {
 		}
 
 #if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
-		public override void Buy() {
+		public override void Buy(string payload) {
 			// buy only if we have no such item
 			if (StoreInventory.GetItemBalance(ItemId) < 1) {
-				base.Buy();
+				base.Buy(payload);
 			}
 		}
 #endif
@@ -83,7 +83,7 @@ namespace Soomla {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("LifetimeVG");
 		}

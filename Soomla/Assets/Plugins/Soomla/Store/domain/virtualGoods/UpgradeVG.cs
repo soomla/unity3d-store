@@ -16,7 +16,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace Soomla {	
+namespace Soomla.Store {	
 	
 	/// <summary>
 	/// An upgrade virtual good is one VG in a series of VGs that define an upgrade scale of an
@@ -108,7 +108,7 @@ namespace Soomla {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public new void save() 
+		public override void save() 
 		{
 			save("UpgradeVG");
 		}

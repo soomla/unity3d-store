@@ -1,5 +1,5 @@
 #import "UnityStoreAssets.h"
-#import "JSONConsts.h"
+#import "StoreJSONConsts.h"
 #import "VirtualCurrencyPack.h"
 #import "VirtualCurrency.h"
 #import "VirtualGood.h"
@@ -10,7 +10,7 @@
 #import "EquippableVG.h"
 #import "SingleUsePackVG.h"
 #import "UpgradeVG.h"
-#import "StoreUtils.h"
+#import "SoomlaUtils.h"
 #import "StoreInfo.h"
 
 extern "C"{
@@ -22,7 +22,7 @@ extern "C"{
     void storeAssets_Save(const char* type, const char* viJSON) {
         NSString* viJSONS = [NSString stringWithUTF8String:viJSON];
         NSString* typeS = [NSString stringWithUTF8String:type];
-        NSDictionary* itemDict = [StoreUtils jsonStringToDict:viJSONS];
+        NSDictionary* itemDict = [SoomlaUtils jsonStringToDict:viJSONS];
         
         if ([typeS isEqualToString:@"EquippableVG"]) {
             [[StoreInfo getInstance] save:[[EquippableVG alloc] initWithDictionary:itemDict]];
@@ -79,7 +79,7 @@ static NSString* TAG = @"SOOMLA UnityStoreAssets";
    
     @try {
 
-        NSDictionary* storeInfo = [StoreUtils jsonStringToDict:storeAssetsJSON];
+        NSDictionary* storeInfo = [SoomlaUtils jsonStringToDict:storeAssetsJSON];
         
         NSMutableArray* currencies = [[[NSMutableArray alloc] init] autorelease];
         NSArray* currenciesDicts = [storeInfo objectForKey:JSON_STORE_CURRENCIES];

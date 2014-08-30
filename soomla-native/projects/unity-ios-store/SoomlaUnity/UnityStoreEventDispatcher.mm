@@ -1,6 +1,6 @@
 
 #import "UnityStoreEventDispatcher.h"
-#import "EventHandling.h"
+#import "StoreEventHandling.h"
 #import "MarketItem.h"
 #import "VirtualGood.h"
 #import "VirtualCurrency.h"
@@ -19,7 +19,7 @@
 
 - (id) init {
     if (self = [super init]) {
-        [EventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
+        [StoreEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
     }
 
     return self;
@@ -62,7 +62,8 @@
     }
 	else if ([notification.name isEqualToString:EVENT_ITEM_PURCHASED]) {
         PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
-        UnitySendMessage("StoreEvents", "onItemPurchased", [pvi.itemId UTF8String]);
+        NSString* payload = [notification.userInfo objectForKey:DICT_ELEMENT_DEVELOPERPAYLOAD];
+        UnitySendMessage("StoreEvents", "onItemPurchased", [[NSString stringWithFormat:@"%@#SOOM#%@", pvi.itemId, payload] UTF8String]);
     }
 	else if ([notification.name isEqualToString:EVENT_ITEM_PURCHASE_STARTED]) {
 		PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
@@ -75,7 +76,8 @@
 	else if ([notification.name isEqualToString:EVENT_MARKET_PURCHASED]) {
         PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
         NSString* purchaseToken = [notification.userInfo objectForKey:DICT_ELEMENT_TOKEN];
-        UnitySendMessage("StoreEvents", "onMarketPurchase", [[NSString stringWithFormat:@"%@#SOOM#[iOS Purchase no payload]#SOOM#%@", pvi.itemId, purchaseToken] UTF8String]);
+        NSString* payload = [notification.userInfo objectForKey:DICT_ELEMENT_DEVELOPERPAYLOAD];
+        UnitySendMessage("StoreEvents", "onMarketPurchase", [[NSString stringWithFormat:@"%@#SOOM#%@#SOOM#%@", pvi.itemId, payload, purchaseToken] UTF8String]);
     }
     else if ([notification.name isEqualToString:EVENT_MARKET_PURCHASE_STARTED]) {
 	    PurchasableVirtualItem* pvi = [notification.userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
@@ -107,8 +109,8 @@
     else if ([notification.name isEqualToString:EVENT_UNEXPECTED_ERROR_IN_STORE]) {
         UnitySendMessage("StoreEvents", "onUnexpectedErrorInStore", "");
     }
-    else if ([notification.name isEqualToString:EVENT_STORECONTROLLER_INIT]) {
-        UnitySendMessage("StoreEvents", "onStoreControllerInitialized", "");
+    else if ([notification.name isEqualToString:EVENT_SOOMLASTORE_INIT]) {
+        UnitySendMessage("StoreEvents", "onSoomlaStoreInitialized", "");
     }
 }
 

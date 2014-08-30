@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// <c>StoreInfo</c> for iOS.
@@ -71,11 +71,11 @@ namespace Soomla {
 		/// </summary>
 		/// <param name="storeAssets">your game's economy</param>
 		override protected void _initialize(IStoreAssets storeAssets) {
-			Utils.LogDebug(TAG, "pushing data to StoreAssets on ios side");
+			SoomlaUtils.LogDebug(TAG, "pushing data to StoreAssets on ios side");
 			string storeAssetsJSON = IStoreAssetsToJSON(storeAssets);
 			int version = storeAssets.GetVersion();
 			storeAssets_Init(version, storeAssetsJSON);
-			Utils.LogDebug(TAG, "done! (pushing data to StoreAssets on ios side)");
+			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on ios side)");
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Soomla {
 			
 			string json = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
-			Utils.LogDebug(TAG, "Got json: " + json);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + json);
 
 			JSONObject obj = new JSONObject(json);
 			return VirtualItem.factoryItemFromJSONObject(obj);
@@ -181,7 +181,7 @@ namespace Soomla {
 			string upgradesJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + upgradesJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + upgradesJson);
 			
 			JSONObject upgradesArr = new JSONObject(upgradesJson);
 			foreach(JSONObject obj in upgradesArr.list) {
@@ -203,7 +203,7 @@ namespace Soomla {
 			string currenciesJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + currenciesJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + currenciesJson);
 			
 			JSONObject currenciesArr = new JSONObject(currenciesJson);
 			foreach(JSONObject obj in currenciesArr.list) {
@@ -225,7 +225,7 @@ namespace Soomla {
 			string goodsJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + goodsJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + goodsJson);
 			
 			JSONObject goodsArr = new JSONObject(goodsJson);
 			foreach(JSONObject obj in goodsArr.list) {
@@ -247,7 +247,7 @@ namespace Soomla {
 			string packsJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + packsJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + packsJson);
 			
 			JSONObject packsArr = new JSONObject(packsJson);
 			foreach(JSONObject obj in packsArr.list) {
@@ -269,7 +269,7 @@ namespace Soomla {
 			string nonConsumableJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + nonConsumableJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + nonConsumableJson);
 			
 			JSONObject nonConsArr = new JSONObject(nonConsumableJson);
 			foreach(JSONObject obj in nonConsArr.list) {
@@ -291,7 +291,7 @@ namespace Soomla {
 			string categoriesJson = Marshal.PtrToStringAnsi(p);
 			Marshal.FreeHGlobal(p);
 			
-			Utils.LogDebug(TAG, "Got json: " + categoriesJson);
+			SoomlaUtils.LogDebug(TAG, "Got json: " + categoriesJson);
 			
 			JSONObject categoriesArr = new JSONObject(categoriesJson);
 			foreach(JSONObject obj in categoriesArr.list) {

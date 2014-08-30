@@ -1,64 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="module_unityandroidstore" default="compile.module.unityandroidstore">
   <dirname property="module.unityandroidstore.basedir" file="${ant.file.module_unityandroidstore}"/>
-  
+
   <property name="module.jdk.home.unityandroidstore" value="${jdk.home.android}"/>
   <property name="module.jdk.bin.unityandroidstore" value="${jdk.bin.android}"/>
   <property name="module.jdk.classpath.unityandroidstore" value="jdk.classpath.android"/>
-  
+
   <property name="compiler.args.unityandroidstore" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
-  
+
   <property name="unityandroidstore.output.dir" value="${module.unityandroidstore.basedir}/out/production/UnityAndroidStore"/>
-  
+
   <path id="unityandroidstore.module.bootclasspath">
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
-  
+
   <path id="unityandroidstore.module.production.classpath">
     <path refid="${module.jdk.classpath.unityandroidstore}"/>
     <pathelement location="${basedir}/libs/unity-classes.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/AndroidStore.jar"/>
+    <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/SoomlaAndroidCore.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/square-otto-1.3.2.jar"/>
   </path>
-  
+
   <path id="unityandroidstore.runtime.production.module.classpath">
     <pathelement location="${unityandroidstore.output.dir}"/>
     <pathelement location="${basedir}/libs/unity-classes.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/AndroidStore.jar"/>
+    <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/SoomlaAndroidCore.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/square-otto-1.3.2.jar"/>
   </path>
-  
+
   <path id="unityandroidstore.module.classpath">
     <path refid="${module.jdk.classpath.unityandroidstore}"/>
     <pathelement location="${unityandroidstore.output.dir}"/>
     <pathelement location="${basedir}/libs/unity-classes.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/AndroidStore.jar"/>
+    <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/SoomlaAndroidCore.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/square-otto-1.3.2.jar"/>
   </path>
-  
+
   <path id="unityandroidstore.runtime.module.classpath">
     <pathelement location="${unityandroidstore.output.dir}"/>
     <pathelement location="${basedir}/libs/unity-classes.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/AndroidStore.jar"/>
+    <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/SoomlaAndroidCore.jar"/>
     <pathelement location="${basedir}/../../../Soomla/Assets/Plugins/Android/square-otto-1.3.2.jar"/>
   </path>
-  
-  
+
+
   <patternset id="excluded.from.module.unityandroidstore">
     <patternset refid="ignored.files"/>
   </patternset>
-  
+
   <patternset id="excluded.from.compilation.unityandroidstore">
     <patternset refid="compiler.excluded"/>
     <patternset refid="excluded.from.module.unityandroidstore"/>
   </patternset>
-  
+
   <path id="unityandroidstore.module.sourcepath">
     <dirset dir="${module.unityandroidstore.basedir}">
       <include name="src"/>
     </dirset>
   </path>
-  
+
   <target name="config">
 
     <property name="config-target-path" value="${basedir}/src/com/soomla/store/"/>
@@ -70,7 +74,7 @@
       <filter token="CONFIG.LOGGING" value="${logging}"/>
      </filterset>
     </copy>
-  
+
     <!-- Now set it to read-only, as we don't want people accidentally
          editing the wrong one. NOTE: This step is unnecessary, but I do
          it so the developers remember that this is not the original file. -->
@@ -78,9 +82,9 @@
     <!-- <attrib file="${config-target-path}/StoreConfig.java" readonly="true"/> -->
 
    </target>
-  
+
   <target name="compile.module.unityandroidstore" depends="compile.module.unityandroidstore.production" description="Compile module UnityAndroidStore"/>
-  
+
   <target name="compile.module.unityandroidstore.production" description="Compile module UnityAndroidStore; production classes">
     <mkdir dir="${unityandroidstore.output.dir}"/>
     <javac destdir="${unityandroidstore.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.unityandroidstore}/javac">
@@ -90,7 +94,7 @@
       <src refid="unityandroidstore.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.unityandroidstore"/>
     </javac>
-    
+
     <copy todir="${unityandroidstore.output.dir}">
       <fileset dir="${module.unityandroidstore.basedir}/src">
         <patternset refid="compiler.resources"/>
@@ -99,7 +103,7 @@
       </fileset>
     </copy>
   </target>
-  
+
   <target name="clean.module.unityandroidstore" description="cleanup module">
     <delete dir="${unityandroidstore.output.dir}"/>
   </target>

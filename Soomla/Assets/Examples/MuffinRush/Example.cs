@@ -21,7 +21,7 @@ using System;
 /// <summary>
 /// 
 /// </summary>
-namespace Soomla.Example {
+namespace Soomla.Store.Example {
 
 
 	public class Example : MonoBehaviour {

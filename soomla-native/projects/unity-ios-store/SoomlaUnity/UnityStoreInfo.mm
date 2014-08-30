@@ -1,26 +1,10 @@
 #import "UnityStoreAssets.h"
-#import "VirtualCategory.h"
-#import "VirtualCurrency.h"
-#import "VirtualGood.h"
-#import "VirtualCurrencyPack.h"
-#import "StoreInventory.h"
-#import "StoreController.h"
 #import "VirtualItemNotFoundException.h"
 #import "UnityCommons.h"
+#import "UnityStoreCommons.h"
+#import "VirtualItem.h"
 #import "StoreInfo.h"
-#import "NonConsumableItem.h"
-#import "PurchasableVirtualItem.h"
-#import "StoreUtils.h"
-
-char* AutonomousStringCopy (const char* string)
-{
-    if (string == NULL)
-       return NULL;
-
-    char* res = (char*)malloc(strlen(string) + 1);
-    strcpy(res, string);
-    return res;
-}
+#import "SoomlaUtils.h"
 
 extern "C"{
 	
@@ -32,7 +16,7 @@ extern "C"{
 		    NSDictionary* nameWithClass = [NSDictionary dictionaryWithObjectsAndKeys:
 		                                   [vi toDictionary], @"item",
 		                                   className, @"className", nil];
-			*json = AutonomousStringCopy([[StoreUtils dictToJsonString:nameWithClass] UTF8String]);
+			*json = Soom_AutonomousStringCopy([[SoomlaUtils dictToJsonString:nameWithClass] UTF8String]);
 		}
 		
 		@catch (VirtualItemNotFoundException* e) {
@@ -51,7 +35,7 @@ extern "C"{
 		    NSDictionary* nameWithClass = [NSDictionary dictionaryWithObjectsAndKeys:
 		                                   [pvi toDictionary], @"item",
 		                                   className, @"className", nil];
-			*json = AutonomousStringCopy([[StoreUtils dictToJsonString:nameWithClass] UTF8String]);
+			*json = Soom_AutonomousStringCopy([[SoomlaUtils dictToJsonString:nameWithClass] UTF8String]);
 		}
 		
 		@catch (VirtualItemNotFoundException* e) {
@@ -66,7 +50,7 @@ extern "C"{
 		NSString* goodItemIdS = [NSString stringWithUTF8String:goodItemId];
 		@try {
 			VirtualCategory* vc = [[StoreInfo getInstance] categoryForGoodWithItemId:goodItemIdS];
-			*json = AutonomousStringCopy([[StoreUtils dictToJsonString:[vc toDictionary]] UTF8String]);
+			*json = Soom_AutonomousStringCopy([[SoomlaUtils dictToJsonString:[vc toDictionary]] UTF8String]);
 		}
 		
 		@catch (VirtualItemNotFoundException* e) {
@@ -81,7 +65,7 @@ extern "C"{
 		NSString* goodItemIdS = [NSString stringWithUTF8String:goodItemId];
 		@try {
 			UpgradeVG* vgu = [[StoreInfo getInstance] firstUpgradeForGoodWithItemId:goodItemIdS];
-			*json = AutonomousStringCopy([[StoreUtils dictToJsonString:[vgu toDictionary]] UTF8String]);
+			*json = Soom_AutonomousStringCopy([[SoomlaUtils dictToJsonString:[vgu toDictionary]] UTF8String]);
 		}
 		
 		@catch (VirtualItemNotFoundException* e) {
@@ -96,7 +80,7 @@ extern "C"{
 		NSString* goodItemIdS = [NSString stringWithUTF8String:goodItemId];
 		@try {
 			UpgradeVG* vgu = [[StoreInfo getInstance] lastUpgradeForGoodWithItemId:goodItemIdS];
-			*json = AutonomousStringCopy([[StoreUtils dictToJsonString:[vgu toDictionary]] UTF8String]);
+			*json = Soom_AutonomousStringCopy([[SoomlaUtils dictToJsonString:[vgu toDictionary]] UTF8String]);
 		}
 		
 		@catch (VirtualItemNotFoundException* e) {
@@ -114,13 +98,13 @@ extern "C"{
 		if (upgrades && upgrades.count>0) {
             retJson = [[[NSMutableString alloc] initWithString:@"["] autorelease];
             for(UpgradeVG* vgu in upgrades) {
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:[vgu toDictionary]]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:[vgu toDictionary]]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
 		}
 		
-		*json = AutonomousStringCopy([retJson UTF8String]);
+		*json = Soom_AutonomousStringCopy([retJson UTF8String]);
 
 		return NO_ERR;
 	}
@@ -131,13 +115,13 @@ extern "C"{
         if (virtualCurrencies.count > 0) {
             retJson = [[[NSMutableString alloc] initWithString:@"["] autorelease];
             for(VirtualCurrency* vc in virtualCurrencies) {
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:[vc toDictionary]]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:[vc toDictionary]]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
         }
 		
-		*json = AutonomousStringCopy([retJson UTF8String]);
+		*json = Soom_AutonomousStringCopy([retJson UTF8String]);
 		
 		return NO_ERR;
 	}
@@ -152,14 +136,14 @@ extern "C"{
                 NSDictionary* nameWithClass = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [vg toDictionary], @"item",
                                                className, @"className", nil];
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:nameWithClass]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:nameWithClass]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
         }
 		
 		
-		*json = AutonomousStringCopy([retJson UTF8String]);
+		*json = Soom_AutonomousStringCopy([retJson UTF8String]);
 		
 		return NO_ERR;
 	}
@@ -170,14 +154,14 @@ extern "C"{
         if (virtualCurrencyPacks.count > 0) {
             retJson = [[[NSMutableString alloc] initWithString:@"["] autorelease];
             for(VirtualCurrencyPack* vcp in virtualCurrencyPacks) {
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:[vcp toDictionary]]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:[vcp toDictionary]]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
         }
 		
 		
-		*json = AutonomousStringCopy([retJson UTF8String]);
+		*json = Soom_AutonomousStringCopy([retJson UTF8String]);
 		
 		return NO_ERR;
 	}
@@ -188,13 +172,13 @@ extern "C"{
         if (nonConsumables.count > 0) {
             retJson = [[[NSMutableString alloc] initWithString:@"["] autorelease];
             for(NonConsumableItem* non in nonConsumables) {
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:[non toDictionary]]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:[non toDictionary]]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
         }
 		
-        *json = AutonomousStringCopy([retJson UTF8String]);
+        *json = Soom_AutonomousStringCopy([retJson UTF8String]);
 		
 		return NO_ERR;
 	}
@@ -205,14 +189,14 @@ extern "C"{
         if (virtualCategories.count > 0) {
             retJson = [[[NSMutableString alloc] initWithString:@"["] autorelease];
             for(VirtualCategory* vc in virtualCategories) {
-                [retJson appendString:[NSString stringWithFormat:@"%@,", [StoreUtils dictToJsonString:[vc toDictionary]]]];
+                [retJson appendString:[NSString stringWithFormat:@"%@,", [SoomlaUtils dictToJsonString:[vc toDictionary]]]];
             }
             [retJson deleteCharactersInRange:NSMakeRange([retJson length]-1, 1)];
             [retJson appendString:@"]"];
         }
 		
 		
-		*json = AutonomousStringCopy([retJson UTF8String]);
+		*json = Soom_AutonomousStringCopy([retJson UTF8String]);
 		
 		return NO_ERR;
 	}

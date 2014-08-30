@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This exception is thrown when looking for a <c>VirtualItem</c> that cannot be found.

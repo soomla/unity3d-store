@@ -1,0 +1,40 @@
+
+echo "creating unitypackage for SOOMLA Core"
+
+/Applications/Unity/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -logFile create_unity.log \
+  -projectPath $PWD/Soomla/ \
+  -exportPackage \
+    Assets/Plugins/Android/SoomlaAndroidCore.jar \
+    Assets/Plugins/Android/square-otto-1.3.2.jar \
+    Assets/Plugins/Android/UnitySoomlaAndroidCore.jar \
+    Assets/Plugins/iOS/libSoomlaIOSCore.a \
+    Assets/Plugins/iOS/libUnitySoomlaiOSCore.a \
+    Assets/Plugins/Soomla/Core \
+    Assets/Soomla/Editor/SoomlaPostBuild.cs \
+    Assets/Soomla/Editor/SoomlaSettingsEditor.cs \
+    Assets/Soomla/Editor/build-tools/mod_pbxproj.pyc \
+    Assets/Soomla/Prefabs/CoreEvents.prefab \
+    Assets/Soomla/Resources/SoomlaEditorScript.asset \
+    Assets/Soomla/Resources/soom_logo.png \
+  $PWD/soomla-unity3d-core.unitypackage \
+  -quit
+
+echo "creating unitypackage for SOOMLA Store"
+
+/Applications/Unity/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -logFile create_unity.log \
+  -projectPath $PWD/Soomla/ \
+  -exportPackage \
+    Assets/Plugins/Android/AndroidStore.jar \
+    Assets/Plugins/Android/UnityAndroidStore.jar \
+    Assets/Plugins/iOS/libSoomlaiOSStore.a \
+    Assets/Plugins/iOS/libUnityiOSStore.a \
+    Assets/Plugins/Soomla/Store \
+    Assets/Soomla/Editor/build-tools/Soomla_StoreRunner.py \
+    Assets/Soomla/Prefabs/StoreEvents.prefab \
+    Assets/Soomla/compilations \
+  $PWD/soomla-unity3d-Store.unitypackage \
+  -quit

@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This interface represents a single game's economy. Use this interface to create your assets 

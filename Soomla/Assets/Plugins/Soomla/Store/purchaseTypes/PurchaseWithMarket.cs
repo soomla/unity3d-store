@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla
+namespace Soomla.Store
 {
 	/// <summary>
 	/// This type of Purchase is used to let users purchase <c>PurchasableVirtualItem</c>s in the platform's 
@@ -55,9 +55,8 @@ namespace Soomla
 			StoreEvents.instance.onMarketPurchaseStarted(itemId);
 		}
 		
-		public override void Success(string itemId) {
+		public override void Success(string itemId, string payload) {
 			Guid purchaseToken = System.Guid.NewGuid();
-			string payload = "[no payload in editor yet]";
 			string message = itemId + "#SOOM#" + payload + "#SOOM#" + purchaseToken.ToString();
 			StoreEvents.instance.onMarketPurchase(message);
 		}

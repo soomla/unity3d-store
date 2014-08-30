@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This class contains all string names of the keys/vals in the JSON being parsed all around the SDK.
@@ -32,10 +32,6 @@ namespace Soomla {
 	    public const string STORE_GOODS_LT           = "lifetime";
 	    public const string STORE_GOODS_EQ           = "equippable";
 	
-	    public const string ITEM_NAME                = "name";
-	    public const string ITEM_DESCRIPTION         = "description";
-	    public const string ITEM_ITEMID              = "itemId";
-	
 	    public const string CATEGORY_NAME            = "name";
 	    public const string CATEGORY_GOODSITEMIDS    = "goods_itemIds";
 	
@@ -47,6 +43,9 @@ namespace Soomla {
 #endif
 	    public const string MARKETITEM_CONSUMABLE    = "consumable";
 	    public const string MARKETITEM_PRICE         = "price";
+		public const string MARKETITEM_MARKETPRICE   = "marketPrice";
+		public const string MARKETITEM_MARKETTITLE   = "marketTitle";
+		public const string MARKETITEM_MARKETDESC    = "marketDesc";
 	
 	    public const string EQUIPPABLE_EQUIPPING     = "equipping";
 	
@@ -73,6 +72,10 @@ namespace Soomla {
 	
 	    public const string PURCHASE_VI_ITEMID       = "pvi_itemId";
 	    public const string PURCHASE_VI_AMOUNT       = "pvi_amount";
+
+		// VIR = VirtualItemReward
+		public const string VIR_ASSOCITEMID          = "associatedItemId";
+		public const string VIR_AMOUNT               = "amount";
 	}
 }
 

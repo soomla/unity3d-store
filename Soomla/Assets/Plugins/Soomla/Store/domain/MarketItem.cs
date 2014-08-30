@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This class represents an item in the market.
@@ -112,6 +112,22 @@ namespace Soomla {
 			} else {
 				this.consumable = Consumable.SUBSCRIPTION;
 			}
+
+			if (jsonObject[JSONConsts.MARKETITEM_MARKETPRICE]) {
+				this.MarketPrice = jsonObject[JSONConsts.MARKETITEM_MARKETPRICE].str;
+			} else {
+				this.MarketPrice = "";
+			}
+			if (jsonObject[JSONConsts.MARKETITEM_MARKETTITLE]) {
+				this.MarketTitle = jsonObject[JSONConsts.MARKETITEM_MARKETTITLE].str;
+			} else {
+				this.MarketTitle = "";
+			}
+			if (jsonObject[JSONConsts.MARKETITEM_MARKETDESC]) {
+				this.MarketDescription = jsonObject[JSONConsts.MARKETITEM_MARKETDESC].str;
+			} else {
+				this.MarketDescription = "";
+			}
 		}
 
 		/// <summary>
@@ -124,6 +140,11 @@ namespace Soomla {
 			obj.AddField(JSONConsts.MARKETITEM_PRODUCT_ID, this.ProductId);
 			obj.AddField(JSONConsts.MARKETITEM_CONSUMABLE, (int)(consumable));
 			obj.AddField(JSONConsts.MARKETITEM_PRICE, (float)this.Price);
+
+			obj.AddField(JSONConsts.MARKETITEM_MARKETPRICE, this.MarketPrice);
+			obj.AddField(JSONConsts.MARKETITEM_MARKETTITLE, this.MarketTitle);
+			obj.AddField(JSONConsts.MARKETITEM_MARKETDESC, this.MarketDescription);
+
 			return obj;
 		}
 

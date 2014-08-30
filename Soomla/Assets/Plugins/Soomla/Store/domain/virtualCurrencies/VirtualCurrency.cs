@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Soomla{
+namespace Soomla.Store{
 
 	/// <summary>
 	/// This is a representation of a game's virtual currency.
@@ -68,7 +68,7 @@ namespace Soomla{
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("VirtualCurrency");
 		}

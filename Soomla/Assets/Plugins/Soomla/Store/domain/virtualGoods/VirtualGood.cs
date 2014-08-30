@@ -16,7 +16,7 @@ using UnityEngine;
 using System.Collections;
 
 
-namespace Soomla {	
+namespace Soomla.Store {	
 	
 	/// <summary>
 	/// This is an abstract representation of the application's virtual good.

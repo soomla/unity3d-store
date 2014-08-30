@@ -16,7 +16,7 @@ using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// <c>StoreInventory</c> for iOS.
@@ -30,7 +30,7 @@ namespace Soomla {
 
 		/// Functions that call iOS-store functions.
 		[DllImport ("__Internal")]
-		private static extern int storeInventory_BuyItem(string itemId);
+		private static extern int storeInventory_BuyItem(string itemId, string payload);
 		[DllImport ("__Internal")]
 		private static extern int storeInventory_GetItemBalance(string itemId, out int outBalance);
 		[DllImport ("__Internal")]
@@ -64,8 +64,8 @@ namespace Soomla {
 		/// <param name="itemId">id of item to be bought</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item to be bought is not found.</exception>
 		/// <exception cref="InsufficientFundsException">Thrown if the user does not have enough funds.</exception>
-		override protected void _buyItem(string itemId) {
-			int err = storeInventory_BuyItem(itemId);
+		override protected void _buyItem(string itemId, string payload) {
+			int err = storeInventory_BuyItem(itemId, payload);
 			IOS_ErrorCodes.CheckAndThrowException(err);
 		}
 

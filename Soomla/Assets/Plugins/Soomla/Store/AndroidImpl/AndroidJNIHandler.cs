@@ -15,7 +15,7 @@
 using UnityEngine;
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This class uses JNI and provides functions that call SOOMLA's android-store.

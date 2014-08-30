@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla
+namespace Soomla.Store
 {
 	/// <summary>
 	/// This type of purchase allows users to purchase <c>PurchasableVirtualItems</c> with other 
@@ -46,11 +46,15 @@ namespace Soomla
 		public override void Buy(string itemId)
 		{
 			StoreEvents.instance.onItemPurchaseStarted(itemId);
-			StoreInventory.TakeItem(ItemId, Amount);
+
+			if (StoreInventory.GetItemBalance(ItemId) < Amount)
+				throw new InsufficientFundsException(itemId);
+			else
+				StoreInventory.TakeItem(ItemId, Amount);
 		}
 		
-		public override void Success(string itemId) {
-			StoreEvents.instance.onItemPurchased(itemId);
+		public override void Success(string itemId, string payload) {
+			StoreEvents.instance.onItemPurchased(itemId + "#SOOM#" + payload);
 		}
 #endif
 	}

@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla
+namespace Soomla.Store
 {
 	/// <summary>
 	/// A <c>PurchaseType</c> is a way to purchase a <c>PurchasableVirtualItem</c>. This
@@ -32,7 +32,7 @@ namespace Soomla
 
 #if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
 		public abstract void Buy(string itemId);
-		public abstract void Success(string itemId);
+		public abstract void Success(string itemId, string payload);
 #endif
 	}
 

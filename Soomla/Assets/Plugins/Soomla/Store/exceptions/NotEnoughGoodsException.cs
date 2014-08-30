@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// This exception is thrown when a user tries to equip a virtual good which he/she does not own.

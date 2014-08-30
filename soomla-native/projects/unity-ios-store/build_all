@@ -1,5 +1,6 @@
-rm -rf ../../../Soomla/Assets/Soomla/compilations/ios/debug
-rm -rf ../../../Soomla/Assets/Soomla/compilations/ios/release
 
-xcodebuild -configuration Debug -sdk iphoneos build CREATING_UNIVERSAL_DIR=$PWD/../../../Soomla/Assets/Soomla/compilations/ios/debug
-xcodebuild -configuration Release -sdk iphoneos build CREATING_UNIVERSAL_DIR=$PWD/../../../Soomla/Assets/Soomla/compilations/ios/release
+rm -rf build
+
+xcodebuild -configuration Release -sdk iphoneos7.1 -project UnityiOSStore.xcodeproj -target UnityiOSStore clean build CREATING_UNIVERSAL_DIR=$PWD/build/release
+
+cp build/release/libUnityiOSStore.a ../../../Soomla/Assets/Plugins/iOS/

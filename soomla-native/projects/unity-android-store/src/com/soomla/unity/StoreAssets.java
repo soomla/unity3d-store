@@ -3,15 +3,16 @@ package com.soomla.unity;
 import java.util.ArrayList;
 
 import com.soomla.store.IStoreAssets;
-import com.soomla.store.StoreConfig;
-import com.soomla.store.StoreUtils;
-import com.soomla.store.data.JSONConsts;
+import com.soomla.SoomlaApp;
+import com.soomla.SoomlaUtils;
 import com.soomla.store.data.StoreInfo;
+import com.soomla.store.data.StoreJSONConsts;
 import com.soomla.store.domain.NonConsumableItem;
 import com.soomla.store.domain.VirtualCategory;
 import com.soomla.store.domain.virtualCurrencies.VirtualCurrency;
 import com.soomla.store.domain.virtualCurrencies.VirtualCurrencyPack;
 import com.soomla.store.domain.virtualGoods.*;
+import com.unity3d.player.UnityPlayer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,14 +28,16 @@ public class StoreAssets implements IStoreAssets {
     public static int version = 0;
 
     public static void prepare(int oVersion, String storeAssetsJSON) {
-        StoreUtils.LogDebug(TAG, "the storeAssets json is: " + storeAssetsJSON);
+        SoomlaApp.setExternalContext(UnityPlayer.currentActivity);
+
+        SoomlaUtils.LogDebug(TAG, "the storeAssets json is: " + storeAssetsJSON);
 
         try {
             version = oVersion;
 
             JSONObject jsonObject = new JSONObject(storeAssetsJSON);
 
-            JSONArray virtualCurrencies = jsonObject.getJSONArray(JSONConsts.STORE_CURRENCIES);
+            JSONArray virtualCurrencies = jsonObject.getJSONArray(StoreJSONConsts.STORE_CURRENCIES);
             currencies = new ArrayList<VirtualCurrency>();
             for (int i=0; i<virtualCurrencies.length(); i++){
                 JSONObject o = virtualCurrencies.getJSONObject(i);
@@ -42,7 +45,7 @@ public class StoreAssets implements IStoreAssets {
                 currencies.add(c);
             }
 
-            JSONArray currencyPacks = jsonObject.getJSONArray(JSONConsts.STORE_CURRENCYPACKS);
+            JSONArray currencyPacks = jsonObject.getJSONArray(StoreJSONConsts.STORE_CURRENCYPACKS);
             StoreAssets.currencyPacks = new ArrayList<VirtualCurrencyPack>();
             for (int i=0; i<currencyPacks.length(); i++){
                 JSONObject o = currencyPacks.getJSONObject(i);
@@ -52,12 +55,12 @@ public class StoreAssets implements IStoreAssets {
 
             // The order in which VirtualGoods are created matters!
             // For example: VGU and VGP depend on other VGs
-            JSONObject virtualGoods = jsonObject.getJSONObject(JSONConsts.STORE_GOODS);
-            JSONArray suGoods = virtualGoods.getJSONArray(JSONConsts.STORE_GOODS_SU);
-            JSONArray ltGoods = virtualGoods.getJSONArray(JSONConsts.STORE_GOODS_LT);
-            JSONArray eqGoods = virtualGoods.getJSONArray(JSONConsts.STORE_GOODS_EQ);
-            JSONArray upGoods = virtualGoods.getJSONArray(JSONConsts.STORE_GOODS_UP);
-            JSONArray paGoods = virtualGoods.getJSONArray(JSONConsts.STORE_GOODS_PA);
+            JSONObject virtualGoods = jsonObject.getJSONObject(StoreJSONConsts.STORE_GOODS);
+            JSONArray suGoods = virtualGoods.getJSONArray(StoreJSONConsts.STORE_GOODS_SU);
+            JSONArray ltGoods = virtualGoods.getJSONArray(StoreJSONConsts.STORE_GOODS_LT);
+            JSONArray eqGoods = virtualGoods.getJSONArray(StoreJSONConsts.STORE_GOODS_EQ);
+            JSONArray upGoods = virtualGoods.getJSONArray(StoreJSONConsts.STORE_GOODS_UP);
+            JSONArray paGoods = virtualGoods.getJSONArray(StoreJSONConsts.STORE_GOODS_PA);
             goods = new ArrayList<VirtualGood>();
             for (int i=0; i<suGoods.length(); i++){
                 JSONObject o = suGoods.getJSONObject(i);
@@ -86,7 +89,7 @@ public class StoreAssets implements IStoreAssets {
             }
 
             // categories depend on virtual goods. That's why the have to be initialized after!
-            JSONArray virtualCategories = jsonObject.getJSONArray(JSONConsts.STORE_CATEGORIES);
+            JSONArray virtualCategories = jsonObject.getJSONArray(StoreJSONConsts.STORE_CATEGORIES);
             categories = new ArrayList<VirtualCategory>();
             for(int i=0; i<virtualCategories.length(); i++){
                 JSONObject o = virtualCategories.getJSONObject(i);
@@ -94,7 +97,7 @@ public class StoreAssets implements IStoreAssets {
                 categories.add(category);
             }
 
-            JSONArray nonConsumables = jsonObject.getJSONArray(JSONConsts.STORE_NONCONSUMABLES);
+            JSONArray nonConsumables = jsonObject.getJSONArray(StoreJSONConsts.STORE_NONCONSUMABLES);
             StoreAssets.nonConsumables = new ArrayList<NonConsumableItem>();
             for (int i=0; i<nonConsumables.length(); i++){
                 JSONObject o = nonConsumables.getJSONObject(i);
@@ -103,9 +106,9 @@ public class StoreAssets implements IStoreAssets {
             }
 
         } catch (JSONException e) {
-            StoreUtils.LogError(TAG, "Couldn't parse storeAssetsJSON (unity)");
+            SoomlaUtils.LogError(TAG, "Couldn't parse storeAssetsJSON (unity)");
         } catch (Exception ex) {
-            StoreUtils.LogError(TAG, "An error occurred while trying to prepare storeAssets (unity) " + ex.getMessage());
+            SoomlaUtils.LogError(TAG, "An error occurred while trying to prepare storeAssets (unity) " + ex.getMessage());
         }
     }
 
@@ -138,11 +141,11 @@ public class StoreAssets implements IStoreAssets {
             } else if (type.equals("NonConsumableItem")){
                 StoreInfo.save(new NonConsumableItem(jsonObject));
             } else {
-                StoreUtils.LogError(TAG, "Don't understand what's the type of the item i need to save... type: " + type);
+                SoomlaUtils.LogError(TAG, "Don't understand what's the type of the item i need to save... type: " + type);
             }
 
         } catch (JSONException e) {
-            StoreUtils.LogError(TAG, "There was an error parsing item JSON in order to save.");
+            SoomlaUtils.LogError(TAG, "There was an error parsing item JSON in order to save.");
         }
     }
 
@@ -174,10 +177,6 @@ public class StoreAssets implements IStoreAssets {
     @Override
     public NonConsumableItem[] getNonConsumableItems() {
         return nonConsumables.toArray(new NonConsumableItem[nonConsumables.size()]);
-    }
-
-    public static void setSoomSec(String soomSec) {
-        StoreConfig.SOOM_SEC = soomSec;
     }
 
     private static String TAG = "SOOMLA StoreAssets (unity)";

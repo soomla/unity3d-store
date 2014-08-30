@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Soomla {
+namespace Soomla.Store {
 
 	/// <summary>
 	/// <c>StoreInfo</c> for Android.
@@ -44,13 +44,13 @@ namespace Soomla {
 		/// number in <c>IStoreAssets</c>'s <c>getVersion</c>.
 		/// </summary>
 		override protected void _initialize(IStoreAssets storeAssets) {
-			Utils.LogDebug(TAG, "pushing data to StoreAssets on java side");
+			SoomlaUtils.LogDebug(TAG, "pushing data to StoreAssets on java side");
 			string storeAssetsJSON = IStoreAssetsToJSON(storeAssets);
 			int version = storeAssets.GetVersion();
 			using(AndroidJavaClass jniStoreAssets = new AndroidJavaClass("com.soomla.unity.StoreAssets")) {
 				jniStoreAssets.CallStatic("prepare", version, storeAssetsJSON);
 			}
-			Utils.LogDebug(TAG, "done! (pushing data to StoreAssets on java side)");
+			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on java side)");
 		}
 
 		/// <summary>
