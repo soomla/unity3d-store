@@ -47,8 +47,11 @@ namespace Soomla.Store
 		GUIContent noneBPLabel = new GUIContent("You have your own Billing Service");
 		GUIContent playLabel = new GUIContent("Google Play");
 		GUIContent amazonLabel = new GUIContent("Amazon");
+		GUIContent bazaarLabel = new GUIContent("Bazaar");
 		GUIContent publicKeyLabel = new GUIContent("API Key [?]:", "The API key from Google Play dev console (just in case you're using Google Play as billing provider).");
+		GUIContent bazaar_publicKeyLabel = new GUIContent("API Key [?]:", "The API key from Bazaar dev console (just in case you're using Bazaar as billing provider).");
 		GUIContent testPurchasesLabel = new GUIContent("Test Purchases [?]:", "Check if you want to allow purchases of Google's test product ids.");
+		GUIContent bazaar_testPurchasesLabel = new GUIContent("Test Purchases [?]:", "Check if you want to allow purchases of Bazaar's test product ids.");
 		GUIContent packageNameLabel = new GUIContent("Package Name [?]", "Your package as defined in Unity.");
 		
 		GUIContent iosSsvLabel = new GUIContent("Receipt Validation [?]:", "Check if you want your purchases validated with SOOMLA Server Side Protection Service.");
@@ -94,7 +97,7 @@ namespace Soomla.Store
 				EditorGUILayout.Space();
 				EditorGUILayout.HelpBox("Billing Service Selection", MessageType.None);
 				
-				if (!GPlayBP && !AmazonBP && !NoneBP) {
+				if (!GPlayBP && !AmazonBP && !BazaarBP && !NoneBP) {
 					GPlayBP = true;
 				}
 
@@ -107,9 +110,11 @@ namespace Soomla.Store
 					
 					AmazonBP = false;
 					GPlayBP = false;
+					BazaarBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(true);
 					handleAmazonBPJars(true);
+					handleBazaarBPJars(true);
 				}
 
 
@@ -136,11 +141,43 @@ namespace Soomla.Store
 					
 					AmazonBP = false;
 					NoneBP = false;
+					BazaarBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(false);
 					handleAmazonBPJars(true);
+					handleBazaarBPJars(true);
+				}
+
+				BazaarBP = EditorGUILayout.ToggleLeft(bazaarLabel, BazaarBP);
+				
+				if (BazaarBP) {
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.Space();
+					EditorGUILayout.LabelField(bazaar_publicKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+					BazaarPublicKey = EditorGUILayout.TextField(BazaarPublicKey, SoomlaEditorScript.FieldHeight);
+					EditorGUILayout.EndHorizontal();
+					
+					EditorGUILayout.Space();
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+					BazaarTestPurchases = EditorGUILayout.Toggle(bazaar_testPurchasesLabel, BazaarTestPurchases);
+					EditorGUILayout.EndHorizontal();
 				}
 				
+				bpUpdate.TryGetValue("bazaar", out update);
+				if (BazaarBP && !update) {
+					setCurrentBPUpdate("bazaar");
+					
+					AmazonBP = false;
+					NoneBP = false;
+					GPlayBP = false;
+					SoomlaManifestTools.GenerateManifest();
+					handleBazaarBPJars(false);
+					handlePlayBPJars(true);
+					handleAmazonBPJars(true);
+				}
+
 
 				AmazonBP = EditorGUILayout.ToggleLeft(amazonLabel, AmazonBP);
 				bpUpdate.TryGetValue("amazon", out update);
@@ -149,9 +186,11 @@ namespace Soomla.Store
 					
 					GPlayBP = false;
 					NoneBP = false;
+					BazaarBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(true);
 					handleAmazonBPJars(false);
+					handleBazaarBPJars(true);
 				}
 			}
 			EditorGUILayout.Space();
@@ -189,7 +228,18 @@ namespace Soomla.Store
 				}
 			}catch {}
 		}
-		
+
+		public static void handleBazaarBPJars(bool remove) {
+			try {
+				if (remove) {
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreBazaar.jar");
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreBazaar.jar.meta");
+				} else {
+					FileUtil.CopyFileOrDirectory(bpRootPath + "bazaar/AndroidStoreBazaar.jar",
+					                             Application.dataPath + "/Plugins/Android/AndroidStoreBazaar.jar");
+				}
+			}catch {}
+		}
 		public static void handleAmazonBPJars(bool remove) {
 			try {
 				if (remove) {
@@ -256,7 +306,45 @@ namespace Soomla.Store
 				}
 			}
 		}
+
+		public static string BAZAAR_PUB_KEY_DEFAULT = "YOUR BAZAAR RSA KEY";
 		
+		public static string BazaarPublicKey
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarPublicKey", out value) ? value : BAZAAR_PUB_KEY_DEFAULT;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarPublicKey", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("BazaarPublicKey",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
+		public static bool BazaarTestPurchases
+		{
+			get { 
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarTestPurchases", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarTestPurchases", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("BazaarTestPurchases",value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
 		public static bool IosSSV
 		{
 			get { 
@@ -328,8 +416,24 @@ namespace Soomla.Store
 				}
 			}
 		}
-		
 
-		
+		public static bool BazaarBP
+		{
+			get { 
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarBP", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set 
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("BazaarBP", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("BazaarBP",value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+				
 	}
 }
