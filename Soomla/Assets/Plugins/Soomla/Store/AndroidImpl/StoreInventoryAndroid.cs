@@ -34,10 +34,10 @@ namespace Soomla.Store {
 		/// <param name="itemId">id of item to be bought</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item to be bought is not found.</exception>
 		/// <exception cref="InsufficientFundsException">Thrown if the user does not have enough funds.</exception>
-		override protected void _buyItem(string itemId) {
+		override protected void _buyItem(string itemId, string payload) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniStoreInventory = new AndroidJavaClass("com.soomla.store.StoreInventory")) {
-				AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "buy", itemId);
+				AndroidJNIHandler.CallStaticVoid(jniStoreInventory, "buy", itemId, payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}

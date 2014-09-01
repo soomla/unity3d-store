@@ -72,6 +72,10 @@ namespace Soomla.Store {
 			return base.toJSONObject();
 		}
 
+		public override void save() 
+		{
+			save("NonConsumableItem");
+		}
 	}
 }
 

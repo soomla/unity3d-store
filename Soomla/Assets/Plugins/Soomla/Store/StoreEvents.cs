@@ -35,9 +35,24 @@ namespace Soomla.Store {
 			if(instance == null){ 	// making sure we only initialize one instance.
 				instance = this;
 				GameObject.DontDestroyOnLoad(this.gameObject);
+				Initialize();
 			} else {				// Destroying unused instances.
 				GameObject.Destroy(this.gameObject);
 			}
+		}
+
+		public static void Initialize() {
+			SoomlaUtils.LogDebug (TAG, "Initializing StoreEvents ...");
+			#if UNITY_ANDROID && !UNITY_EDITOR
+			AndroidJNI.PushLocalFrame(100);
+			//init EventHandler
+			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.unity.StoreEventHandler")) {
+				jniEventHandler.CallStatic("initialize");
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+			#elif UNITY_IOS && !UNITY_EDITOR
+			// On iOS, this is initialized inside the bridge library when we call "soomlaStore_Init" in SoomlaStoreIOS
+			#endif
 		}
 
 		/// <summary>
@@ -147,8 +162,15 @@ namespace Soomla.Store {
 		public void onItemPurchased(string message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onItemPurchased:" + message);
 
-			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(message);
-			StoreEvents.OnItemPurchased(pvi);
+			string[] vars = Regex.Split(message, "#SOOM#");
+			
+			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(vars[0]);
+			string payload = "";
+			if (vars.Length > 1) {
+				payload = vars[1];
+			}
+
+			StoreEvents.OnItemPurchased(pvi, payload);
 		}
 
 		/// <summary>
@@ -188,14 +210,18 @@ namespace Soomla.Store {
 			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(vars[0]);
 			string payload = "";
 			string purchaseToken = "";
+			string orderId = "";
 			if (vars.Length > 1) {
 				payload = vars[1];
 			}
 			if (vars.Length > 2) {
 				purchaseToken = vars[2];
 			}
+			if (vars.Length > 3) {
+				orderId = vars[3];
+			}
 
-			StoreEvents.OnMarketPurchase(pvi, purchaseToken, payload);
+			StoreEvents.OnMarketPurchase(pvi, purchaseToken, payload, orderId);
 		}
 
 		/// <summary>
@@ -284,6 +310,7 @@ namespace Soomla.Store {
 					mi.MarketPrice = marketPrice;
 					mi.MarketTitle = marketTitle;
 					mi.MarketDescription = marketDescription;
+					pvi.save();
 
 					marketItems.Add(mi);
 				} catch (VirtualItemNotFoundException ex){
@@ -347,13 +374,13 @@ namespace Soomla.Store {
 
 		public static Action<VirtualGood, UpgradeVG> OnGoodUpgrade = delegate {};
 
-		public static Action<PurchasableVirtualItem> OnItemPurchased = delegate {};
+		public static Action<PurchasableVirtualItem, string> OnItemPurchased = delegate {};
 
 		public static Action<PurchasableVirtualItem> OnItemPurchaseStarted = delegate {};
 
 		public static Action<PurchasableVirtualItem> OnMarketPurchaseCancelled = delegate {};
 
-		public static Action<PurchasableVirtualItem, string, string> OnMarketPurchase = delegate {};
+		public static Action<PurchasableVirtualItem, string, string, string> OnMarketPurchase = delegate {};
 
 		public static Action<PurchasableVirtualItem> OnMarketPurchaseStarted = delegate {};
 

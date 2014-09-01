@@ -73,7 +73,7 @@ namespace Soomla.Store {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public void save() 
+		public override void save() 
 		{
 			save("LifetimeVG");
 		}

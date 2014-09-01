@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C01B1D2B19508A61006936F0 /* UnitySoomla.mm in Sources */ = {isa = PBXBuildFile; fileRef = C01B1D2A19508A61006936F0 /* UnitySoomla.mm */; };
-		C01B1D2E19508B4C006936F0 /* UnitySoomlaEventDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = C01B1D2C19508B4C006936F0 /* UnitySoomlaEventDispatcher.h */; };
-		C01B1D2F19508B4C006936F0 /* UnitySoomlaEventDispatcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = C01B1D2D19508B4C006936F0 /* UnitySoomlaEventDispatcher.mm */; };
+		C09D99BA19A0E3C800CBD235 /* UnityStoreCommons.h in Headers */ = {isa = PBXBuildFile; fileRef = C09D99B919A0E3C800CBD235 /* UnityStoreCommons.h */; };
 		C0B3C5F3168C6D0C00161FAA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0B3C5F2168C6D0C00161FAA /* Foundation.framework */; };
-		C0CF4D60183BDCA80070CC85 /* UnityCommons.h in Headers */ = {isa = PBXBuildFile; fileRef = C0CF4D58183BDCA80070CC85 /* UnityCommons.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C0CF4D61183BDCA80070CC85 /* UnityStoreAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = C0CF4D59183BDCA80070CC85 /* UnityStoreAssets.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C0CF4D62183BDCA80070CC85 /* UnityStoreAssets.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0CF4D5A183BDCA80070CC85 /* UnityStoreAssets.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C0CF4D63183BDCA80070CC85 /* UnitySoomlaStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0CF4D5B183BDCA80070CC85 /* UnitySoomlaStore.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -34,12 +31,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C01B1D2A19508A61006936F0 /* UnitySoomla.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnitySoomla.mm; sourceTree = "<group>"; };
-		C01B1D2C19508B4C006936F0 /* UnitySoomlaEventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitySoomlaEventDispatcher.h; sourceTree = "<group>"; };
-		C01B1D2D19508B4C006936F0 /* UnitySoomlaEventDispatcher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnitySoomlaEventDispatcher.mm; sourceTree = "<group>"; };
+		C09D99B919A0E3C800CBD235 /* UnityStoreCommons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnityStoreCommons.h; sourceTree = "<group>"; };
 		C0B3C5EF168C6D0C00161FAA /* libUnityiOSStore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnityiOSStore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0B3C5F2168C6D0C00161FAA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C0CF4D58183BDCA80070CC85 /* UnityCommons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnityCommons.h; sourceTree = "<group>"; };
 		C0CF4D59183BDCA80070CC85 /* UnityStoreAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnityStoreAssets.h; sourceTree = "<group>"; };
 		C0CF4D5A183BDCA80070CC85 /* UnityStoreAssets.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityStoreAssets.mm; sourceTree = "<group>"; };
 		C0CF4D5B183BDCA80070CC85 /* UnitySoomlaStore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnitySoomlaStore.mm; sourceTree = "<group>"; };
@@ -89,10 +83,7 @@
 		C0CF4D57183BDCA80070CC85 /* SoomlaUnity */ = {
 			isa = PBXGroup;
 			children = (
-				C01B1D2C19508B4C006936F0 /* UnitySoomlaEventDispatcher.h */,
-				C01B1D2D19508B4C006936F0 /* UnitySoomlaEventDispatcher.mm */,
-				C01B1D2A19508A61006936F0 /* UnitySoomla.mm */,
-				C0CF4D58183BDCA80070CC85 /* UnityCommons.h */,
+				C09D99B919A0E3C800CBD235 /* UnityStoreCommons.h */,
 				C0CF4D59183BDCA80070CC85 /* UnityStoreAssets.h */,
 				C0CF4D5A183BDCA80070CC85 /* UnityStoreAssets.mm */,
 				C0CF4D5B183BDCA80070CC85 /* UnitySoomlaStore.mm */,
@@ -111,10 +102,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0CF4D60183BDCA80070CC85 /* UnityCommons.h in Headers */,
 				C0CF4D61183BDCA80070CC85 /* UnityStoreAssets.h in Headers */,
+				C09D99BA19A0E3C800CBD235 /* UnityStoreCommons.h in Headers */,
 				C0CF4D64183BDCA80070CC85 /* UnityStoreEventDispatcher.h in Headers */,
-				C01B1D2E19508B4C006936F0 /* UnitySoomlaEventDispatcher.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,13 +177,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C01B1D2B19508A61006936F0 /* UnitySoomla.mm in Sources */,
 				C0CF4D62183BDCA80070CC85 /* UnityStoreAssets.mm in Sources */,
 				C0CF4D65183BDCA80070CC85 /* UnityStoreEventDispatcher.mm in Sources */,
 				C0CF4D63183BDCA80070CC85 /* UnitySoomlaStore.mm in Sources */,
 				C0CF4D67183BDCA80070CC85 /* UnityStoreInventory.mm in Sources */,
 				C0CF4D66183BDCA80070CC85 /* UnityStoreInfo.mm in Sources */,
-				C01B1D2F19508B4C006936F0 /* UnitySoomlaEventDispatcher.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,14 +240,16 @@
 			buildSettings = {
 				DSTROOT = /tmp/SoomlaIOSStore.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/iPhone_target_Prefix.pch";
+				GCC_PREFIX_HEADER = SoomlaUnity.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/**",
+					"${UNITY_HEADERS43}/**",
 					"../../../submodules/ios-store/SoomlaiOSStore/**",
 					"../../../submodules/ios-store/submodules/soomla-ios-core/SoomlaiOSCore/**",
+					"${UNITY_HEADERS45}/**",
+					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
 				);
 				LIBRARY_SEARCH_PATHS = ../../../Soomla/Assets/Plugins/iOS/;
 				OTHER_LDFLAGS = "-ObjC";
@@ -267,6 +257,10 @@
 				PRODUCT_NAME = UnityiOSStore;
 				PUBLIC_HEADERS_FOLDER_PATH = headers/public;
 				SKIP_INSTALL = YES;
+				UNITY_HEADERS43 = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/";
+				UNITY_HEADERS45 = /Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/Trampoline/Classes/;
+				UNITY_LIBS43 = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Libraries/";
+				UNITY_LIBS45 = /Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/Trampoline/Libraries/;
 			};
 			name = Debug;
 		};
@@ -276,13 +270,15 @@
 				DSTROOT = /tmp/SoomlaIOSStore.dst;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/iPhone_target_Prefix.pch";
+				GCC_PREFIX_HEADER = SoomlaUnity.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/**",
+					"${UNITY_HEADERS43}/**",
 					"../../../submodules/ios-store/SoomlaiOSStore/**",
 					"../../../submodules/ios-store/submodules/soomla-ios-core/SoomlaiOSCore/**",
+					"${UNITY_HEADERS45}/**",
+					"../../../submodules/soomla-unity3d-core/soomla-native/projects/unity-soomla-ios-core/SoomlaUnity",
 				);
 				LIBRARY_SEARCH_PATHS = ../../../Soomla/Assets/Plugins/iOS/;
 				ONLY_ACTIVE_ARCH = NO;
@@ -291,6 +287,10 @@
 				PRODUCT_NAME = UnityiOSStore;
 				PUBLIC_HEADERS_FOLDER_PATH = headers/public;
 				SKIP_INSTALL = YES;
+				UNITY_HEADERS43 = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Classes/";
+				UNITY_HEADERS45 = /Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/Trampoline/Classes/;
+				UNITY_LIBS43 = "/Applications/Unity/Unity.app/Contents/PlaybackEngines/iPhonePlayer/iPhone-Trampoline/Libraries/";
+				UNITY_LIBS45 = /Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/Trampoline/Libraries/;
 			};
 			name = Release;
 		};

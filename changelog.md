@@ -1,3 +1,26 @@
+### v1.5.3 [view commit logs](https://github.com/soomla/android-store/compare/v1.5.2...v1.5.3)
+
+* New Features
+  * You can now use StoreInventory's 'BuyItem' with a payload of your choice. This payload will be returned back to you in the purchase events when it's completed.
+  * VirtualItemReward is added.
+  * (Android) back button will exit the example app.
+
+* Fixed
+  * Firing UnexpectedErrorInStoreEvent when the user tried to buy a NonConsumableItem when it was already owned.
+
+### v1.5.2 [view commit logs](https://github.com/soomla/android-store/compare/v1.5.1...v1.5.2)
+
+* New Features
+  * Some core objects and features were extracted to a separate folder called "Core". Will be moved to a separate repo later.
+  * You only provide one secret now which is called Soomla Secret when you initialize "Soomla" (soomla core).
+  * The option to print debug messages was added to the settings panel.
+
+* Changes
+  * StoreController is now called SoomlaStore.
+
+* Fixes
+  * Android - Fixed an issue with not getting back to the app well from background during a purchase.
+
 ### v1.5.0 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.4.4...v1.5.0)
 
 * Fixes

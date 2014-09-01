@@ -159,6 +159,14 @@ namespace Soomla.Store.Example {
 					}
 				}
 			}
+
+			if (Application.platform == RuntimePlatform.Android) {
+				if (Input.GetKeyUp(KeyCode.Escape)) {
+					//quit application on back button
+					Application.Quit();
+					return;
+				}
+			}
 		}
 
 		/// <summary>

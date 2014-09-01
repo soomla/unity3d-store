@@ -51,11 +51,23 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item to be bought is not found.</exception>
 		/// <exception cref="InsufficientFundsException">Thrown if the user does not have enough funds.</exception>
 		public static void BuyItem(string itemId) {
-			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY Calling BuyItem with: " + itemId);
-			instance._buyItem(itemId);
+			BuyItem(itemId, "");
 		}
 
-		virtual protected void _buyItem(string itemId) {
+		/// <summary>
+		/// Buys the item with the given <c>itemId</c>.
+		/// </summary>
+		/// <param name="itemId">id of item to be bought</param>
+		/// <param name="payload">a string you want to be assigned to the purchase. This string
+		/// is saved in a static variable and will be given bacl to you when the purchase is completed.</param>
+		/// <exception cref="VirtualItemNotFoundException">Thrown if the item to be bought is not found.</exception>
+		/// <exception cref="InsufficientFundsException">Thrown if the user does not have enough funds.</exception>
+		public static void BuyItem(string itemId, string payload) {
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY Calling BuyItem with: " + itemId);
+			instance._buyItem(itemId, payload);
+		}
+
+		virtual protected void _buyItem(string itemId, string payload) {
 		}
 
 

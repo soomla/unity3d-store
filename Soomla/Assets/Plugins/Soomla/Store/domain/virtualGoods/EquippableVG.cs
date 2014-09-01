@@ -158,7 +158,7 @@ namespace Soomla.Store {
 		/// <summary>
 		/// Saves this instance.
 		/// </summary>
-		public new void save() 
+		public override void save() 
 		{
 			save("EquippableVG");
 		}

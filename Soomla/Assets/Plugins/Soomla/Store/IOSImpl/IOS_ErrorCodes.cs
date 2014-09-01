@@ -24,11 +24,11 @@ namespace Soomla.Store {
 
 		public static int NO_ERROR = 0;
 
-		public static int EXCEPTION_ITEM_NOT_FOUND = -1;
+		public static int EXCEPTION_ITEM_NOT_FOUND = -101;
 
-		public static int EXCEPTION_INSUFFICIENT_FUNDS = -2;
+		public static int EXCEPTION_INSUFFICIENT_FUNDS = -102;
 
-		public static int EXCEPTION_NOT_ENOUGH_GOODS = -3;
+		public static int EXCEPTION_NOT_ENOUGH_GOODS = -103;
 
 		/// <summary>
 		/// Checks the error code and throws the relevant exception.

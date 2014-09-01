@@ -3,6 +3,7 @@ package com.soomla.unity;
 import android.text.TextUtils;
 
 import com.soomla.BusProvider;
+import com.soomla.SoomlaUtils;
 import com.soomla.store.domain.MarketItem;
 import com.soomla.store.domain.virtualGoods.UpgradeVG;
 import com.soomla.store.events.BillingNotSupportedEvent;
@@ -33,8 +34,8 @@ public class StoreEventHandler {
     private static StoreEventHandler mLocalEventHandler;
 
     public static void initialize() {
+        SoomlaUtils.LogDebug("SOOMLA Unity StoreEventHandler", "Initializing StoreEventHandler ...");
         mLocalEventHandler = new StoreEventHandler();
-
     }
 
     public StoreEventHandler() {
@@ -102,12 +103,15 @@ public class StoreEventHandler {
 
     @Subscribe
     public void onItemPurchased(ItemPurchasedEvent itemPurchasedEvent) {
-        UnityPlayer.UnitySendMessage("StoreEvents", "onItemPurchased", itemPurchasedEvent.getPurchasableVirtualItem().getItemId());
+        UnityPlayer.UnitySendMessage("StoreEvents", "onItemPurchased",
+                itemPurchasedEvent.getPurchasableVirtualItem().getItemId() + "#SOOM#" +
+                        itemPurchasedEvent.getPayload());
     }
 
     @Subscribe
     public void onItemPurchaseStarted(ItemPurchaseStartedEvent itemPurchaseStartedEvent) {
-        UnityPlayer.UnitySendMessage("StoreEvents", "onItemPurchaseStarted", itemPurchaseStartedEvent.getPurchasableVirtualItem().getItemId());
+        UnityPlayer.UnitySendMessage("StoreEvents", "onItemPurchaseStarted",
+                itemPurchaseStartedEvent.getPurchasableVirtualItem().getItemId());
     }
 
     @Subscribe
@@ -121,7 +125,8 @@ public class StoreEventHandler {
         UnityPlayer.UnitySendMessage("StoreEvents", "onMarketPurchase",
                 playPurchaseEvent.getPurchasableVirtualItem().getItemId() + "#SOOM#" +
                         playPurchaseEvent.getPayload() + "#SOOM#" +
-                        playPurchaseEvent.getToken()
+                        playPurchaseEvent.getToken() + "#SOOM#" +
+                        playPurchaseEvent.getOrderId()
         );
     }
 

@@ -48,11 +48,6 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="storeAssets">Your game's economy.</param>
 		protected override void _initialize(IStoreAssets storeAssets) {
-			if (!SoomlaIOS.Initialize()) {
-				SoomlaUtils.LogError(TAG, "SOOMLA/UNITY Soomla could not be initialized!! Stopping here!!");
-				throw new ExitGUIException();
-			}
-
 			soomlaStore_SetSSV(StoreSettings.IosSSV, "https://verify.soom.la/verify_ios?platform=unity4");
 			StoreInfo.Initialize(storeAssets);
 			soomlaStore_Init();

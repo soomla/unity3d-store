@@ -24,7 +24,7 @@ namespace Soomla.Store {
 	/// of virtual items, each one will extend this class. Each one of the various types extends
 	/// <c>VirtualItem</c> and adds its own behavior to it.
 	/// </summary>
-	public abstract class VirtualItem {
+	public abstract class VirtualItem : SoomlaEntity<VirtualItem> {
 
 #if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
@@ -32,10 +32,12 @@ namespace Soomla.Store {
 #endif
 
 		private const string TAG = "SOOMLA VirtualItem";
-		
-		public string Name;
-		public string Description;
-		public string ItemId;
+
+		public string ItemId {
+			get { return this._id; }
+			set { this._id = value; }
+
+		}
 		
 		/// <summary>
 		/// Constructor.
@@ -44,17 +46,14 @@ namespace Soomla.Store {
 		/// <param name="description">Description.</param>
 		/// <param name="itemId">Item id.</param>
 		protected VirtualItem (string name, string description, string itemId)
+			: base(itemId, name, description)
 		{
-			this.Name = name;
-			this.Description = description;
-			this.ItemId = itemId;
 		}
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
-		protected VirtualItem(AndroidJavaObject jniVirtualItem) {
-			this.Name = jniVirtualItem.Call<string>("getName");
-			this.Description = jniVirtualItem.Call<string>("getDescription");
-			this.ItemId = jniVirtualItem.Call<string>("getItemId");
+		protected VirtualItem(AndroidJavaObject jniVirtualItem) 
+			: base(jniVirtualItem)
+		{
 		}
 #endif
 		/// <summary>
@@ -62,27 +61,9 @@ namespace Soomla.Store {
 		/// Generates an instance of <c>VirtualItem</c> from the given <c>JSONObject</c>.
 		/// </summary>
 		/// <param name="jsonItem">A JSONObject representation of the wanted <c>VirtualItem</c>.</param>
-		protected VirtualItem(JSONObject jsonItem) {
-			this.Name = jsonItem[JSONConsts.ITEM_NAME].str;
-			if (jsonItem[JSONConsts.ITEM_DESCRIPTION]) {
-				this.Description = jsonItem[JSONConsts.ITEM_DESCRIPTION].str;
-			} else {
-				this.Description = "";
-			}
-			this.ItemId = jsonItem[JSONConsts.ITEM_ITEMID].str;
-		}
-		
-		/// <summary>
-		/// Converts the current <c>VirtualItem</c> to a JSONObject.
-		/// </summary>
-		/// <returns>A <c>JSONObject</c> representation of the current <c>VirtualItem</c>.</returns>
-		public virtual JSONObject toJSONObject() {
-			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-			obj.AddField(JSONConsts.ITEM_NAME, this.Name);
-			obj.AddField(JSONConsts.ITEM_DESCRIPTION, this.Description);
-			obj.AddField(JSONConsts.ITEM_ITEMID, this.ItemId);
-			
-			return obj;
+		protected VirtualItem(JSONObject jsonItem) 
+			: base(jsonItem)
+		{
 		}
 
 		/// <summary>
@@ -115,10 +96,6 @@ namespace Soomla.Store {
 		}
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
-		private static bool isInstanceOf(AndroidJavaObject jniItem, string classJniStr) {
-			System.IntPtr cls = AndroidJNI.FindClass(classJniStr);
-			return AndroidJNI.IsInstanceOf(jniItem.GetRawObject(), cls);
-		}
 		
 		public static VirtualItem factoryItemFromJNI(AndroidJavaObject jniItem) {
 			SoomlaUtils.LogDebug(TAG, "Trying to create VirtualItem with itemId: " + jniItem.Call<string>("getItemId"));
@@ -146,6 +123,8 @@ namespace Soomla.Store {
 			return null;
 		}
 #endif
+
+		public abstract void save();
 
 		/// <summary>
 		/// Saves this instance according to type.
