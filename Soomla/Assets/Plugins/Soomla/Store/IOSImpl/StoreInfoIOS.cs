@@ -184,8 +184,12 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + upgradesJson);
 			
 			JSONObject upgradesArr = new JSONObject(upgradesJson);
-			foreach(JSONObject obj in upgradesArr.list) {
-				vgus.Add(new UpgradeVG(obj));
+
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (upgradesArr.list != null) {
+				foreach(JSONObject obj in upgradesArr.list) {
+					vgus.Add(new UpgradeVG(obj));
+				}
 			}
 			return vgus;
 		}
@@ -206,8 +210,11 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + currenciesJson);
 			
 			JSONObject currenciesArr = new JSONObject(currenciesJson);
-			foreach(JSONObject obj in currenciesArr.list) {
-				vcs.Add(new VirtualCurrency(obj));
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (currenciesArr.list != null) {
+				foreach(JSONObject obj in currenciesArr.list) {
+					vcs.Add(new VirtualCurrency(obj));
+				}
 			}
 			return vcs;
 		}
@@ -228,8 +235,11 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + goodsJson);
 			
 			JSONObject goodsArr = new JSONObject(goodsJson);
-			foreach(JSONObject obj in goodsArr.list) {
-				virtualGoods.Add((VirtualGood)VirtualItem.factoryItemFromJSONObject(obj));
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (goodsArr.list != null) {
+				foreach(JSONObject obj in goodsArr.list) {
+					virtualGoods.Add((VirtualGood)VirtualItem.factoryItemFromJSONObject(obj));
+				}
 			}
 			return virtualGoods;
 		}
@@ -250,8 +260,11 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + packsJson);
 			
 			JSONObject packsArr = new JSONObject(packsJson);
-			foreach(JSONObject obj in packsArr.list) {
-				vcps.Add(new VirtualCurrencyPack(obj));
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (packsArr.list != null) {
+				foreach(JSONObject obj in packsArr.list) {
+					vcps.Add(new VirtualCurrencyPack(obj));
+				}
 			}
 			return vcps;
 		}
@@ -272,8 +285,11 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + nonConsumableJson);
 			
 			JSONObject nonConsArr = new JSONObject(nonConsumableJson);
-			foreach(JSONObject obj in nonConsArr.list) {
-				nonConsumableItems.Add(new NonConsumableItem(obj));
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (nonConsArr.list != null) {
+				foreach(JSONObject obj in nonConsArr.list) {
+					nonConsumableItems.Add(new NonConsumableItem(obj));
+				}
 			}
 			return nonConsumableItems;
 		}
@@ -294,8 +310,11 @@ namespace Soomla.Store {
 			SoomlaUtils.LogDebug(TAG, "Got json: " + categoriesJson);
 			
 			JSONObject categoriesArr = new JSONObject(categoriesJson);
-			foreach(JSONObject obj in categoriesArr.list) {
-				virtualCategories.Add(new VirtualCategory(obj));
+			// .list can be == null when json string is empty (it comes empty from iOS when no entries)
+			if (categoriesArr.list != null) {
+				foreach(JSONObject obj in categoriesArr.list) {
+					virtualCategories.Add(new VirtualCategory(obj));
+				}
 			}
 			return virtualCategories;
 		}
