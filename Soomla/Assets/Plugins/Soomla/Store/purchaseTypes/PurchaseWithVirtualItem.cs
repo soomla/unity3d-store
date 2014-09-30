@@ -41,6 +41,22 @@ namespace Soomla.Store
 			this.ItemId = itemId;
 			this.Amount = amount;
 		}
+
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public override void Buy(string itemId)
+		{
+			StoreEvents.instance.onItemPurchaseStarted(itemId);
+
+			if (StoreInventory.GetItemBalance(ItemId) < Amount)
+				throw new InsufficientFundsException(itemId);
+			else
+				StoreInventory.TakeItem(ItemId, Amount);
+		}
+		
+		public override void Success(string itemId, string payload) {
+			StoreEvents.instance.onItemPurchased(itemId + "#SOOM#" + payload);
+		}
+#endif
 	}
 }
 

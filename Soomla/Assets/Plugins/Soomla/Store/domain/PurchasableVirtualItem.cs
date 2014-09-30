@@ -36,6 +36,17 @@ namespace Soomla.Store {
 		{
 			this.PurchaseType = purchaseType;
 		}
+
+
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public virtual void Buy(string payload)
+		{
+			PurchaseType.Buy(ItemId);
+			StoreInventory.GiveItem(ItemId, 1);
+			PurchaseType.Success(ItemId, payload);
+		}
+#endif
+
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
 		protected PurchasableVirtualItem(AndroidJavaObject jniVirtualItem) :

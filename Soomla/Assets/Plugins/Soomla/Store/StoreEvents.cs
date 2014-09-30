@@ -26,7 +26,11 @@ namespace Soomla.Store {
 
 		private const string TAG = "SOOMLA StoreEvents";
 
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public static StoreEvents instance { get; private set; }
+#else
 		private static StoreEvents instance = null;
+#endif
 
 		/// <summary>
 		/// Initializes game state before the game starts.
@@ -343,6 +347,8 @@ namespace Soomla.Store {
 		/// <param name="message">Not used here.</param>
 		public void onSoomlaStoreInitialized(string message) {
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onSoomlaStoreInitialized");
+
+			StoreInfo.RefreshLocalStoreInfo();
 
 			StoreEvents.OnSoomlaStoreInitialized();
 		}

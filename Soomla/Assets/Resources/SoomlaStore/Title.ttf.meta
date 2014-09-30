@@ -3,7 +3,6 @@ guid: 14c488119a91e6d4bb665ec75a4c2c1b
 TrueTypeFontImporter:
   serializedVersion: 2
   fontSize: 16
-  fontColor: {r: 1, g: 1, b: 1, a: 1}
   forceTextureCase: -2
   characterSpacing: 1
   characterPadding: 0

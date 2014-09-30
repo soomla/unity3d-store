@@ -29,8 +29,12 @@ namespace Soomla.Store
 		public PurchaseType ()
 		{
 		}
+
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public abstract void Buy(string itemId);
+		public abstract void Success(string itemId, string payload);
+#endif
 	}
-	
-	
+
 }
 

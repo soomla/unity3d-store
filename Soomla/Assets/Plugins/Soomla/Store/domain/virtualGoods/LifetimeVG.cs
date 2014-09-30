@@ -48,6 +48,16 @@ namespace Soomla.Store {
 			: base(name, description, itemId, purchaseType)
 		{
 		}
+
+#if (!UNITY_IOS && !UNITY_ANDROID) || UNITY_EDITOR
+		public override void Buy(string payload) {
+			// buy only if we have no such item
+			if (StoreInventory.GetItemBalance(ItemId) < 1) {
+				base.Buy(payload);
+			}
+		}
+#endif
+
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
 		public LifetimeVG(AndroidJavaObject jniLifetimeVG) 
