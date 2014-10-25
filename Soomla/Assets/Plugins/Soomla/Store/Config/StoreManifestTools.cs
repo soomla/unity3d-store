@@ -50,6 +50,19 @@ namespace Soomla.Store
 			} else {
 				SoomlaManifestTools.RemoveApplicationElement("receiver", "com.amazon.inapp.purchasing.ResponseReceiver");
 			}
+			if (StoreSettings.BazaarBP) {
+				SoomlaManifestTools.SetPermission("com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR");
+				SoomlaManifestTools.AddActivity("com.soomla.store.billing.bazaar.BazaarIabService$IabActivity",
+				                                new Dictionary<string, string>() { 
+					{"theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen"} 
+				});
+				SoomlaManifestTools.AddMetaDataTag("billing.service", "bazaar.BazaarIabService");
+			} else {
+				// removing BILLING permission
+				SoomlaManifestTools.RemovePermission("com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR");
+				// removing Iab Activity
+				SoomlaManifestTools.RemoveActivity("com.soomla.store.billing.bazaar.BazaarIabService$IabActivity");
+			}
 		}
 
 #endif
