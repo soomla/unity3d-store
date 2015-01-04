@@ -31,6 +31,18 @@ namespace Soomla.Store
 		protected const string TAG = "SOOMLA StoreInventory";
 
 		/// <summary>
+		/// Checks if there is enough funds to afford <c>itemId</c>.
+		/// </summary>
+		/// <param name="itemId">id of item to be checked</param>
+		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
+		public static bool CanAfford(string itemId) {
+			SoomlaUtils.LogDebug(TAG, "Checking can afford: " + itemId);
+			
+			PurchasableVirtualItem pvi = (PurchasableVirtualItem) StoreInfo.GetItemByItemId(itemId);
+			return pvi.CanAfford();
+		}
+		
+		/// <summary>
 		/// Buys the item with the given <c>itemId</c>.
 		/// </summary>
 		/// <param name="itemId">id of item to be bought</param>
@@ -39,7 +51,7 @@ namespace Soomla.Store
 		public static void BuyItem(string itemId) {
 			BuyItem(itemId, "");
 		}
-
+		
 		/// <summary>
 		/// Buys the item with the given <c>itemId</c>.
 		/// </summary>
@@ -284,7 +296,7 @@ namespace Soomla.Store
 				UpgradeVG upgrade = VirtualGoodsStorage.GetCurrentUpgrade(item);
 				if (upgrade != null) {
 					int upgradeLevel = GetGoodUpgradeLevel(item.ItemId);
-					localUpgrades.Add(item.ItemId, new LocalUpgrade { itemId = upgrade.ItemId, level = upgradeLevel });
+					localUpgrades.AddOrUpdate(item.ItemId, new LocalUpgrade { itemId = upgrade.ItemId, level = upgradeLevel });
 				}
 				
 				if (item is EquippableVG) {
@@ -303,8 +315,8 @@ namespace Soomla.Store
 				localUpgrades.Remove(vg.ItemId);
 			} else {
 				int upgradeLevel = GetGoodUpgradeLevel(vg.ItemId);
-				LocalUpgrade upgrade = localUpgrades[vg.ItemId];
-				if (upgrade != null) {
+				LocalUpgrade upgrade;
+				if (localUpgrades.TryGetValue(vg.ItemId, out upgrade)) {
 					upgrade.itemId = uvg.ItemId;
 					upgrade.level = upgradeLevel;
 				} else {

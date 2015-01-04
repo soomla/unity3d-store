@@ -69,8 +69,18 @@ namespace Soomla.Store
 
 			JSONObject eventJSON = new JSONObject();
 			eventJSON.AddField("itemId", AssociatedItem.ItemId);
-			StoreEvents.Instance.onItemPurchaseStarted(eventJSON.print());
+			StoreEvents.Instance.onItemPurchaseStarted(eventJSON.print(), true);
 			SoomlaStore.BuyMarketItem(MarketItem.ProductId, payload);
+		}
+
+		/// <summary>
+		/// Checks if there is enough funds to afford the <code>PurchasableVirtualItem</code>.
+		/// Implementation in subclasses will be according to specific type of purchase.
+		/// </summary>
+		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
+		public override bool CanAfford() {
+			// for market purchases, always assume it can be afforded
+			return true;
 		}
 	}
 }

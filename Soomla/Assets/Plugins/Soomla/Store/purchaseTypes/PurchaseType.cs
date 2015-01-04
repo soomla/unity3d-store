@@ -46,6 +46,13 @@ namespace Soomla.Store
 		///   purchase is completed.</param>
 		/// <exception cref="Soomla.Store.InsufficientFundsException">throws InsufficientFundsException</exception>
 		public abstract void Buy(string payload);
+
+		/// <summary>
+		/// Checks if there is enough funds to afford the <code>PurchasableVirtualItem</code>.
+		/// Implementation in subclasses will be according to specific type of purchase.
+		/// </summary>
+		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
+		public abstract bool CanAfford();
 	}
 
 }

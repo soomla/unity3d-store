@@ -71,7 +71,7 @@ namespace Soomla.Store
 		}
 
 		public void OnInfoGUI() {
-			SoomlaEditorScript.SelectableLabelField(frameworkVersion, "1.7.0");
+			SoomlaEditorScript.SelectableLabelField(frameworkVersion, "1.7.7");
 			SoomlaEditorScript.SelectableLabelField(buildVersion, "1");
 			EditorGUILayout.Space();
 		}
@@ -250,13 +250,13 @@ namespace Soomla.Store
 				if (remove) {
 					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar");
 					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar.meta");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar");
-					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar.meta");
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-2.0.1.jar");
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/in-app-purchasing-2.0.1.jar.meta");
 				} else {
 					FileUtil.CopyFileOrDirectory(bpRootPath + "amazon/AndroidStoreAmazon.jar",
 					                             Application.dataPath + "/Plugins/Android/AndroidStoreAmazon.jar");
-					FileUtil.CopyFileOrDirectory(bpRootPath + "amazon/in-app-purchasing-1.0.3.jar",
-					                             Application.dataPath + "/Plugins/Android/in-app-purchasing-1.0.3.jar");
+					FileUtil.CopyFileOrDirectory(bpRootPath + "amazon/in-app-purchasing-2.0.1.jar",
+					                             Application.dataPath + "/Plugins/Android/in-app-purchasing-2.0.1.jar");
 				}
 			}catch {}
 		}

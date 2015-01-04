@@ -216,7 +216,7 @@ namespace Soomla.Store
 		/// <param name="notify">notify if true posts balance change event.</param>
 		public static int Add(VirtualItem item, int amount, bool notify){
 			SoomlaUtils.LogDebug(TAG, "adding " + amount + " " + item.ItemId);
-			
+
 			return instance._add(item, amount, notify);
 		}
 		

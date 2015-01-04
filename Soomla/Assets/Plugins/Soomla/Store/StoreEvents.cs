@@ -55,6 +55,15 @@ namespace Soomla.Store {
 			}
 		}
 
+		public delegate void RunLaterDelegate();
+		public void RunLater(RunLaterDelegate runLaterDelegate) {
+			StartCoroutine(RunLaterPriv(runLaterDelegate));
+		}
+		private System.Collections.IEnumerator RunLaterPriv(RunLaterDelegate runLaterDelegate) {
+			yield return new WaitForSeconds(0.1f);
+			runLaterDelegate();
+		}
+		
 		/// <summary>
 		/// Initializes the different native event handlers in Android / iOS
 		/// </summary>

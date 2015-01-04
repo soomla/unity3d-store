@@ -46,6 +46,15 @@ namespace Soomla.Store {
 		}
 
 		/// <summary>
+		/// Checks if there is enough funds to afford the <code>PurchasableVirtualItem</code>.
+		/// This action uses the associated <code>PurchaseType</code> to perform the check.
+		/// </summary>
+		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
+		public bool CanAfford() {
+			return PurchaseType.CanAfford();
+		}
+		
+		/// <summary>
 		/// Buys the <code>PurchasableVirtualItem</code>, after checking if the user is in a state that
 		/// allows him/her to buy. This action uses the associated <code>PurchaseType</code> to perform
 		/// the purchase.

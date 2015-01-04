@@ -23,7 +23,7 @@ extern "C"{
         NSString* itemIdS = [NSString stringWithUTF8String:itemId];
         NSString* upgradeItemIdS = [NSString stringWithUTF8String:upgradeItemId];
         @try {
-            [[[StorageManager getInstance] virtualGoodStorage] assignCurrentUpgrade:itemIdS toGood:upgradeItemIdS withEvent:notify];
+            [[[StorageManager getInstance] virtualGoodStorage] assignCurrentUpgrade:upgradeItemIdS toGood:itemIdS withEvent:notify];
         }
         @catch (VirtualItemNotFoundException* e) {
             NSLog(@"Couldn't find a VirtualItem with itemId: %@.", itemIdS);

@@ -31,10 +31,10 @@ unity3d-store is the Unity3d flavor of SOOMLA's Store Module.
 
 ####Pre baked unitypackages:
 
-> If you're upgrading to v1.7.2 make sure you take soomla-unity3d-core again.
+> If you're upgrading to v1.7.x make sure you take soomla-unity3d-core again.
 
-[soomla-unity3d-core](https://raw.githubusercontent.com/soomla/unity3d-store/master/soomla-unity3d-core.unitypackage)  
-[unity3d-store v1.7.2](http://bit.ly/1rc21Zo)  
+[soomla-unity3d-core v1.0.2](http://library.soom.la/fetch/unity3d-core/1.0.2?cf=github)  
+[unity3d-store v1.7.7](http://library.soom.la/fetch/unity3d-store/1.7.7?cf=github)
 
 ## Debugging
 
@@ -51,7 +51,7 @@ $ git clone --recursive git@github.com:soomla/unity3d-store.git
 
 ## Getting Started
 
-1. Download the [soomla-unity3d-core](https://raw.githubusercontent.com/soomla/unity3d-store/master/soomla-unity3d-core.unitypackage) and [unity3d-store](http://bit.ly/1rc21Zo) unitypackages and double-click on them (first 'Core' then 'Store'). It'll import all the necessary files into your project.
+1. Download the [soomla-unity3d-core](http://library.soom.la/fetch/unity3d-core/1.0.2?cf=github) and [unity3d-store](http://library.soom.la/fetch/unity3d-store/1.7.7?cf=github) unitypackages and double-click on them (first 'Core' then 'Store'). It'll import all the necessary files into your project.
 2. Drag the "StoreEvents" and "CoreEvents" Prefabs from `../Assets/Soomla/Prefabs` into your scene. You should see it listed in the "Hierarchy" panel. [This step MUST be done for unity3d-store to work properly]
 3. On the menu bar click "Window -> Soomla -> Edit Settings" and change the value for "Soomla Secret" (also setup Public Key if you're building for Google Play):
     - _Soomla Secret_ - is an encryption secret you provide that will be used to secure your data. (If you used versions before v1.5.2 this secret MUST be the same as Custom Secret)  

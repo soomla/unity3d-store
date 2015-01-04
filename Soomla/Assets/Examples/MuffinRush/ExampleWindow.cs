@@ -33,6 +33,8 @@ namespace Soomla.Store.Example {
 		private bool isDragging = false;
 		private Vector2 startTouch = Vector2.zero;
 
+		private bool checkAffordable = false;
+
 		public string fontSuffix = "";
 
 		private enum GUIState{
@@ -75,6 +77,7 @@ namespace Soomla.Store.Example {
 		private Texture2D tGetMore;
 		private Font tTitle;
 		private Dictionary<string, Texture2D> itemsTextures;
+		private Dictionary<string, bool> itemsAffordability;
 
 
 		/// <summary>
@@ -83,6 +86,7 @@ namespace Soomla.Store.Example {
 		/// </summary>
 		void Start () {
 			StoreEvents.OnSoomlaStoreInitialized += onSoomlaStoreInitialized;
+			StoreEvents.OnCurrencyBalanceChanged += onCurrencyBalanceChanged;
 
 			tImgDirect = (Texture2D)Resources.Load("SoomlaStore/images/img_direct");
 			fgoodDog = (Font)Resources.Load("SoomlaStore/GoodDog" + fontSuffix);
@@ -115,6 +119,8 @@ namespace Soomla.Store.Example {
 			}
 
 			setupItemsTextures();
+
+			setupItemsAffordability ();
 		}
 
 		public void setupItemsTextures() {
@@ -125,6 +131,23 @@ namespace Soomla.Store.Example {
 			}
 			foreach(VirtualCurrencyPack vcp in StoreInfo.CurrencyPacks){
 				itemsTextures[vcp.ItemId] = (Texture2D)Resources.Load("SoomlaStore/images/" + vcp.Name);
+			}
+		}
+
+		public void setupItemsAffordability() {
+			itemsAffordability = new Dictionary<string, bool> ();
+
+			foreach (VirtualGood vg in StoreInfo.Goods) {
+				itemsAffordability.Add(vg.ID, StoreInventory.CanAfford(vg.ID));
+			}
+		}
+
+		public void onCurrencyBalanceChanged(VirtualCurrency virtualCurrency, int balance, int amountAdded) {
+			if (itemsAffordability != null)
+			{
+				List<string> keys = new List<string> (itemsAffordability.Keys);
+				foreach(string key in keys)
+					itemsAffordability[key] = StoreInventory.CanAfford(key);
 			}
 		}
 
@@ -252,7 +275,9 @@ namespace Soomla.Store.Example {
 			GUI.color = Color.black;
 			GUI.skin.label.alignment = TextAnchor.UpperRight;
 			string cItemId = StoreInfo.Currencies[0].ItemId;
-			GUI.Label(new Rect(10,10,Screen.width-40,Screen.height),""+ StoreInventory.GetItemBalance(cItemId));
+			GUI.Label(new Rect(10,10,Screen.width-40,20),""+ StoreInventory.GetItemBalance(cItemId));
+			checkAffordable = GUI.Toggle(new Rect(10,30,Screen.width-40,20), checkAffordable, "Check Affordability");
+
 			GUI.skin.label.alignment = TextAnchor.MiddleCenter;
 			GUI.skin.label.font = fTitle;
 			GUI.Label(new Rect(0,Screen.height/8f,Screen.width,Screen.height/8f),"Virtual Goods");
@@ -268,6 +293,16 @@ namespace Soomla.Store.Example {
 			float y = 0;
 			foreach(VirtualGood vg in StoreInfo.Goods){
 				GUI.color = backupColor;
+
+				bool isAffordable = true;
+				if (checkAffordable){
+					bool affordable;
+					if (itemsAffordability.TryGetValue(vg.ID, out affordable))
+						isAffordable = affordable;
+				}
+
+				GUI.enabled = isAffordable;
+
 				if(GUI.Button(new Rect(0,y,Screen.width,productSize),"") && !isDragging){
 					Debug.Log("SOOMLA/UNITY wants to buy: " + vg.Name);
 					try {
@@ -298,10 +333,14 @@ namespace Soomla.Store.Example {
 
 				GUI.skin.label.alignment = TextAnchor.UpperRight;
 				GUI.skin.label.font = fBuy;
-				GUI.Label(new Rect(0,y,Screen.width-10,productSize),"Click to buy");
+				if (GUI.enabled)
+					GUI.Label(new Rect(0,y,Screen.width-10,productSize),"Click to buy");
+				else
+					GUI.Label(new Rect(0,y,Screen.width-10,productSize),"Cannot afford");
 				GUI.color = Color.grey;
 				GUI.DrawTexture(new Rect(0,y+productSize-1,Screen.width,1),tWhitePixel);
 				y+= productSize;
+				GUI.enabled = true;
 			}
 			GUI.EndScrollView();
 			//We have just ended the scroll view this means that all the positions are relative top-left corner again.

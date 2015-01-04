@@ -201,6 +201,17 @@ namespace Soomla.Store
 			Save();
 		}
 
+		/// <summary>
+		/// Replaces the given virtual item, and then saves the store's metadata.
+		/// </summary>
+		/// <param name="virtualItem">the virtual item to replace.</param>
+		public static void Save(List<VirtualItem> virtualItems) {
+			foreach(VirtualItem virtualItem in virtualItems) {
+				replaceVirtualItem(virtualItem);
+			}
+			Save();
+		}
+
 
 		/** Protected Functions **/
 		/** These protected virtual functions will only run when in editor **/
@@ -384,7 +395,7 @@ namespace Soomla.Store
 					List<UpgradeVG> upgrades;
 					if (!GoodsUpgrades.TryGetValue (((UpgradeVG)vi).GoodItemId, out upgrades)) {
 						upgrades = new List<UpgradeVG> ();
-						GoodsUpgrades.AddOrUpdate(((UpgradeVG)vi).GoodItemId, upgrades);
+						GoodsUpgrades.Add(((UpgradeVG)vi).GoodItemId, upgrades);
 					}
 					upgrades.Add ((UpgradeVG)vi);
 				}
@@ -441,10 +452,10 @@ namespace Soomla.Store
 				VirtualGood vg = (VirtualGood)virtualItem;
 				
 				if (vg is UpgradeVG) {
-					List<UpgradeVG> upgrades = GoodsUpgrades[((UpgradeVG) vg).GoodItemId];
-					if (upgrades == null) {
+					List<UpgradeVG> upgrades;
+					if (!GoodsUpgrades.TryGetValue (((UpgradeVG) vg).GoodItemId, out upgrades)) {
 						upgrades = new List<UpgradeVG>();
-						GoodsUpgrades.AddOrUpdate(((UpgradeVG) vg).ItemId, upgrades);
+						GoodsUpgrades.Add(((UpgradeVG) vg).ItemId, upgrades);
 					}
 					upgrades.Add((UpgradeVG) vg);
 				}

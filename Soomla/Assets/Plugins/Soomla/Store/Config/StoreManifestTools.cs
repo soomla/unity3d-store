@@ -51,7 +51,7 @@ namespace Soomla.Store
 			}
 
 			if (StoreSettings.AmazonBP) {
-				XmlElement receiverElement = SoomlaManifestTools.AppendApplicationElement("receiver", "com.amazon.inapp.purchasing.ResponseReceiver", null);
+				XmlElement receiverElement = SoomlaManifestTools.AppendApplicationElement("receiver", "com.amazon.device.iap.ResponseReceiver", null);
 				receiverElement.InnerText = "\n    ";
 				XmlElement intentElement = SoomlaManifestTools.AppendElementIfMissing("intent-filter", null, null, receiverElement);
 				XmlElement actionElement = SoomlaManifestTools.AppendElementIfMissing("action", "com.amazon.inapp.purchasing.NOTIFY", 
