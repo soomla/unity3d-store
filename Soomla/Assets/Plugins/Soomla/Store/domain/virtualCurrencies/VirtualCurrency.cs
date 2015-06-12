@@ -29,7 +29,7 @@ namespace Soomla.Store{
 	/// available for purchase you will need to define a <c>VirtualCurrencyPack</c> of 1 'Coin'.
 	/// </summary>
 	public class VirtualCurrency : VirtualItem{
-		
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -58,40 +58,22 @@ namespace Soomla.Store{
 			return base.toJSONObject();
 		}
 
-		/// <summary>
-		/// Gives a curtain amount of this currency.
-		/// </summary>
-		/// <param name="amount">amount the amount of the specific item to be given.</param>
-		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Give(int amount, bool notify) {
-			return VirtualCurrencyStorage.Add(this, amount, notify);
-		}
+        /// <summary>
+        /// Will fetch the balance for the current VirtualItem according to its type.
+        /// </summary>
+        /// <returns>The balance.</returns>
+        protected override int LoadValue()
+        {
+            return VirtualCurrencyStorage.GetBalance(this);
+        }
 
-		/// <summary>
-		/// Takes a curtain amount of this currency.
-		/// </summary>
-		/// <param name="amount">the amount of the specific item to be taken.</param>
-		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Take(int amount, bool notify) {
-			return VirtualCurrencyStorage.Remove(this, amount, notify);
-		}
-
-		/// <summary>
-		/// Resets the currency balance to a given balance.
-		/// </summary>
-		/// <returns>The balance after the reset process.</returns>
-		/// <param name="balance">The balance of the current virtual item.</param>
-		/// <param name="notify">Notify of change in user's balance of current virtual item.</param>
-		public override int ResetBalance(int balance, bool notify) {
-			return VirtualCurrencyStorage.SetBalance(this, balance, notify);
-		}
-
-		/// <summary>
-		/// Will fetch the balance for the current currency according to its type.
-		/// </summary>
-		/// <returns>The balance.</returns>
-		public override int GetBalance() {
-			return VirtualCurrencyStorage.GetBalance(this);
-		}
+        /// <summary>
+        /// Will store the cached balance for the current VirtualItem according to its type.
+        /// </summary>
+        /// <returns>The balance.</returns>
+        protected override void SaveValue(bool notify)
+        {
+            VirtualCurrencyStorage.SetBalance(this, CachedValue, notify);
+        }
 	}
 }

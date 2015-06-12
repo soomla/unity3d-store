@@ -65,24 +65,6 @@ namespace Soomla.Store {
 			return base.toJSONObject();
 		}
 
-		/// <summary>
-		/// Will give a curtain amount of this single use virtual good.
-		/// </summary>
-		/// <param name="amount">amount the amount of the specific item to be given.</param>
-		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Give(int amount, bool notify) {
-			return VirtualGoodsStorage.Add(this, amount, notify);
-		}
-
-		/// <summary>
-		/// Will take a curtain amount of this single use virtual good.
-		/// </summary>
-		/// <param name="amount">the amount of the specific item to be taken.</param>
-		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Take(int amount, bool notify) {
-			return VirtualGoodsStorage.Remove(this, amount, notify);
-		}
-
 		protected override bool canBuy() {
 			return true;
 		}

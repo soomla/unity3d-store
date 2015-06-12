@@ -94,8 +94,7 @@ namespace Soomla.Store{
 				                     + " doesn't exist! Can't give this pack.");
 				return 0;
 			}
-			return VirtualCurrencyStorage.Add(
-				currency, CurrencyAmount * amount, notify);
+			return currency.Give(CurrencyAmount * amount, notify);
 		}
 
 		/// <summary>
@@ -112,28 +111,23 @@ namespace Soomla.Store{
 				                     " doesn't exist! Can't take this pack.");
 				return 0;
 			}
-			return VirtualCurrencyStorage.Remove(currency, CurrencyAmount * amount, notify);
+			return currency.Take(CurrencyAmount * amount, notify);
 		}
 
-		/// <summary>
-		/// DON't APPLY FOR A PACK
-		/// </summary>
-		public override int ResetBalance(int balance, bool notify) {
-			// Not supported for VirtualCurrencyPacks !
-			SoomlaUtils.LogError(TAG, "Someone tried to reset balance of CurrencyPack. "
-			                     + "That's not right.");
-			return 0;
-		}
+        protected override int LoadValue()
+        {
+            // Not supported for VirtualCurrencyPacks !
+            SoomlaUtils.LogError(TAG, "Someone tried to check balance of CurrencyPack. "
+                                 + "That's not right.");
+            return 0;
+        }
 
-		/// <summary>
-		/// DON'T APPLY FOR A PACK
-		/// </summary>
-		public override int GetBalance() {
-			// Not supported for VirtualCurrencyPacks !
-			SoomlaUtils.LogError(TAG, "Someone tried to check balance of CurrencyPack. "
-			                     + "That's not right.");
-			return 0;
-		}
+        protected override void SaveValue(bool notify)
+        {
+            // Not supported for VirtualCurrencyPacks !
+            SoomlaUtils.LogError(TAG, "Someone tried to set balance of CurrencyPack. "
+                                 + "That's not right.");
+        }
 
 		protected override bool canBuy() {
 			return true;

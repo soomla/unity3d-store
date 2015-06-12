@@ -41,6 +41,10 @@ namespace Soomla.Store {
 	public class SingleUsePackVG : VirtualGood {
 		private static string TAG = "SOOMLA SingleUsePackVG";
 
+        protected override int Max { get { return 0; } }
+
+        protected override int Min { get { return 0; } }
+
 		/// <summary>
 		/// The itemId of the <c>VirtualGood</c> associated with the pack.
 		/// </summary>
@@ -93,39 +97,48 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="amount">amount the amount of the specific item to be given.</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Give(int amount, bool notify) {
-			SingleUseVG good = null;
-			try {
-				good = (SingleUseVG) StoreInfo.GetItemByItemId(GoodItemId);
-			} catch (VirtualItemNotFoundException) {
-				SoomlaUtils.LogError(TAG, "SingleUseVG with itemId: " + GoodItemId + " doesn't exist! Can't give this pack.");
-				return 0;
-			}
-			return VirtualGoodsStorage.Add(good, GoodAmount*amount, notify);
-		}
+        public override int Give(int amount, bool notify)
+        {
+            SingleUseVG good = null;
+            try
+            {
+                good = (SingleUseVG)StoreInfo.GetItemByItemId(GoodItemId);
+            }
+            catch (VirtualItemNotFoundException)
+            {
+                SoomlaUtils.LogError(TAG, "SingleUseVG with itemId: " + GoodItemId + " doesn't exist! Can't give this pack.");
+                return 0;
+            }
+            return good.Give(GoodAmount * amount, notify);
+        }
 
 		/// <summary>
 		/// This function takes a curtain amout of <c>VirtualGood</c>s according to the given amount and the amount in the pack.
 		/// </summary>
 		/// <param name="amount">the amount of the specific item to be taken.</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Take(int amount, bool notify) {
-			SingleUseVG good = null;
-			try {
-				good = (SingleUseVG) StoreInfo.GetItemByItemId(GoodItemId);
-			} catch (VirtualItemNotFoundException) {
-				SoomlaUtils.LogError(TAG, "SingleUseVG with itemId: " + GoodItemId + " doesn't exist! Can't give this pack.");
-				return 0;
-			}
-			return VirtualGoodsStorage.Remove(good, GoodAmount*amount, notify);
-		}
+        public override int Take(int amount, bool notify)
+        {
+            SingleUseVG good = null;
+            try
+            {
+                good = (SingleUseVG)StoreInfo.GetItemByItemId(GoodItemId);
+            }
+            catch (VirtualItemNotFoundException)
+            {
+                SoomlaUtils.LogError(TAG, "SingleUseVG with itemId: " + GoodItemId + " doesn't exist! Can't give this pack.");
+                return 0;
+            }
+            return good.Take(GoodAmount * amount, notify);
+        }
 
 		/// <summary>
 		/// DON't APPLY FOR A PACK
 		/// </summary>
-		public override int ResetBalance(int balance, bool notify) {
+        protected override int LoadValue()
+        {
 			// Not supported for SingleUsePackVGs !
-			SoomlaUtils.LogError(TAG, "Someone tried to reset balance of GoodPack. "
+			SoomlaUtils.LogError(TAG, "Someone tried to load balance of GoodPack. "
 			                     + "That's not right.");
 			return 0;
 		}
@@ -133,11 +146,11 @@ namespace Soomla.Store {
 		/// <summary>
 		/// DON'T APPLY FOR A PACK
 		/// </summary>
-		public override int GetBalance() {
+        protected override void SaveValue(bool notify)
+        {
 			// Not supported for SingleUsePackVGs !
-			SoomlaUtils.LogError(TAG, "Someone tried to check balance of GoodPack. "
+			SoomlaUtils.LogError(TAG, "Someone tried to save balance of GoodPack. "
 			                     + "That's not right.");
-			return 0;
 		}
 
 		protected override bool canBuy() {

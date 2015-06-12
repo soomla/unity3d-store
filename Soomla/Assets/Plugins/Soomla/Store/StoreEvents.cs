@@ -123,8 +123,6 @@ namespace Soomla.Store {
 			int balance = (int)eventJSON["balance"].n;
 			int amountAdded = (int)eventJSON["amountAdded"].n;
 
-			StoreInventory.RefreshOnCurrencyBalanceChanged(vc, balance, amountAdded);
-
 			StoreEvents.OnCurrencyBalanceChanged(vc, balance, amountAdded);
 
 			if (alsoPush) {
@@ -152,8 +150,6 @@ namespace Soomla.Store {
 			int balance = (int)eventJSON["balance"].n;
 			int amountAdded = (int)eventJSON["amountAdded"].n;
 
-			StoreInventory.RefreshOnGoodBalanceChanged(vg, balance, amountAdded);
-
 			StoreEvents.OnGoodBalanceChanged(vg, balance, amountAdded);
 
 			if (alsoPush) {
@@ -178,8 +174,6 @@ namespace Soomla.Store {
 
 			EquippableVG vg = (EquippableVG)StoreInfo.GetItemByItemId(eventJSON["itemId"].str);
 
-			StoreInventory.RefreshOnGoodEquipped(vg);
-
 			StoreEvents.OnGoodEquipped(vg);
 
 			if (alsoPush) {
@@ -203,8 +197,6 @@ namespace Soomla.Store {
 			var eventJSON = new JSONObject(message);
 
 			EquippableVG vg = (EquippableVG)StoreInfo.GetItemByItemId(eventJSON["itemId"].str);
-
-			StoreInventory.RefreshOnGoodUnEquipped(vg);
 
 			StoreEvents.OnGoodUnEquipped(vg);
 
@@ -234,8 +226,6 @@ namespace Soomla.Store {
 			if (eventJSON.HasField("upgradeItemId") && !string.IsNullOrEmpty(eventJSON["upgradeItemId"].str)) {
 				vgu = (UpgradeVG)StoreInfo.GetItemByItemId(eventJSON["upgradeItemId"].str);
 		  	}
-
-			StoreInventory.RefreshOnGoodUpgrade(vg, vgu);
 
 			StoreEvents.OnGoodUpgrade(vg, vgu);
 
