@@ -135,22 +135,24 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="amount">NOT USED HERE!</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public override int Give(int amount, bool notify) {
-			SoomlaUtils.LogDebug(TAG, "Assigning " + Name + " to: " + GoodItemId);
-			
-			VirtualGood good = null;
-			try {
-				good = (VirtualGood) StoreInfo.GetItemByItemId(GoodItemId);
-			} catch (VirtualItemNotFoundException) {
-				SoomlaUtils.LogError(TAG, "VirtualGood with itemId: " + GoodItemId +
-				                     " doesn't exist! Can't upgrade.");
-				return 0;
-			}
-			
-			VirtualGoodsStorage.AssignCurrentUpgrade(good, this, notify);
-			
-			return base.Give(amount, notify);
-		}
+        public override int Give(int amount, bool notify)
+        {
+            SoomlaUtils.LogDebug(TAG, "Assigning " + Name + " to: " + GoodItemId);
+
+            VirtualGood good = null;
+            try
+            {
+                good = (VirtualGood)StoreInfo.GetItemByItemId(GoodItemId);
+            }
+            catch (VirtualItemNotFoundException)
+            {
+                SoomlaUtils.LogError(TAG, "VirtualGood with itemId: " + GoodItemId +
+                                     " doesn't exist! Can't upgrade.");
+                return 0;
+            }
+
+            return good.SetValue(StoreInventory.GetGoodUpgradeLevel(ItemId), notify);
+        }
 
 		/// <summary>
 		/// Takes upgrade from the user, or in other words DOWNGRADES the associated

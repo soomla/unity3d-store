@@ -60,15 +60,17 @@ namespace Soomla.Store {
 		/// <summary>
 		/// <see cref="Soomla.Store.VirtualItem"/>
 		/// </summary>
-		public override int ResetBalance(int balance, bool notify) {
-			return VirtualGoodsStorage.SetBalance(this, balance, notify);
-		}
+        protected override void SaveValue(bool notify)
+        {
+            VirtualGoodsStorage.SetBalance(this, CachedValue, notify);
+        }
 
 		/// <summary>
 		/// Will fetch the balance for the current VirtualItem according to its type.
 		/// </summary>
 		/// <returns>The balance.</returns>
-		public override int GetBalance() {
+        protected override int LoadValue()
+        {
 			return VirtualGoodsStorage.GetBalance(this);
 		}
 

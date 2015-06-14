@@ -72,52 +72,6 @@ namespace Soomla.Store
 #endif
 		}
 
-		protected virtual int _add(VirtualItem item, int amount, bool notify){
-#if UNITY_EDITOR
-			string itemId = item.ItemId;
-			int balance = _getBalance(item);
-			if (balance < 0) { /* in case the user "adds" a negative value */
-				balance = 0;
-				amount = 0;
-			}
-			string balanceStr = "" + (balance + amount);
-			string key = keyBalance(itemId);
-
-			PlayerPrefs.SetString(key, balanceStr);
-			
-			if (notify) {
-				postBalanceChangeEvent(item, balance+amount, amount);
-			}
-			
-			return balance + amount;
-#else
-			return 0;
-#endif
-		}
-
-		protected virtual int _remove(VirtualItem item, int amount, bool notify){
-#if UNITY_EDITOR
-			string itemId = item.ItemId;
-			int balance = _getBalance(item) - amount;
-			if (balance < 0) {
-				balance = 0;
-				amount = 0;
-			}
-			string balanceStr = "" + balance;
-			string key = keyBalance(itemId);
-			PlayerPrefs.SetString(key, balanceStr);
-			
-			if (notify) {
-				postBalanceChangeEvent(item, balance, -1*amount);
-			}
-			
-			return balance;
-#else
-			return 0;
-#endif
-		}
-
-
 		/** Keys (protected helper functions if Unity Editor is being used.) **/
 
 #if UNITY_EDITOR

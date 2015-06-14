@@ -28,6 +28,22 @@ namespace Soomla.Store {
 
 		private const string TAG = "SOOMLA VirtualItem";
 
+        /// <summary>
+        /// Gets the Minimum value for this item
+        /// </summary>
+        protected virtual int Min { get { return int.MinValue; } }
+
+        /// <summary>
+        /// Gets the Maximum value for this item
+        /// </summary>
+        protected virtual int Max { get { return int.MaxValue; } }
+
+        /// <summary>
+        /// Gets or Sets the Cache for this item
+        /// </summary>
+        protected int CachedValue { get { return cachedValue; } set { cachedValue = Mathf.Clamp(value, Min, Max); } }
+        private int cachedValue = 0;
+
 		/// <summary>
 		/// This is the itemId associated with the <c>VirtualItem</c>.
 		/// The itemId is a unique id that every item in the SOOMLA economy have.
@@ -68,6 +84,14 @@ namespace Soomla.Store {
 			return base.GetHashCode ();
 		}
 
+        /// <summary>
+        /// Forces the cache to be refreshed from the data store
+        /// </summary>
+        public void RefreshCache()
+        {
+            CachedValue = LoadValue();
+        }
+
 		/// <summary>
 		/// Gives your user the given amount of the specific virtual item.
 		/// For example, when your users play your game for the first time you GIVE them 1000 gems.
@@ -87,7 +111,12 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="amount">amount the amount of the specific item to be given.</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public abstract int Give(int amount, bool notify);
+        public virtual int Give(int amount, bool notify)
+        {
+            CachedValue += amount;
+            SaveValue(notify);
+            return CachedValue;
+        }
 
 		/// <summary>
 		/// Takes from your user the given amount of the specific virtual item.
@@ -104,31 +133,56 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="amount">the amount of the specific item to be taken.</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
-		public abstract int Take(int amount, bool notify);
+        public virtual int Take(int amount, bool notify)
+        {
+            CachedValue -= amount;
+            SaveValue(notify);
+            return CachedValue;
+        }
 
 		/// <summary>
-		/// Resets this <code>VirtualItem</code>'s balance to the given balance.
+		/// Sets this <code>VirtualItem</code>'s balance to the given balance.
 		/// </summary>
 		/// <returns>The balance of the current virtual item.</returns>
 		/// <param name="balance">Balance.</param>
-		public int ResetBalance(int balance) {
-			return ResetBalance(balance, true);
+		public int SetValue(int balance) {
+			return SetValue(balance, true);
 		}
 
 		/// <summary>
-		/// Works like "resetBalance" but receives an argument, notify, to indicate
+        /// Works like "SetValue" but receives an argument, notify, to indicate
 		/// if there has been a change in the balance of the current virtual item.
 		/// </summary>
 		/// <returns>The balance after the reset process.</returns>
 		/// <param name="balance">The balance of the current virtual item.</param>
 		/// <param name="notify">Notify of change in user's balance of current virtual item.</param>
-		public abstract int ResetBalance(int balance, bool notify);
+        public virtual int SetValue(int balance, bool notify)
+        {
+            CachedValue = balance;
+            SaveValue(notify);
+            return CachedValue;
+        }
 
 		/// <summary>
-		/// Will fetch the balance for the current VirtualItem according to its type.
+		/// Returns the cached balance for the current VirtualItem according to its type.
 		/// </summary>
 		/// <returns>The balance.</returns>
-		public abstract int GetBalance();
+        public virtual int GetValue()
+        {
+            return cachedValue;
+        }
+
+        /// <summary>
+        /// Will fetch the balance for the current VirtualItem according to its type.
+        /// </summary>
+        /// <returns>The balance.</returns>
+        protected abstract int LoadValue();
+
+        /// <summary>
+        /// Will store the cached balance for the current VirtualItem according to its type.
+        /// </summary>
+        /// <returns>The balance.</returns>
+        protected abstract void SaveValue(bool notify);
 
 		/// <summary>
 		/// Save this instance with changes that were made to it.

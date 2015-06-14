@@ -37,7 +37,11 @@ namespace Soomla.Store {
 	/// </summary>
 	public class LifetimeVG : VirtualGood {
 		private static string TAG = "SOOMLA LifetimeVG";
-		
+
+        protected override int Max { get { return 1; } }
+
+        protected override int Min { get { return 0; } }
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -67,47 +71,6 @@ namespace Soomla.Store {
 	
 
 		/// <summary>
-		/// Gives your user exactly one <code>LifetimeVG</code>.
-		/// </summary>
-		/// <param name="amount">he amount of the specific item to be given - if this input is greater than 1,
-		///               we force the amount to equal 1, because a <code>LifetimeVG</code> can only be given once..</param>
-		/// <param name="notify">Notify.</param>
-		public override int Give(int amount, bool notify) {
-			if(amount > 1) {
-				SoomlaUtils.LogDebug(TAG, "You tried to give more than one LifetimeVG."
-				                     + "Will try to give one anyway.");
-				amount = 1;
-			}
-			
-			int balance = VirtualGoodsStorage.GetBalance(this);
-			
-			if (balance < 1) {
-				return VirtualGoodsStorage.Add(this, amount, notify);
-			}
-			return 1;
-		}
-
-		/// <summary>
-		/// Takes from your user exactly one <code>LifetimeVG</code>.
-		/// </summary>
-		/// <param name="amount">the amount of the specific item to be taken - if this input is greater than 1,
-		///               we force amount to equal 1, because a <code>LifetimeVG</code> can only be
-		///               given once and therefore, taken once.</param>
-		/// <param name="notify">Notify.</param>
-		public override int Take(int amount, bool notify) {
-			if (amount > 1) {
-				amount = 1;
-			}
-			
-			int balance = VirtualGoodsStorage.GetBalance(this);
-			
-			if (balance > 0) {
-				return VirtualGoodsStorage.Remove(this, amount, notify);
-			}
-			return 0;
-		}
-
-		/// <summary>
 		/// etermines if the user is in a state that allows him/her to buy a <code>LifetimeVG</code>,
 		/// by checking his/her balance of <code>LifetimeVG</code>s.
 		/// From the definition of a <code>LifetimeVG</code>:
@@ -116,9 +79,7 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <returns>true if buying is allowed, false otherwise.</returns>
 		protected override bool canBuy() {
-			int balance = VirtualGoodsStorage.GetBalance(this);
-			
-			return balance < 1;
+			return CachedValue < 1;
 		}
 	}
 }

@@ -74,13 +74,8 @@ namespace Soomla.Store
 		/// <returns>Balance of the virtual item with the given item id.</returns>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static int GetItemBalance(string itemId) {
-			int amount;
-			if (localItemBalances.TryGetValue(itemId, out amount)) {
-				return amount;
-			}
-			
 			VirtualItem item = StoreInfo.GetItemByItemId(itemId);
-			return item.GetBalance();
+			return item.GetValue();
 		}
 
 		/** VIRTUAL ITEMS **/
@@ -126,18 +121,22 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Id of the good to be equipped.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		/// <exception cref="NotEnoughGoodsException"></exception>
-		public static void EquipVirtualGood(string goodItemId) {
-			SoomlaUtils.LogDebug(TAG, "Equipping: " + goodItemId);
+        public static void EquipVirtualGood(string goodItemId)
+        {
+            SoomlaUtils.LogDebug(TAG, "Equipping: " + goodItemId);
 
-			EquippableVG good = (EquippableVG) StoreInfo.GetItemByItemId(goodItemId);
-			
-			try {
-				good.Equip();
-			} catch (NotEnoughGoodsException e) {
-				SoomlaUtils.LogError(TAG, "UNEXPECTED! Couldn't equip something");
-				throw e;
-			}
-		}
+            EquippableVG good = (EquippableVG)StoreInfo.GetItemByItemId(goodItemId);
+
+            try
+            {
+                good.Equip();
+            }
+            catch (NotEnoughGoodsException e)
+            {
+                SoomlaUtils.LogError(TAG, "UNEXPECTED! Couldn't equip something");
+                throw e;
+            }
+        }
 
 		/// <summary>
 		/// Unequips the virtual good with the given <c>goodItemId</c>. Unequipping means that the
@@ -164,7 +163,7 @@ namespace Soomla.Store
 
 			EquippableVG good = (EquippableVG) StoreInfo.GetItemByItemId(goodItemId);
 			
-			return VirtualGoodsStorage.IsEquipped(good);;
+			return good.IsEquipped;
 		}
 
 		/// <summary>
@@ -194,7 +193,7 @@ namespace Soomla.Store
 			if (upgradeVG == null) {
 				return 0; //no upgrade
 			}
-			
+
 			UpgradeVG first = StoreInfo.GetFirstUpgradeForVirtualGood(goodItemId);
 			int level = 1;
 			while (first.ItemId != upgradeVG.ItemId) {
@@ -265,7 +264,7 @@ namespace Soomla.Store
 
 			List<UpgradeVG> upgrades = StoreInfo.GetUpgradesForVirtualGood(goodItemId);
 			foreach (UpgradeVG upgrade in upgrades) {
-				VirtualGoodsStorage.Remove(upgrade, 1, true);
+				upgrade.Take(1, true);
 			}
 			VirtualGood good = (VirtualGood) StoreInfo.GetItemByItemId(goodItemId);
 			VirtualGoodsStorage.RemoveUpgrades(good);
@@ -281,81 +280,13 @@ namespace Soomla.Store
 		/// </summary>
 		public static void RefreshLocalInventory() {
 			SoomlaUtils.LogDebug(TAG, "Refreshing local inventory");
-
-			localItemBalances = new Dictionary<string, int> ();
-			localUpgrades = new Dictionary<string, LocalUpgrade>();
-			localEquippedGoods = new HashSet<string>();
 			
 			foreach(VirtualCurrency item in StoreInfo.Currencies){
-				localItemBalances[item.ItemId] = VirtualCurrencyStorage.GetBalance(item);
+                item.RefreshCache();
 			}
-			
-			foreach(VirtualGood item in StoreInfo.Goods){
-				localItemBalances[item.ItemId] =  VirtualGoodsStorage.GetBalance(item);
-				
-				UpgradeVG upgrade = VirtualGoodsStorage.GetCurrentUpgrade(item);
-				if (upgrade != null) {
-					int upgradeLevel = GetGoodUpgradeLevel(item.ItemId);
-					localUpgrades.AddOrUpdate(item.ItemId, new LocalUpgrade { itemId = upgrade.ItemId, level = upgradeLevel });
-				}
-				
-				if (item is EquippableVG) {
-					if (VirtualGoodsStorage.IsEquipped((EquippableVG)item)) {
-						localEquippedGoods.Add(item.ItemId);
-					}
-				}
-			}
-		}
 
-
-		/** A set of private functions to refresh the local inventory whenever there are changes on runtime. **/
-
-		public static void RefreshOnGoodUpgrade(VirtualGood vg, UpgradeVG uvg) {
-			if (uvg == null) {
-				localUpgrades.Remove(vg.ItemId);
-			} else {
-				int upgradeLevel = GetGoodUpgradeLevel(vg.ItemId);
-				LocalUpgrade upgrade;
-				if (localUpgrades.TryGetValue(vg.ItemId, out upgrade)) {
-					upgrade.itemId = uvg.ItemId;
-					upgrade.level = upgradeLevel;
-				} else {
-					localUpgrades.Add(vg.ItemId, new LocalUpgrade { itemId = uvg.ItemId, level = upgradeLevel });
-				}
-			}
+            foreach (VirtualGood item in StoreInfo.Goods)
+                item.RefreshCache();
 		}
-		
-		public static void RefreshOnGoodEquipped(EquippableVG equippable) {
-			localEquippedGoods.Add(equippable.ItemId);
-		}
-		
-		public static void RefreshOnGoodUnEquipped(EquippableVG equippable) {
-			localEquippedGoods.Remove(equippable.ItemId);
-		}
-		
-		public static void RefreshOnCurrencyBalanceChanged(VirtualCurrency virtualCurrency, int balance, int amountAdded) {
-			UpdateLocalBalance(virtualCurrency.ItemId, balance);
-		}
-		
-		public static void RefreshOnGoodBalanceChanged(VirtualGood good, int balance, int amountAdded) {
-			UpdateLocalBalance(good.ItemId, balance);
-		}
-		
-		private static void UpdateLocalBalance(string itemId, int balance) {
-			localItemBalances[itemId] = balance;
-		}
-
-
-
-		/** Private local balances **/
-
-		private class LocalUpgrade {
-			public int level;
-			public string itemId;
-		}
-		
-		private static Dictionary<string, int> localItemBalances = null;
-		private static Dictionary<string, LocalUpgrade> localUpgrades = null;
-		private static HashSet<string> localEquippedGoods = null;
 	}
 }

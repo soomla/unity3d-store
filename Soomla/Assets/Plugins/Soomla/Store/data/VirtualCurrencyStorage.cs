@@ -23,7 +23,6 @@ namespace Soomla.Store
 	/// </summary>
 	public class VirtualCurrencyStorage : VirtualItemStorage
 	{
-
 		/// <summary>
 		/// Holds an instance of <c>VirtualCurrencyStorage</c> or <c>VirtualCurrencyStorageAndroid</c> or <c>VirtualCurrencyStorageIOS</c>.
 		/// </summary>
@@ -89,51 +88,6 @@ namespace Soomla.Store
 			
 			return instance._setBalance(item, balance, notify);
 		}
-		
-		/// <summary>
-		/// Adds the given amount of items to the storage.
-		/// </summary>
-		/// <param name="item">the required virtual item.</param>
-		/// <param name="amount">the amount of items to add.</param>
-		public static int Add(VirtualItem item, int amount){
-			return Add(item, amount, true);
-		}
-		
-		/// <summary>
-		/// Adds the given amount of items to the storage, and if notify is true
-		/// posts the change in the balance to the event bus.
-		/// </summary>
-		/// <param name="item">the required virtual item.</param>
-		/// <param name="amount">the amount of items to add.</param>
-		/// <param name="notify">notify if true posts balance change event.</param>
-		public static int Add(VirtualItem item, int amount, bool notify){
-			SoomlaUtils.LogDebug(TAG, "adding " + amount + " " + item.ItemId);
-			
-			return instance._add(item, amount, notify);
-		}
-		
-		/// <summary>
-		/// Removes the given amount from the given virtual item's balance.
-		/// </summary>
-		/// <param name="item">the virtual item to remove the given amount from.</param>
-		/// <param name="amount">the amount to remove.</param>
-		public static int Remove(VirtualItem item, int amount){
-			return Remove(item, amount, true);
-		}
-		
-		/// <summary>
-		/// Removes the given amount from the given virtual item's balance.
-		/// </summary>
-		/// <param name="item">the virtual item to remove the given amount from.</param>
-		/// <param name="amount">the amount to remove.</param>
-		/// <param name="notify">notify is true post balance change event</para>
-		public static int Remove(VirtualItem item, int amount, bool notify){
-			SoomlaUtils.LogDebug(TAG, "Removing " + amount + " " + item.ItemId + ".");
-			
-			return instance._remove(item, amount, true);
-		}
-
-
 
 		/** Keys (protected helper functions if Unity Editor is being used.) **/
 
