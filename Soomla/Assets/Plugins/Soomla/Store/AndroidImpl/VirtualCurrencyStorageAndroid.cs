@@ -46,30 +46,7 @@ namespace Soomla.Store
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 			return retBalance;
 		}
-		
-		protected override int _add(VirtualItem item, int amount, bool notify){
-			int retBalance;
-			AndroidJNI.PushLocalFrame(100);
-			using(AndroidJavaClass jniStorageManager = new AndroidJavaClass("com.soomla.store.data.StorageManager")) {
-				using(AndroidJavaObject jniVCStorage = jniStorageManager.CallStatic<AndroidJavaObject>("getVirtualCurrencyStorage")) {
-					retBalance = jniVCStorage.Call<int>("add", item.ItemId, amount, notify);
-				}
-			}
-			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-			return retBalance;
-		}
-		
-		protected override int _remove(VirtualItem item, int amount, bool notify){
-			int retBalance;
-			AndroidJNI.PushLocalFrame(100);
-			using(AndroidJavaClass jniStorageManager = new AndroidJavaClass("com.soomla.store.data.StorageManager")) {
-				using(AndroidJavaObject jniVCStorage = jniStorageManager.CallStatic<AndroidJavaObject>("getVirtualCurrencyStorage")) {
-					retBalance = jniVCStorage.Call<int>("remove", item.ItemId, amount, notify);
-				}
-			}
-			AndroidJNI.PopLocalFrame(IntPtr.Zero);
-			return retBalance;
-		}
+
 	
 #endif
 	}

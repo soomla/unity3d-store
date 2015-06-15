@@ -48,20 +48,6 @@ namespace Soomla.Store
 			return outBalance;
 		}
 
-		protected override int _add(VirtualItem item, int amount, bool notify){
-			int outBalance = 0;
-			int err = vcStorage_Add(item.ItemId, amount, notify, out outBalance);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			return outBalance;
-		}
-
-		protected override int _remove(VirtualItem item, int amount, bool notify){
-			int outBalance = 0;
-			int err = vcStorage_Remove(item.ItemId, amount, notify, out outBalance);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			return outBalance;
-		}
-
 #endif
 	}
 }
