@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<ProductListings>
+  <ProductListing Key="noads" Purchased="false" Fulfilled="false">
+    <Name>No Ads</Name>
+    <Description>No Ads</Description>
+    <ProductId>no_ads</ProductId>
+    <ProductType>Durable</ProductType>
+    <FormattedPrice>$1.99</FormattedPrice>
+    <ImageUri></ImageUri>
+    <Keywords>test;product</Keywords>
+    <Tag>Additional text</Tag>
+  </ProductListing>
+  <ProductListing Key="android.test.refunded" Purchased="false" Fulfilled="false">
+    <Name>muffins_10</Name>
+    <Description></Description>
+    <ProductId>android.test.refunded</ProductId>
+    <ProductType>Consumable</ProductType>
+    <FormattedPrice>$0.99</FormattedPrice>
+    <ImageUri></ImageUri>
+    <Keywords>test;product</Keywords>
+    <Tag>Additional text</Tag>
+  </ProductListing>
+  <ProductListing Key="android.test.canceled" Purchased="false" Fulfilled="false">
+    <Name>muffins_50</Name>
+    <Description>A sample product listing</Description>
+    <ProductId>android.test.canceled</ProductId>
+    <ProductType>Consumable</ProductType>
+    <FormattedPrice>$1.99</FormattedPrice>
+    <ImageUri></ImageUri>
+    <Keywords>test;product</Keywords>
+    <Tag>Additional text</Tag>
+  </ProductListing>
+  <ProductListing Key="android.test.purchased" Purchased="false" Fulfilled="false">
+    <Name>muffins_400</Name>
+    <Description>A sample product listing</Description>
+    <ProductId>android.test.purchased</ProductId>
+    <ProductType>Consumable</ProductType>
+    <FormattedPrice>$4.99</FormattedPrice>
+    <ImageUri></ImageUri>
+    <Keywords>test;product</Keywords>
+    <Tag>Additional text</Tag>
+  </ProductListing>
+    <ProductListing Key="2500_pack" Purchased="false" Fulfilled="false">
+    <Name>muffins_1000</Name>
+    <Description>A sample product listing</Description>
+    <ProductId>2500_pack</ProductId>
+    <ProductType>Consumable</ProductType>
+    <FormattedPrice>$8.99</FormattedPrice>
+    <ImageUri></ImageUri>
+    <Keywords>test;product</Keywords>
+    <Tag>Additional text</Tag>
+  </ProductListing>
+  
+</ProductListings>

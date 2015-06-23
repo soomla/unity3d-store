@@ -91,6 +91,34 @@ SoomlaStore.StopIabServiceInBg();
 Don't forget to close the Iab Service when your store is closed. You don't have to do this at all, this is just an optimization.
 
 
+### Unity & Windows Phone 8
+
+#### Compatibility
+
+This WP8 plugin work on Unity 4.5.4 and above 4.x versions.
+For Unity 5 the plugin work with 5.0.1p1 patch release 1 version and above.
+
+#### IAP Test Mode
+
+To activate the IAP Test Mode select the checkbox in the Soomla Config Panel. Declare your test IAP in Assets/Plugins/WP8/IAPMock.xml
+
+#### Simulator build
+
+To run your app in the simulator select the checkbox in the Soomla config panel. This option copy the right assembly into the Assets/Plugins/WP8/ folder
+
+#### Clone and Develop on Windows (workaround)
+
+One major issue is that Git didn't manage symlink on Windows...
+
+Before launching Unity you have to run "setup-symlinks.bat" located at the root of the repo in a Git bash. If you forget to call it before launching Unity, just close Unity and delete the Library folder.
+
+When you want to restore the repo at it's initial state run "restore-symlinks.bat"
+
+Keep in mind that modifications in symlink single files or not copied, you have to copy them before restoring symlinks!
+
+One last thing is that this script didn't follow symlink in submodules of submodules, you can still have missing files.
+
+
 ## What's next? In App Purchasing.
 
 When we implemented modelV3, we were thinking about ways that people buy things inside apps. We figured out many ways you can let your users purchase stuff in your game and we designed the new modelV3 to support 2 of them: PurchaseWithMarket and PurchaseWithVirtualItem.

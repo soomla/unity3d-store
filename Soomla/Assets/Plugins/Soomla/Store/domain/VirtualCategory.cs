@@ -49,7 +49,13 @@ namespace Soomla.Store {
 			this.GoodItemIds = goodItemIds;
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+		public VirtualCategory(SoomlaWpStore.domain.VirtualCategory wpVirtualCategory) {
+    		this.Name = wpVirtualCategory.getName();
+    		GoodItemIds = wpVirtualCategory.getGoodsItemIds();
+    	}
+#endif
+        /// <summary>
 		/// Constructor.
 		/// Generates an instance of <c>VirtualCategory</c> from the given <c>JSONObject</c>.
 		/// </summary>

@@ -43,6 +43,7 @@ namespace Soomla.Store
 
 		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
 		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
+        	bool showWP8Settings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.WP8Player);
 
 		GUIContent noneBPLabel = new GUIContent("You have your own Billing Service");
 		GUIContent playLabel = new GUIContent("Google Play");
@@ -50,6 +51,8 @@ namespace Soomla.Store
 		GUIContent publicKeyLabel = new GUIContent("API Key [?]:", "The API key from Google Play dev console (just in case you're using Google Play as billing provider).");
 		GUIContent testPurchasesLabel = new GUIContent("Test Purchases [?]:", "Check if you want to allow purchases of Google's test product ids.");
 		GUIContent packageNameLabel = new GUIContent("Package Name [?]", "Your package as defined in Unity.");
+        	GUIContent wp8SimulatorModeLabel = new GUIContent("Run in Simulator (x86 build)");
+        	GUIContent wp8TestModeLabel = new GUIContent("Simulate Store. (Don't forget to adapt IAPMock.xml to fit your IAPs)");
 
 		GUIContent iosSsvLabel = new GUIContent("Receipt Validation [?]:", "Check if you want your purchases validated with SOOMLA Server Side Protection Service.");
 
@@ -65,6 +68,8 @@ namespace Soomla.Store
 			AndroidGUI();
 			EditorGUILayout.Space();
 			IOSGUI();
+            		EditorGUILayout.Space();
+            		WP8GUI();
 		}
 
 		public void OnInfoGUI() {
@@ -163,7 +168,17 @@ namespace Soomla.Store
 		}
 
 
-
+        private void WP8GUI()
+        {
+            showWP8Settings = EditorGUILayout.Foldout(showWP8Settings, "WP8 Settings");
+            if (showWP8Settings)
+            {
+                WP8SimulatorBuild = EditorGUILayout.ToggleLeft(wp8SimulatorModeLabel, WP8SimulatorBuild);
+                EditorGUILayout.Space();
+                WP8TestMode = EditorGUILayout.ToggleLeft(wp8TestModeLabel, WP8TestMode);
+            }
+            
+        }
 
 
 
@@ -182,6 +197,7 @@ namespace Soomla.Store
 
 		private Dictionary<string, bool> bpUpdate = new Dictionary<string, bool>();
 		private static string bpRootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig/android/android-billing-services/";
+        private static string wp8RootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig/wp8/";
 
 		public static void handlePlayBPJars(bool remove) {
 			try {
@@ -334,7 +350,62 @@ namespace Soomla.Store
 			}
 		}
 
+        public static bool WP8SimulatorBuild
+        {
+            get
+            {
+                string value;
+                return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("WP8SimulatorBuild", out value) ? Convert.ToBoolean(value) : false;
+            }
+            set
+            {
+                string v;
+                SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("WP8SimulatorBuild", out v);
+                if (Convert.ToBoolean(v) != value)
+                {
+                    SoomlaEditorScript.Instance.setSettingsValue("WP8SimulatorBuild", value.ToString());
+                    SoomlaEditorScript.DirtyEditor();
+#if UNITY_EDITOR
+                    if (value == true)
+                    {
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/sqlite3.dll");
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/Sqlite.dll");
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/Sqlite.winmd");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "x86/sqlite3.soomladll",Application.dataPath + "/Plugins/WP8/sqlite3.dll");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "x86/Sqlite.soomladll",Application.dataPath + "/Plugins/WP8/Sqlite.dll");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "x86/Sqlite.soomlawinmd",Application.dataPath + "/Plugins/WP8/Sqlite.winmd");
+                    }
+                    else
+                    {
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/sqlite3.dll");
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/Sqlite.dll");
+                        FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/WP8/Sqlite.winmd");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "ARM/sqlite3.soomladll",Application.dataPath + "/Plugins/WP8/sqlite3.dll");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "ARM/Sqlite.soomlawinmd",Application.dataPath + "/Plugins/WP8/Sqlite.winmd");
+                        FileUtil.CopyFileOrDirectory(wp8RootPath + "ARM/Sqlite.soomladll",Application.dataPath + "/Plugins/WP8/Sqlite.dll");
+                    }
+#endif
+                }
+            }
+        }
 
-
+        public static bool WP8TestMode
+        {
+            get
+            {
+                string value;
+                return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("WP8TestMode", out value) ? Convert.ToBoolean(value) : false;
+            }
+            set
+            {
+                string v;
+                SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("WP8TestMode", out v);
+                if (Convert.ToBoolean(v) != value)
+                {
+                    SoomlaEditorScript.Instance.setSettingsValue("WP8TestMode", value.ToString());
+                    SoomlaEditorScript.DirtyEditor();
+                }
+            }
+        }
 	}
 }

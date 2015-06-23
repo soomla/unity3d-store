@@ -79,6 +79,7 @@ namespace Soomla.Store.Example {
 		private Dictionary<string, Texture2D> itemsTextures;
 		private Dictionary<string, bool> itemsAffordability;
 
+        private Reward firstLaunchReward;
 
 		/// <summary>
 		/// Starts this instance.
@@ -102,6 +103,7 @@ namespace Soomla.Store.Example {
 			tGetMore = (Texture2D)Resources.Load("SoomlaStore/images/GetMore");
 			tTitle = (Font)Resources.Load("SoomlaStore/Title" + fontSuffix);
 
+            firstLaunchReward = new VirtualItemReward("first-launch", "Give Money at first launch", MuffinRushAssets.MUFFIN_CURRENCY_ITEM_ID, 4000);
 			SoomlaStore.Initialize(new MuffinRushAssets());
 		}
 
@@ -111,7 +113,14 @@ namespace Soomla.Store.Example {
 			// some examples
 			if (StoreInfo.Currencies.Count>0) {
 				try {
-					StoreInventory.GiveItem(StoreInfo.Currencies[0].ItemId,4000);
+					//First launch reward
+                    if(!firstLaunchReward.Owned)
+                    {
+                        firstLaunchReward.Give();
+                    }
+
+                    //How to give currency
+                    //StoreInventory.GiveItem(StoreInfo.Currencies[0].ItemId,4000);
 					SoomlaUtils.LogDebug("SOOMLA ExampleEventHandler", "Currency balance:" + StoreInventory.GetItemBalance(StoreInfo.Currencies[0].ItemId));
 				} catch (VirtualItemNotFoundException ex){
 					SoomlaUtils.LogError("SOOMLA ExampleEventHandler", ex.Message);

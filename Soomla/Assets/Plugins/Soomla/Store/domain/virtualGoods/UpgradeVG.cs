@@ -81,7 +81,16 @@ namespace Soomla.Store {
 			this.NextItemId = nextItemId;
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+		public UpgradeVG(SoomlaWpStore.domain.virtualGoods.UpgradeVG wpUpgradeVG)
+            : base(wpUpgradeVG)
+		{
+            GoodItemId = wpUpgradeVG.getGoodItemId();
+            NextItemId = wpUpgradeVG.getNextItemId();
+            PrevItemId = wpUpgradeVG.getPrevItemId();
+		}
+#endif
+        /// <summary>
 		/// see parent.
 		/// </summary>
 		public UpgradeVG(JSONObject jsonItem)

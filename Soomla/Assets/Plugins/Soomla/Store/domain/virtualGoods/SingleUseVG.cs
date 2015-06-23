@@ -50,7 +50,13 @@ namespace Soomla.Store {
 		{
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+		public SingleUseVG(SoomlaWpStore.domain.virtualGoods.SingleUseVG suVG)
+            : base(suVG)
+		{
+		}
+#endif
+        /// <summary>
 		/// see parent.
 		/// </summary>
 		public SingleUseVG(JSONObject jsonVg)

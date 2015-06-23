@@ -50,7 +50,13 @@ namespace Soomla.Store {
 		{
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+		public LifetimeVG(SoomlaWpStore.domain.virtualGoods.LifetimeVG wpLifetimeVG)
+            : base(wpLifetimeVG)
+		{
+		}
+#endif
+        /// <summary>
 		/// see parent.
 		/// </summary>
 		public LifetimeVG(JSONObject jsonVg)

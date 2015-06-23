@@ -48,7 +48,13 @@ namespace Soomla.Store {
 		{
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+		protected VirtualItem(SoomlaWpCore.SoomlaEntity<SoomlaWpStore.domain.VirtualItem> wpVirtualItem)
+            : base(wpVirtualItem.GetId(),wpVirtualItem.GetName(),wpVirtualItem.GetDescription())
+            {
+		}
+#endif
+        /// <summary>
 		/// Constructor.
 		/// Generates an instance of <c>VirtualItem</c> from the given <c>JSONObject</c>.
 		/// </summary>
@@ -68,7 +74,50 @@ namespace Soomla.Store {
 			return base.GetHashCode ();
 		}
 
-		/// <summary>
+#if UNITY_WP8 && !UNITY_EDITOR
+        /// <summary>
+        /// Creates relevant virtual item according to given JSON object's className.
+        /// </summary>
+        /// <returns>The relevant item according to given JSON object's className.</returns>
+        /// <param name="jsonItem">Json item.</param>
+        public static VirtualItem factoryItemFromWP(SoomlaWpStore.domain.VirtualItem wpvi)
+        {
+            
+            if(wpvi is SoomlaWpStore.domain.virtualGoods.SingleUseVG)
+            {
+                return new SingleUseVG((SoomlaWpStore.domain.virtualGoods.SingleUseVG)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualGoods.LifetimeVG)
+            {
+                return new LifetimeVG((SoomlaWpStore.domain.virtualGoods.LifetimeVG)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualGoods.EquippableVG)
+            {
+                return new EquippableVG((SoomlaWpStore.domain.virtualGoods.EquippableVG)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualGoods.SingleUsePackVG)
+            {
+                return new SingleUsePackVG((SoomlaWpStore.domain.virtualGoods.SingleUsePackVG)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualCurrencies.VirtualCurrency)
+            {
+                return new VirtualCurrency((SoomlaWpStore.domain.virtualCurrencies.VirtualCurrency)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualCurrencies.VirtualCurrencyPack)
+            {
+                return new VirtualCurrencyPack((SoomlaWpStore.domain.virtualCurrencies.VirtualCurrencyPack)wpvi);
+            }
+            else if(wpvi is SoomlaWpStore.domain.virtualGoods.UpgradeVG)
+            {
+                return new UpgradeVG((SoomlaWpStore.domain.virtualGoods.UpgradeVG)wpvi);
+            }
+
+
+            return null;
+        }
+#endif
+
+        /// <summary>
 		/// Gives your user the given amount of the specific virtual item.
 		/// For example, when your users play your game for the first time you GIVE them 1000 gems.
 		///

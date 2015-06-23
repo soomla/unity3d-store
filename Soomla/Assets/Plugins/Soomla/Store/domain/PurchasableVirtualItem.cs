@@ -73,8 +73,56 @@ namespace Soomla.Store {
 		/// Determines if user is in a state that allows him/her to buy a specific <code>VirtualItem</code>.
 		/// </summary>
 		protected abstract bool canBuy();
+#if UNITY_WP8 && !UNITY_EDITOR
+		protected PurchasableVirtualItem(SoomlaWpStore.domain.PurchasableVirtualItem wpPurchasableVirtualItem) :
+            base(wpPurchasableVirtualItem)
+            {
+			SoomlaUtils.LogDebug(TAG, "Trying to create PurchasableVirtualItem with itemId: " +
+                                wpPurchasableVirtualItem.getItemId());
 
-		/// <summary>
+            SoomlaWpStore.purchasesTypes.PurchaseType wpPT = wpPurchasableVirtualItem.GetPurchaseType();
+            if (wpPT is SoomlaWpStore.purchasesTypes.PurchaseWithMarket)
+            {
+                SoomlaWpStore.purchasesTypes.PurchaseWithMarket wpPWM = (SoomlaWpStore.purchasesTypes.PurchaseWithMarket)wpPT;
+                string productId = wpPWM.getMarketItem().getProductId();
+                /*MarketItem.Consumable consType = MarketItem.Consumable.CONSUMABLE;
+                if(wpPWM.getMarketItem().getManaged() == SoomlaWpStore.domain.MarketItem.Managed.MANAGED)
+                {
+                    consType = MarketItem.Consumable.CONSUMABLE;
+                }
+                if (wpPWM.getMarketItem().getManaged() == SoomlaWpStore.domain.MarketItem.Managed.UNMANAGED)
+                {
+                    consType = MarketItem.Consumable.NONCONSUMABLE;
+                }
+                if (wpPWM.getMarketItem().getManaged() == SoomlaWpStore.domain.MarketItem.Managed.SUBSCRIPTION)
+                {
+                    consType = MarketItem.Consumable.SUBSCRIPTION;
+                }*/
+                double price = wpPWM.getMarketItem().getPrice();
+
+                MarketItem mi = new MarketItem(productId, price);
+                mi.MarketTitle = wpPWM.getMarketItem().getMarketTitle();
+                mi.MarketPriceAndCurrency = wpPWM.getMarketItem().getMarketPrice();
+                mi.MarketDescription = wpPWM.getMarketItem().getMarketDescription();
+                if(wpPWM.getMarketItem().isPriceSuccessfullyParsed())
+                {
+                    mi.MarketPriceMicros = wpPWM.getMarketItem().getMarketPriceMicros();
+                    mi.MarketCurrencyCode = wpPWM.getMarketItem().getMarketCurrencyCode();
+                }
+                PurchaseType = new PurchaseWithMarket(mi);
+            }
+
+            if (wpPT is SoomlaWpStore.purchasesTypes.PurchaseWithVirtualItem)
+            {
+                SoomlaWpStore.purchasesTypes.PurchaseWithVirtualItem wpPWVI = (SoomlaWpStore.purchasesTypes.PurchaseWithVirtualItem)wpPT;
+                string itemId = wpPWVI.getTargetItemId();
+                int amount = wpPWVI.getAmount();
+                PurchaseType = new PurchaseWithVirtualItem(itemId, amount);
+            }
+        }
+#endif
+
+        /// <summary>
 		/// Constructor.
 		/// Generates an instance of <c>PurchasableVirtualItem</c> from a <c>JSONObject</c>.
 		/// </summary>
