@@ -72,11 +72,11 @@ namespace Soomla.Store
 
 			SoomlaUtils.LogDebug(TAG, "SoomlaStore Initializing ...");
 
+			instance._loadBillingService();
+
 			StoreInfo.SetStoreAssets(storeAssets);
 
-			instance._loadBillingService();
-			
-			#if UNITY_IOS
+#if UNITY_IOS
 			// On iOS we only refresh market items
 			instance._refreshMarketItemsDetails();
 #elif UNITY_ANDROID

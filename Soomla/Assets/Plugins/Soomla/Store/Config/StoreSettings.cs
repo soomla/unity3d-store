@@ -44,6 +44,10 @@ namespace Soomla.Store
 		bool showAndroidSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android);
 		bool showIOSSettings = (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone);
 
+		GUIContent tapClashLabel = new GUIContent("TapClash");
+		GUIContent tapClashPublicKeyLabel = new GUIContent("API Key [?]:", "The public key from the TapClash admin");
+		GUIContent tapClashTestPurchasesLabel = new GUIContent("Test Purchases [?]:", "Check if you want to allow purchases of TapClash's test product ids.");
+
 		GUIContent noneBPLabel = new GUIContent("You have your own Billing Service");
 		GUIContent playLabel = new GUIContent("Google Play");
 		GUIContent amazonLabel = new GUIContent("Amazon");
@@ -95,68 +99,97 @@ namespace Soomla.Store
 				EditorGUILayout.BeginHorizontal();
 				SoomlaEditorScript.SelectableLabelField(packageNameLabel, PlayerSettings.bundleIdentifier);
 				EditorGUILayout.EndHorizontal();
-
+				
 				EditorGUILayout.Space();
 				EditorGUILayout.HelpBox("Billing Service Selection", MessageType.None);
-
-				if (!GPlayBP && !AmazonBP && !NoneBP) {
+				
+				if (!GPlayBP && !AmazonBP && !NoneBP && !TapClashBP) {
 					GPlayBP = true;
 				}
-
+				
 				NoneBP = EditorGUILayout.ToggleLeft(noneBPLabel, NoneBP);
-
+				
 				bool update;
 				bpUpdate.TryGetValue("none", out update);
 				if (NoneBP && !update) {
 					setCurrentBPUpdate("none");
-
+					
 					AmazonBP = false;
 					GPlayBP = false;
+					TapClashBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(true);
 					handleAmazonBPJars(true);
 				}
-
-
+				
+				
 				GPlayBP = EditorGUILayout.ToggleLeft(playLabel, GPlayBP);
-
+				
 				if (GPlayBP) {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.Space();
 					EditorGUILayout.LabelField(publicKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
 					AndroidPublicKey = EditorGUILayout.TextField(AndroidPublicKey, SoomlaEditorScript.FieldHeight);
 					EditorGUILayout.EndHorizontal();
-
+					
 					EditorGUILayout.Space();
-
+					
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
 					AndroidTestPurchases = EditorGUILayout.Toggle(testPurchasesLabel, AndroidTestPurchases);
 					EditorGUILayout.EndHorizontal();
 				}
-
+				
 				bpUpdate.TryGetValue("play", out update);
 				if (GPlayBP && !update) {
 					setCurrentBPUpdate("play");
-
+					
 					AmazonBP = false;
 					NoneBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(false);
 					handleAmazonBPJars(true);
 				}
-
-
+				
+				
 				AmazonBP = EditorGUILayout.ToggleLeft(amazonLabel, AmazonBP);
 				bpUpdate.TryGetValue("amazon", out update);
 				if (AmazonBP && !update) {
 					setCurrentBPUpdate("amazon");
-
+					
 					GPlayBP = false;
 					NoneBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(true);
 					handleAmazonBPJars(false);
+				}
+				
+				TapClashBP = EditorGUILayout.ToggleLeft(tapClashLabel, TapClashBP);
+				if (TapClashBP) {
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.Space();
+					EditorGUILayout.LabelField(tapClashPublicKeyLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+					TapClashPublicKey = EditorGUILayout.TextField(TapClashPublicKey, SoomlaEditorScript.FieldHeight);
+					EditorGUILayout.EndHorizontal();
+					
+					EditorGUILayout.Space();
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+					TapClashTestPurchases = EditorGUILayout.Toggle(tapClashTestPurchasesLabel, TapClashTestPurchases);
+					EditorGUILayout.EndHorizontal();
+				}
+				
+				bpUpdate.TryGetValue("tapclash", out update);
+				if (TapClashBP && !update) {
+					setCurrentBPUpdate("tapclash");
+					
+					GPlayBP = false;
+					AmazonBP = false;
+					NoneBP = false;
+					SoomlaManifestTools.GenerateManifest();
+					handlePlayBPJars(true);
+					handleAmazonBPJars(true);
 				}
 			}
 			EditorGUILayout.Space();
@@ -211,6 +244,18 @@ namespace Soomla.Store
 			}catch {}
 		}
 
+		public static void handleTapClashBPJars(bool remove) {
+			try {
+				if (remove) {
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreTapClash.jar");
+					FileUtil.DeleteFileOrDirectory(Application.dataPath + "/Plugins/Android/AndroidStoreTapClash.jar.meta");
+				} else {
+					FileUtil.CopyFileOrDirectory(bpRootPath + "tapclash/AndroidStoreTapClash.jar",
+					                             Application.dataPath + "/Plugins/Android/AndroidStoreTapClash.jar");
+				}
+			}catch {}
+		}
+
 
 
 #endif
@@ -225,6 +270,7 @@ namespace Soomla.Store
 
 
 		public static string AND_PUB_KEY_DEFAULT = "YOUR GOOGLE PLAY PUBLIC KEY";
+		public static string TAPCASH_PUB_KEY_DEFAULT = "YOUR TAPCLASH PUBLIC KEY";
 
 		public static string AndroidPublicKey
 		{
@@ -257,6 +303,42 @@ namespace Soomla.Store
 				if (Convert.ToBoolean(v) != value)
 				{
 					SoomlaEditorScript.Instance.setSettingsValue("AndroidTestPurchases",value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
+		public static string TapClashPublicKey
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashPublicKey", out value) ? value : TAPCASH_PUB_KEY_DEFAULT;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashPublicKey", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TapClashPublicKey",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
+		public static bool TapClashTestPurchases
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashTestPurchases", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashTestPurchases", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TapClashTestPurchases",value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
@@ -334,6 +416,23 @@ namespace Soomla.Store
 			}
 		}
 
+		public static bool TapClashBP
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashBP", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("TapClashBP", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("TapClashBP",value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
 
 
 	}

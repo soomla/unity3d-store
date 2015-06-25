@@ -1,1 +1,14 @@
-../../../../../../../submodules/android-store/billing-services/amazon/amazon.sdktester.json
+{
+   "android.test.purchased":{
+      "itemType":"CONSUMABLE",
+      "price":4.99,
+      "title":"400 Muffins",
+      "description":"Test purchase of an item"
+   },
+   "no_ads":{
+      "itemType":"ENTITLED",
+      "price":1.99,
+      "title":"No Ads",
+      "description":"Test purchase of MANAGED item"
+   }
+}

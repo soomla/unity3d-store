@@ -48,7 +48,6 @@ namespace Soomla.Store {
 		void Awake(){
 			if(Instance == null){ 	// making sure we only initialize one instance.
 				Instance = this;
-                gameObject.name = "StoreEvents";
 				GameObject.DontDestroyOnLoad(this.gameObject);
 				Initialize();
 			} else {				// Destroying unused instances.
