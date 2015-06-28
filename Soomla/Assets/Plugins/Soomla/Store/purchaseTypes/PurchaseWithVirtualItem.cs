@@ -61,8 +61,10 @@ namespace Soomla.Store
 		/// <exception cref="Soomla.Store.InsufficientFundsException">throws InsufficientFundsException</exception>
 		public override void Buy(string payload)
 		{
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug("SOOMLA PurchaseWithVirtualItem", "Trying to buy a " + AssociatedItem.Name + " with "
 			                     + Amount + " pieces of " + TargetItemId);
+			#endif
 
 			VirtualItem item = getTargetVirtualItem ();
 			if (item == null) {
@@ -97,8 +99,10 @@ namespace Soomla.Store
 		/// </summary>
 		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
 		public override bool CanAfford() {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug("SOOMLA PurchaseWithVirtualItem", "Checking affordability of " + AssociatedItem.Name + " with "
 			                     + Amount + " pieces of " + TargetItemId);
+			#endif
 
 			VirtualItem targetItem = getTargetVirtualItem();
 			return checkTargetBalance(targetItem);

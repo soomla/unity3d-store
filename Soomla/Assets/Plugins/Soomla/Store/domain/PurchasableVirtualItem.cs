@@ -77,8 +77,10 @@ namespace Soomla.Store {
 		protected PurchasableVirtualItem(SoomlaWpStore.domain.PurchasableVirtualItem wpPurchasableVirtualItem) :
             base(wpPurchasableVirtualItem)
             {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to create PurchasableVirtualItem with itemId: " +
                                 wpPurchasableVirtualItem.getItemId());
+			#endif
 
             SoomlaWpStore.purchasesTypes.PurchaseType wpPT = wpPurchasableVirtualItem.GetPurchaseType();
             if (wpPT is SoomlaWpStore.purchasesTypes.PurchaseWithMarket)

@@ -64,8 +64,10 @@ namespace Soomla.Store
 		/// <exception cref="Soomla.Store.InsufficientFundsException">throws InsufficientFundsException</exception>
 		public override void Buy(string payload)
 		{
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Starting in-app purchase for productId: "
 			                     + MarketItem.ProductId);
+			#endif
 
 			JSONObject eventJSON = new JSONObject();
 			eventJSON.AddField("itemId", AssociatedItem.ItemId);

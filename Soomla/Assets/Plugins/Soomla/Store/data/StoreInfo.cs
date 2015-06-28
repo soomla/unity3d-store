@@ -68,7 +68,9 @@ namespace Soomla.Store
 		/// in {@link com.soomla.store.IStoreAssets#getVersion()}.
 		/// </summary>
 		public static void SetStoreAssets(IStoreAssets storeAssets){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Setting store assets in SoomlaInfo");
+			#endif
 
 			if (storeAssets == null){
 				SoomlaUtils.LogError(TAG, "The given store assets can't be null!");
@@ -90,7 +92,9 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if item is not found.</exception>
 		/// <returns>Item with the given id.</returns>
 		public static VirtualItem GetItemByItemId(string itemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch an item with itemId: " + itemId);
+			#endif
 
 			VirtualItem item;
 			if (VirtualItems != null && VirtualItems.TryGetValue(itemId, out item)) {
@@ -107,7 +111,9 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if item is not found.</exception>
 		/// <returns>Purchasable virtual item with the given id.</returns>
 		public static PurchasableVirtualItem GetPurchasableItemWithProductId(string productId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch a purchasable item with productId: " + productId);
+			#endif
 
 			PurchasableVirtualItem item;
 			if (PurchasableItems != null && PurchasableItems.TryGetValue(productId, out item)) {
@@ -124,7 +130,9 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if category is not found.</exception>
 		/// <returns>Category that the item with given id belongs to.</returns>
 		public static VirtualCategory GetCategoryForVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch a category for a good with itemId: " + goodItemId);
+			#endif
 
 			VirtualCategory category;
 			if (GoodsCategories != null && GoodsCategories.TryGetValue(goodItemId, out category)) {
@@ -140,7 +148,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Item id.</param>
 		/// <returns>The first upgrade for virtual good with the given id.</returns>
 		public static UpgradeVG GetFirstUpgradeForVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch first upgrade of a good with itemId: " + goodItemId);
+			#endif
 
 			List<UpgradeVG> upgrades;
 			if (GoodsUpgrades != null && GoodsUpgrades.TryGetValue(goodItemId, out upgrades)) {
@@ -156,7 +166,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">item id</param>
 		/// <returns>last upgrade for virtual good with the given id</returns>
 		public static UpgradeVG GetLastUpgradeForVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch last upgrade of a good with itemId: " + goodItemId);
+			#endif
 
 			List<UpgradeVG> upgrades;
 			if (GoodsUpgrades != null && GoodsUpgrades.TryGetValue(goodItemId, out upgrades)) {
@@ -172,7 +184,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Item id.</param>
 		/// <returns>All upgrades for virtual good with the given id.</returns>
 		public static List<UpgradeVG> GetUpgradesForVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Trying to fetch upgrades of a good with itemId: " + goodItemId);
+			#endif
 
 			List<UpgradeVG> upgrades;
 			if (GoodsUpgrades != null && GoodsUpgrades.TryGetValue(goodItemId, out upgrades)) {
@@ -187,7 +201,9 @@ namespace Soomla.Store
 		/// </summary>
 		public static void Save() {
 			string store_json = toJSONObject().print();
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "saving StoreInfo to DB. json is: " + store_json);
+			#endif
 			string key = keyMetaStoreInfo();
 			KeyValueStorage.SetValue(key, store_json);
 
@@ -313,7 +329,9 @@ namespace Soomla.Store
 				Application.Quit();
 			}
 			
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "the metadata-economy json (from DB) is " + val);
+			#endif
 
 			JSONObject storeJSON = new JSONObject (val);
 			fromJSONObject (storeJSON);

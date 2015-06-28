@@ -36,7 +36,9 @@ namespace Soomla.Store
 		/// <param name="itemId">id of item to be checked</param>
 		/// <returns>True if there are enough funds to afford the virtual item with the given item id </returns>
 		public static bool CanAfford(string itemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Checking can afford: " + itemId);
+			#endif
 			
 			PurchasableVirtualItem pvi = (PurchasableVirtualItem) StoreInfo.GetItemByItemId(itemId);
 			return pvi.CanAfford();
@@ -61,7 +63,9 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item to be bought is not found.</exception>
 		/// <exception cref="InsufficientFundsException">Thrown if the user does not have enough funds.</exception>
 		public static void BuyItem(string itemId, string payload) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Buying: " + itemId);
+			#endif
 
 			PurchasableVirtualItem pvi = (PurchasableVirtualItem) StoreInfo.GetItemByItemId(itemId);
 			pvi.Buy(payload);
@@ -97,7 +101,9 @@ namespace Soomla.Store
 		/// <param name="amount">Amount of the item to be given.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static void GiveItem(string itemId, int amount) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Giving: " + amount + " pieces of: " + itemId);
+			#endif
 
 			VirtualItem item = StoreInfo.GetItemByItemId(itemId);
 			item.Give(amount);
@@ -111,7 +117,9 @@ namespace Soomla.Store
 		/// <param name="amount">Amount.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static void TakeItem(string itemId, int amount) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Taking: " + amount + " pieces of: " + itemId);
+			#endif
 
 			VirtualItem item = StoreInfo.GetItemByItemId(itemId);
 			item.Take(amount);
@@ -127,7 +135,9 @@ namespace Soomla.Store
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		/// <exception cref="NotEnoughGoodsException"></exception>
 		public static void EquipVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Equipping: " + goodItemId);
+			#endif
 
 			EquippableVG good = (EquippableVG) StoreInfo.GetItemByItemId(goodItemId);
 			
@@ -147,7 +157,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Id of the good to be unequipped.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static void UnEquipVirtualGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "UnEquipping: " + goodItemId);
+			#endif
 			
 			EquippableVG good = (EquippableVG) StoreInfo.GetItemByItemId(goodItemId);
 			good.Unequip();
@@ -160,7 +172,9 @@ namespace Soomla.Store
 		/// <returns>True if the virtual good is equipped, false otherwise.</returns>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static bool IsVirtualGoodEquipped(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Checking if " + goodItemId + " is equipped");
+			#endif
 
 			EquippableVG good = (EquippableVG) StoreInfo.GetItemByItemId(goodItemId);
 			
@@ -183,7 +197,9 @@ namespace Soomla.Store
 		/// <returns>The good upgrade level.</returns>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static int GetGoodUpgradeLevel(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Checking " + goodItemId + " upgrade level");
+			#endif
 
 			VirtualGood good = (VirtualGood) StoreInfo.GetItemByItemId(goodItemId);
 			if (good == null) {
@@ -212,7 +228,9 @@ namespace Soomla.Store
 		/// <returns>The good's current upgrade.</returns>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static string GetGoodCurrentUpgrade(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Checking " + goodItemId + " current upgrade");
+			#endif
 
 			VirtualGood good = (VirtualGood) StoreInfo.GetItemByItemId(goodItemId);
 			
@@ -235,7 +253,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Good item identifier.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static void UpgradeGood(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY Calling UpgradeGood with: " + goodItemId);
+			#endif
 			VirtualGood good = (VirtualGood) StoreInfo.GetItemByItemId(goodItemId);
 			
 			UpgradeVG upgradeVG = VirtualGoodsStorage.GetCurrentUpgrade(good);
@@ -261,7 +281,9 @@ namespace Soomla.Store
 		/// <param name="goodItemId">Id of the good whose upgrades are to be removed.</param>
 		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
 		public static void RemoveGoodUpgrades(string goodItemId) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY Calling RemoveGoodUpgrades with: " + goodItemId);
+			#endif
 
 			List<UpgradeVG> upgrades = StoreInfo.GetUpgradesForVirtualGood(goodItemId);
 			foreach (UpgradeVG upgrade in upgrades) {
@@ -280,7 +302,9 @@ namespace Soomla.Store
 		/// NOTE: This is less useful when you work in editor.
 		/// </summary>
 		public static void RefreshLocalInventory() {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Refreshing local inventory");
+			#endif
 
 			localItemBalances = new Dictionary<string, int> ();
 			localUpgrades = new Dictionary<string, LocalUpgrade>();

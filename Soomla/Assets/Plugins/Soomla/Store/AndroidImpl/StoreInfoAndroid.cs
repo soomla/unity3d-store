@@ -44,7 +44,9 @@ namespace Soomla.Store {
 		/// number in <c>IStoreAssets</c>'s <c>getVersion</c>.
 		/// </summary>
 		override protected void _setStoreAssets(IStoreAssets storeAssets) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "pushing IStoreAssets to StoreInfo on java side");
+			#endif
 			AndroidJNI.PushLocalFrame(100);
 			string storeAssetsJSON = IStoreAssetsToJSON(storeAssets);
 			int version = storeAssets.GetVersion();
@@ -52,7 +54,9 @@ namespace Soomla.Store {
 				jniStoreInfoClass.CallStatic("setStoreAssets", version, storeAssetsJSON);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on java side)");
+			#endif
 		}
 
 		protected override void loadNativeFromDB() {

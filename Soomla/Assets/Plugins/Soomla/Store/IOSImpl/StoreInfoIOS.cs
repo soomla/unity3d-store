@@ -51,12 +51,16 @@ namespace Soomla.Store {
 		/// </summary>
 		/// <param name="storeAssets">your game's economy</param>
 		override protected void _setStoreAssets(IStoreAssets storeAssets) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "pushing IStoreAssets to StoreInfo on iOS side");
+			#endif
 			string storeAssetsJSON = IStoreAssetsToJSON(storeAssets);
 			int version = storeAssets.GetVersion();
 			int err = storeInfo_SetStoreAssets(storeAssetsJSON, version);
 			IOS_ErrorCodes.CheckAndThrowException(err);
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on iOS side)");
+			#endif
 		}
 
 		protected override void loadNativeFromDB() {

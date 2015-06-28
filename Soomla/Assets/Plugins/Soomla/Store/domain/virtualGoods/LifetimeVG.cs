@@ -36,8 +36,10 @@ namespace Soomla.Store {
 	/// <see cref="com.soomla.store.domain.VirtualItem"/>
 	/// </summary>
 	public class LifetimeVG : VirtualGood {
+		#if DEBUG_SOOMLA
 		private static string TAG = "SOOMLA LifetimeVG";
-		
+		#endif
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -80,8 +82,10 @@ namespace Soomla.Store {
 		/// <param name="notify">Notify.</param>
 		public override int Give(int amount, bool notify) {
 			if(amount > 1) {
+				#if DEBUG_SOOMLA
 				SoomlaUtils.LogDebug(TAG, "You tried to give more than one LifetimeVG."
 				                     + "Will try to give one anyway.");
+				#endif
 				amount = 1;
 			}
 			

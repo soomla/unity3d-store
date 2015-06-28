@@ -62,8 +62,10 @@ namespace Soomla.Store
 		/// <returns>The balance of the required virtual item.</returns>
 		/// <param name="item">The required virtual item.</param>
 		public static int GetBalance(VirtualItem item){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "fetching balance for virtual item with itemId: "
 			                     + item.ItemId);
+			#endif
 			
 			return instance._getBalance(item);
 		}
@@ -87,7 +89,9 @@ namespace Soomla.Store
 		/// <param name="notify">if notify is true post balance change event.</param>
 		/// <returns>the balance of the required virtual item</returns>
 		public static int SetBalance(VirtualItem item, int balance, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "setting balance " + balance + " to " + item.ItemId + ".");
+			#endif
 			
 			return instance._setBalance(item, balance, notify);
 		}
@@ -109,7 +113,9 @@ namespace Soomla.Store
 		/// <param name="amount">the amount of items to add.</param>
 		/// <param name="notify">notify if true posts balance change event.</param>
 		public static int Add(VirtualItem item, int amount, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "adding " + amount + " " + item.ItemId);
+			#endif
 			
 			return instance._add(item, amount, notify);
 		}
@@ -130,7 +136,9 @@ namespace Soomla.Store
 		/// <param name="amount">the amount to remove.</param>
 		/// <param name="notify">notify is true post balance change event</para>
 		public static int Remove(VirtualItem item, int amount, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Removing " + amount + " " + item.ItemId + ".");
+			#endif
 			
 			return instance._remove(item, amount, true);
 		}

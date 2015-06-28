@@ -40,7 +40,9 @@ namespace Soomla.Store
 				balance = int.Parse(val);
 			}
 			
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "the balance for " + item.ItemId + " is " + balance);
+			#endif
 			
 			return balance;
 #else

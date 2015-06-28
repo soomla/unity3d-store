@@ -202,9 +202,11 @@ namespace Soomla.Store {
 							                     + "in the category. Continuing to the next one. itemId: "
 							                     + goodItemId);
 						} catch (System.InvalidCastException) {
+							#if DEBUG_SOOMLA
 							SoomlaUtils.LogDebug(TAG, "On equip, an error occurred. It's a debug "
 							                     + "message b/c the VirtualGood may just not be an EquippableVG. "
 							                     + "itemId: " + goodItemId);
+							#endif
 						}
 					}
 				} else if (Equipping == EquippingModel.GLOBAL) {

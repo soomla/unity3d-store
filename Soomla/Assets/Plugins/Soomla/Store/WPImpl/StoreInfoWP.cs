@@ -51,12 +51,16 @@ namespace Soomla.Store {
         /// </summary>
         override protected void _setStoreAssets(IStoreAssets storeAssets)
         {
+            #if DEBUG_SOOMLA
             SoomlaUtils.LogDebug(TAG, "pushing data to StoreAssets on wp side");
+            #endif
             string storeAssetsJSON = IStoreAssetsToJSON(storeAssets);
             int version = storeAssets.GetVersion();
             SoomlaWpStore.data.GenericStoreAssets.GetInstance().Prepare(version, storeAssetsJSON);
             SoomlaWpStore.data.StoreInfo.setStoreAssets(SoomlaWpStore.data.GenericStoreAssets.GetInstance());
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on wp side)");
+			#endif
 		}	
 #endif
     }

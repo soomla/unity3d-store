@@ -70,8 +70,10 @@ namespace Soomla.Store
 		/// <param name="good">VirtualGood to remove upgrade from.</param>
 		/// <param name="notify">true will also post event.</param>
 		public static void RemoveUpgrades(VirtualGood good, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Removing upgrade information from virtual good: "
 			                     + good.ItemId);
+			#endif
 			
 			instance._removeUpgrades(good, notify);
 		}
@@ -92,8 +94,10 @@ namespace Soomla.Store
 		/// <param name="upgradeVG">the upgrade to assign.</param>
 		/// <param name="notify">true will also post event.</param>
 		public static void AssignCurrentUpgrade(VirtualGood good, UpgradeVG upgradeVG, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Assigning upgrade " + upgradeVG.ItemId + " to virtual good: "
 			                     + good.ItemId);
+			#endif
 
 			instance._assignCurrentUpgrade(good, upgradeVG, notify);
 		}
@@ -104,7 +108,9 @@ namespace Soomla.Store
 		/// <param name="good">the virtual good to retrieve upgrade for.</param>
 		/// <return>the current upgrade for the given virtual good.</return>
 		public static UpgradeVG GetCurrentUpgrade(VirtualGood good){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Fetching upgrade to virtual good: " + good.ItemId);
+			#endif
 			
 			return instance._getCurrentUpgrade(good);
 		}
@@ -115,8 +121,10 @@ namespace Soomla.Store
 		/// <param name="good">the virtual good to retrieve upgrade for.</param>
 		/// <return>the current upgrade for the given virtual good.</return>
 		public static bool IsEquipped(EquippableVG good){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "checking if virtual good with itemId: " + good.ItemId +
 			                     " is equipped.");
+			#endif
 			
 			return instance._isEquipped(good);
 		}
@@ -126,7 +134,9 @@ namespace Soomla.Store
 		/// </summary>
 		/// <param name="good">the <code>EquippableVG</code> to equip.</param>
 		public static void Equip(EquippableVG good){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "equipping: " + good.ItemId);
+			#endif
 			
 			Equip(good);
 		}
@@ -137,7 +147,9 @@ namespace Soomla.Store
 		/// <param name="good">the <code>EquippableVG</code> to equip.</param>
 		/// <param name="notify">true will also post event.</param>
 		public static void Equip(EquippableVG good, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "equipping: " + good.ItemId);
+			#endif
 			
 			instance._equip(good, notify);
 		}
@@ -147,7 +159,9 @@ namespace Soomla.Store
 		/// </summary>
 		/// <param name="good">the <code>EquippableVG</code> to equip.</param>
 		public static void UnEquip(EquippableVG good){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "unequipping: " + good.ItemId);
+			#endif
 			
 			UnEquip(good, true);
 		}
@@ -158,7 +172,9 @@ namespace Soomla.Store
 		/// <param name="good">the <code>EquippableVG</code> to equip.</param>
 		/// <param name="notify">true will also post event.</param>
 		public static void UnEquip(EquippableVG good, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "unequipping: " + good.ItemId);
+			#endif
 			
 			instance._unequip(good, notify);
 		}
@@ -170,8 +186,10 @@ namespace Soomla.Store
 		/// <returns>The balance of the required virtual item.</returns>
 		/// <param name="item">The required virtual item.</param>
 		public static int GetBalance(VirtualItem item){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "fetching balance for virtual item with itemId: "
 			                     + item.ItemId);
+			#endif
 			
 			return instance._getBalance(item);
 		}
@@ -195,7 +213,9 @@ namespace Soomla.Store
 		/// <param name="notify">if notify is true post balance change event.</param>
 		/// <returns>the balance of the required virtual item</returns>
 		public static int SetBalance(VirtualItem item, int balance, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "setting balance " + balance + " to " + item.ItemId + ".");
+			#endif
 			
 			return instance._setBalance(item, balance, notify);
 		}
@@ -217,7 +237,9 @@ namespace Soomla.Store
 		/// <param name="amount">the amount of items to add.</param>
 		/// <param name="notify">notify if true posts balance change event.</param>
 		public static int Add(VirtualItem item, int amount, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "adding " + amount + " " + item.ItemId);
+			#endif
 
 			return instance._add(item, amount, notify);
 		}
@@ -238,7 +260,9 @@ namespace Soomla.Store
 		/// <param name="amount">the amount to remove.</param>
 		/// <param name="notify">notify is true post balance change event</para>
 		public static int Remove(VirtualItem item, int amount, bool notify){
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Removing " + amount + " " + item.ItemId + ".");
+			#endif
 			
 			return instance._remove(item, amount, true);
 		}
@@ -293,8 +317,10 @@ namespace Soomla.Store
 			string upItemId = PlayerPrefs.GetString(key);
 			
 			if (string.IsNullOrEmpty(upItemId)) {
+				#if DEBUG_SOOMLA
 				SoomlaUtils.LogDebug(TAG, "You tried to fetch the current upgrade of " + good.ItemId
 				                     + " but there's no upgrade for it.");
+				#endif
 				return null;
 			}
 			

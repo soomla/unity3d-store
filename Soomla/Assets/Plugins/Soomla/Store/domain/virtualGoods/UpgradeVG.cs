@@ -145,7 +145,9 @@ namespace Soomla.Store {
 		/// <param name="amount">NOT USED HERE!</param>
 		/// <param name="notify">notify of change in user's balance of current virtual item.</param>
 		public override int Give(int amount, bool notify) {
+			#if DEBUG_SOOMLA
 			SoomlaUtils.LogDebug(TAG, "Assigning " + Name + " to: " + GoodItemId);
+			#endif
 			
 			VirtualGood good = null;
 			try {
@@ -200,14 +202,18 @@ namespace Soomla.Store {
 					return 0;
 				}
 				// Case: downgrade is successful!
+				#if DEBUG_SOOMLA
 				SoomlaUtils.LogDebug(TAG, "Downgrading " + good.Name + " to: "
 				                     + prevUpgradeVG.Name);
+				#endif
 				VirtualGoodsStorage.AssignCurrentUpgrade(good, prevUpgradeVG, notify);
 			}
 			
 			// Case: first Upgrade in the series - so we downgrade to NO upgrade.
 			else {
+				#if DEBUG_SOOMLA
 				SoomlaUtils.LogDebug(TAG, "Downgrading " + good.Name + " to NO-UPGRADE");
+				#endif
 				VirtualGoodsStorage.RemoveUpgrades(good, notify);
 			}
 
