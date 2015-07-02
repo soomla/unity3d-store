@@ -146,6 +146,7 @@ namespace Soomla.Store
 					
 					AmazonBP = false;
 					NoneBP = false;
+					TapClashBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(false);
 					handleAmazonBPJars(true);
@@ -159,6 +160,7 @@ namespace Soomla.Store
 					
 					GPlayBP = false;
 					NoneBP = false;
+					TapClashBP = false;
 					SoomlaManifestTools.GenerateManifest();
 					handlePlayBPJars(true);
 					handleAmazonBPJars(false);

@@ -57,6 +57,17 @@ namespace Soomla.Store {
 					jniGooglePlayIabServiceClass.SetStatic("AllowAndroidTestPurchases", StoreSettings.AndroidTestPurchases);
 				}
 			}
+
+			if (StoreSettings.TapClashBP) {
+				using(AndroidJavaClass jniTapClashIabServiceClass = new AndroidJavaClass("com.soomla.store.billing.tapclash.TapClashIabService")) {
+					AndroidJavaObject jniTapClashIabService = jniTapClashIabServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+					jniTapClashIabService.Call("setPublicKey", StoreSettings.TapClashPublicKey);
+					
+					jniTapClashIabServiceClass.SetStatic("AllowAndroidTestPurchases", StoreSettings.TapClashTestPurchases);
+				}
+			}
+
+
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}
 
