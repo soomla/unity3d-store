@@ -21,11 +21,11 @@ extern "C"{
         [[NSNotificationCenter defaultCenter] postNotificationName:EVENT_SOOMLASTORE_INIT object:instance userInfo:nil];
     }
     
-    void eventDispatcher_PushEventUnexpectedStoreError(const char* errMessage) {
-        // TODO: we're ignoring errMessage here. change it?
-
-        NSDictionary *userInfo = @{ DICT_ELEMENT_ERROR_CODE: [NSNumber numberWithInt:ERR_GENERAL] };
-        [[NSNotificationCenter defaultCenter] postNotificationName:EVENT_UNEXPECTED_ERROR_IN_STORE object:instance userInfo:userInfo];
+    void eventDispatcher_PushEventUnexpectedStoreError(const char *message) {
+        NSString* messageS = [NSString stringWithUTF8String:message];
+        NSDictionary* eventJSON = [SoomlaUtils jsonStringToDict:messageS];
+        NSDictionary *userInfo = @{ DICT_ELEMENT_ERROR_CODE: eventJSON[@"errorCode"]};
+        [[NSNotificationCenter defaultCenter] postNotificationName:EVENT_UNEXPECTED_STORE_ERROR object:instance userInfo:userInfo];
     }
     
     void eventDispatcher_PushEventCurrencyBalanceChanged(const char* message) {
@@ -239,16 +239,16 @@ extern "C"{
     else if ([notification.name isEqualToString:EVENT_MARKET_ITEMS_REFRESH_FAILED]) {
         NSDictionary* userInfo = [notification userInfo];
         NSString* jsonStr = [SoomlaUtils dictToJsonString:@{
-                                                            @"errorMessage": ([userInfo objectForKey:DICT_ELEMENT_ERROR_MESSAGE] ?: @"")
-                                                            }];
+                @"errorMessage": ([userInfo objectForKey:DICT_ELEMENT_ERROR_MESSAGE] ?: @"")
+        }];
         UnitySendMessage("StoreEvents", "onMarketItemsRefreshFailed", [jsonStr UTF8String]);
     }
-    else if ([notification.name isEqualToString:EVENT_UNEXPECTED_ERROR_IN_STORE]) {
+    else if ([notification.name isEqualToString:EVENT_UNEXPECTED_STORE_ERROR]) {
         NSDictionary* userInfo = [notification userInfo];
         NSString* jsonStr = [SoomlaUtils dictToJsonString:@{
-                                                      @"errorCode": (userInfo[DICT_ELEMENT_ERROR_CODE] ?: 0)
+                                                      @"errorCode": (userInfo[DICT_ELEMENT_ERROR_CODE] ?: @0)
                                                       }];
-        UnitySendMessage("StoreEvents", "onUnexpectedErrorInStore", [jsonStr UTF8String]);
+        UnitySendMessage("StoreEvents", "onUnexpectedStoreError", [jsonStr UTF8String]);
     }
     else if ([notification.name isEqualToString:EVENT_SOOMLASTORE_INIT]) {
         UnitySendMessage("StoreEvents", "onSoomlaStoreInitialized", "");

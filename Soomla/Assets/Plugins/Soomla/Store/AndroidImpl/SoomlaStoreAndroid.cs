@@ -33,14 +33,39 @@ namespace Soomla.Store {
 		/// Load the billing service.
 		/// </summary>
 		protected override void _loadBillingService() {
-			if (StoreSettings.GPlayBP && 
-			    (string.IsNullOrEmpty(StoreSettings.AndroidPublicKey) ||
-			 		StoreSettings.AndroidPublicKey==StoreSettings.AND_PUB_KEY_DEFAULT)) {
-				SoomlaUtils.LogError(TAG, "You chose Google Play billing service but publicKey is not set!! Stopping here!!");
-				throw new ExitGUIException();
-			}
+			if (StoreSettings.GPlayBP) {
+				if (string.IsNullOrEmpty(StoreSettings.AndroidPublicKey) ||
+			 		    StoreSettings.AndroidPublicKey == StoreSettings.AND_PUB_KEY_DEFAULT) {
 
-			AndroidJNI.PushLocalFrame(100);
+					SoomlaUtils.LogError(TAG, "You chose Google Play billing service, but publicKey is not set!! Stopping here!!");
+					throw new ExitGUIException();
+				}
+
+				if (StoreSettings.PlaySsvValidation) {
+					if (string.IsNullOrEmpty(StoreSettings.PlayClientId) ||
+					    StoreSettings.PlayClientId == StoreSettings.PLAY_CLIENT_ID_DEFAULT) {
+						
+						SoomlaUtils.LogError(TAG, "You chose Google Play Receipt Validation, but clientId is not set!! Stopping here!!");
+						throw new ExitGUIException();
+					}
+					
+					if (string.IsNullOrEmpty(StoreSettings.PlayClientSecret) ||
+					    StoreSettings.PlayClientSecret == StoreSettings.PLAY_CLIENT_SECRET_DEFAULT) {
+						
+						SoomlaUtils.LogError(TAG, "You chose Google Play Receipt Validation, but clientSecret is not set!! Stopping here!!");
+						throw new ExitGUIException();
+					}
+					
+					if (string.IsNullOrEmpty(StoreSettings.PlayRefreshToken) ||
+					    StoreSettings.PlayRefreshToken == StoreSettings.PLAY_REFRESH_TOKEN_DEFAULT) {
+                        
+                        SoomlaUtils.LogError(TAG, "You chose Google Play Receipt Validation, but refreshToken is not set!! Stopping here!!");
+                        throw new ExitGUIException();
+                    }
+                }
+            }
+            
+            AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniSoomlaStoreClass = new AndroidJavaClass("com.soomla.store.SoomlaStore")) {
 				jniSoomlaStore = jniSoomlaStoreClass.CallStatic<AndroidJavaObject>("getInstance");
 				bool success = jniSoomlaStore.Call<bool>("loadBillingService");
@@ -54,8 +79,68 @@ namespace Soomla.Store {
 					AndroidJavaObject jniGooglePlayIabService = jniGooglePlayIabServiceClass.CallStatic<AndroidJavaObject>("getInstance");
 					jniGooglePlayIabService.Call("setPublicKey", StoreSettings.AndroidPublicKey);
 
-					jniGooglePlayIabServiceClass.SetStatic("AllowAndroidTestPurchases", StoreSettings.AndroidTestPurchases);
+
+					using(AndroidJavaObject obj_HashMap = new AndroidJavaObject("java.util.HashMap"))
+					{
+						IntPtr method_Put = AndroidJNIHelper.GetMethodID(obj_HashMap.GetRawClass(), "put",
+						                                                 "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+						
+						object[] args = new object[2];
+
+						// client ID
+						using(AndroidJavaObject k = new AndroidJavaObject("java.lang.String", "clientId"))
+						{
+							using(AndroidJavaObject v = new AndroidJavaObject("java.lang.String", StoreSettings.PlayClientId))
+							{
+								args[0] = k;
+								args[1] = v;
+								AndroidJNI.CallObjectMethod(obj_HashMap.GetRawObject(),
+								                            method_Put, AndroidJNIHelper.CreateJNIArgArray(args));
+                            }
+                        }
+						
+						// client secret
+						using(AndroidJavaObject k = new AndroidJavaObject("java.lang.String", "clientSecret"))
+						{
+							using(AndroidJavaObject v = new AndroidJavaObject("java.lang.String", StoreSettings.PlayClientSecret))
+							{
+								args[0] = k;
+								args[1] = v;
+								AndroidJNI.CallObjectMethod(obj_HashMap.GetRawObject(),
+								                            method_Put, AndroidJNIHelper.CreateJNIArgArray(args));
+                            }
+                        }
+                        
+						// refresh token
+						using(AndroidJavaObject k = new AndroidJavaObject("java.lang.String", "refreshToken"))
+						{
+							using(AndroidJavaObject v = new AndroidJavaObject("java.lang.String", StoreSettings.PlayClientSecret))
+							{
+								args[0] = k;
+								args[1] = v;
+								AndroidJNI.CallObjectMethod(obj_HashMap.GetRawObject(),
+								                            method_Put, AndroidJNIHelper.CreateJNIArgArray(args));
+							}
+						}
+						
+						// verifyOnServerFailure
+						using(AndroidJavaObject k = new AndroidJavaObject("java.lang.String", "verifyOnServerFailure"))
+						{
+							using(AndroidJavaObject v = new AndroidJavaObject("java.lang.Boolean", StoreSettings.PlayVerifyOnServerFailure))
+							{
+								args[0] = k;
+								args[1] = v;
+								AndroidJNI.CallObjectMethod(obj_HashMap.GetRawObject(),
+								                            method_Put, AndroidJNIHelper.CreateJNIArgArray(args));
+							}
+						}
+						
+						jniGooglePlayIabService.Call("configVerifyPurchases", obj_HashMap);
+                    }
+                    
+                    jniGooglePlayIabServiceClass.SetStatic("AllowAndroidTestPurchases", StoreSettings.AndroidTestPurchases);
 				}
+
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 		}

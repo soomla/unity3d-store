@@ -66,9 +66,8 @@ namespace Soomla.Store
 			}
 
 			if (Initialized) {
-				string err = "SoomlaStore is already initialized. You can't initialize it twice!";
-				StoreEvents.Instance.onUnexpectedErrorInStore(err, true);
-				SoomlaUtils.LogError(TAG, err);
+				StoreEvents.Instance.onUnexpectedStoreError("{\"errorCode\": 0}", true);
+				SoomlaUtils.LogError(TAG, "SoomlaStore is already initialized. You can't initialize it twice!");
 				return false;
 			}
 

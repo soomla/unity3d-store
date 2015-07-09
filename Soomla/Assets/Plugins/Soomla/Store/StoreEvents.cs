@@ -808,22 +808,14 @@ namespace Soomla.Store {
 		/// occurs in store.
 		/// </summary>
 		/// <param name="message">Message that contains information about the error.</param>
-		public void onUnexpectedErrorInStore(string message) {
-			onUnexpectedErrorInStore(message, false);
+		public void onUnexpectedStoreError(string message) {
+			onUnexpectedStoreError(message, false);
 		}
-		public void onUnexpectedErrorInStore(string message, bool alsoPush) {
-			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY onUnexpectedErrorInStore");
+		public void onUnexpectedStoreError(string message, bool alsoPush) {
+			SoomlaUtils.LogDebug(TAG, "SOOMLA/UNITY OnUnexpectedStoreError");
 
-			JSONObject eventJSON = null;
-			try {
-				eventJSON = new JSONObject(message);
-			} catch {}
-
-			if (eventJSON != null && eventJSON ["errorCode"] != null) {
-				StoreEvents.OnUnexpectedStoreError((int) eventJSON ["errorCode"].n);
-			} else {
-				StoreEvents.OnUnexpectedErrorInStore (message);
-			}
+			JSONObject eventJSON = new JSONObject(message);
+			StoreEvents.OnUnexpectedStoreError((int) eventJSON ["errorCode"].n);
 
 			if (alsoPush) {
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
@@ -910,8 +902,6 @@ namespace Soomla.Store {
 		public static Action<string> OnMarketItemsRefreshFailed = delegate {};
 
 		public static Action<List<MarketItem>> OnMarketItemsRefreshFinished = delegate {};
-
-		public static Action<string> OnUnexpectedErrorInStore = delegate {};
 
 		public static Action<int> OnUnexpectedStoreError = delegate {};
 

@@ -47,6 +47,13 @@ namespace Soomla.Store
 
 		GUIContent noneBPLabel = new GUIContent("You have your own Billing Service");
 		GUIContent playLabel = new GUIContent("Google Play");
+		GUIContent playSsvLabel = new GUIContent("Receipt Validation [?]:", "Check if you want your purchases validated with SOOMLA Server Side Protection Service.");
+		GUIContent playClientIdLabel = new GUIContent("Client ID");
+		GUIContent playClientSecretLabel = new GUIContent("Client Secret");
+		GUIContent playRefreshTokenLabel = new GUIContent("Refresh Token");
+		GUIContent playVerifyOnServerFailureLabel = new GUIContent("Verify On Server Failure [?]:", "Check if you want your purchases get validated if server failure happens.");
+
+
 		GUIContent amazonLabel = new GUIContent("Amazon");
 		GUIContent publicKeyLabel = new GUIContent("API Key [?]:", "The API key from Google Play dev console (just in case you're using Google Play as billing provider).");
 		GUIContent testPurchasesLabel = new GUIContent("Test Purchases [?]:", "Check if you want to allow purchases of Google's test product ids.");
@@ -138,6 +145,37 @@ namespace Soomla.Store
 					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
 					AndroidTestPurchases = EditorGUILayout.Toggle(testPurchasesLabel, AndroidTestPurchases);
 					EditorGUILayout.EndHorizontal();
+
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+					PlaySsvValidation = EditorGUILayout.Toggle(playSsvLabel, PlaySsvValidation);
+					EditorGUILayout.EndHorizontal();
+
+					if (PlaySsvValidation) {
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField(playClientIdLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+						PlayClientId = EditorGUILayout.TextField(PlayClientId, SoomlaEditorScript.FieldHeight);
+						EditorGUILayout.EndHorizontal();
+						
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField(playClientSecretLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+						PlayClientSecret = EditorGUILayout.TextField(PlayClientSecret, SoomlaEditorScript.FieldHeight);
+						EditorGUILayout.EndHorizontal();
+
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField(playRefreshTokenLabel, SoomlaEditorScript.FieldWidth, SoomlaEditorScript.FieldHeight);
+						PlayRefreshToken = EditorGUILayout.TextField(PlayRefreshToken, SoomlaEditorScript.FieldHeight);
+						EditorGUILayout.EndHorizontal();
+
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.Space();
+						EditorGUILayout.LabelField(SoomlaEditorScript.EmptyContent, SoomlaEditorScript.SpaceWidth, SoomlaEditorScript.FieldHeight);
+						PlayVerifyOnServerFailure = EditorGUILayout.Toggle(playVerifyOnServerFailureLabel, PlayVerifyOnServerFailure);
+						EditorGUILayout.EndHorizontal();
+					}
 				}
 
 				bpUpdate.TryGetValue("play", out update);
@@ -242,6 +280,11 @@ namespace Soomla.Store
 
 		public static string AND_PUB_KEY_DEFAULT = "YOUR GOOGLE PLAY PUBLIC KEY";
 
+		public static string PLAY_CLIENT_ID_DEFAULT = "YOUR CLIENT ID";
+		public static string PLAY_CLIENT_SECRET_DEFAULT = "YOUR CLIENT SECRET";
+		public static string PLAY_REFRESH_TOKEN_DEFAULT = "YOUR REFRESH TOKEN";
+
+		
 		public static string AndroidPublicKey
 		{
 			get {
@@ -260,6 +303,78 @@ namespace Soomla.Store
 			}
 		}
 
+		public static string PlayClientId
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayClientId", out value) ? value : PLAY_CLIENT_ID_DEFAULT;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayClientId", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("PlayClientId",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
+		public static string PlayClientSecret
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayClientSecret", out value) ? value : PLAY_CLIENT_SECRET_DEFAULT;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayClientSecret", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("PlayClientSecret",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
+		public static string PlayRefreshToken
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayRefreshToken", out value) ? value : PLAY_REFRESH_TOKEN_DEFAULT;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayRefreshToken", out v);
+				if (v != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("PlayRefreshToken",value);
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
+		public static bool PlayVerifyOnServerFailure
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayVerifyOnServerFailure", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlayVerifyOnServerFailure", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("PlayVerifyOnServerFailure", value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+		
 		public static bool AndroidTestPurchases
 		{
 			get {
@@ -273,6 +388,24 @@ namespace Soomla.Store
 				if (Convert.ToBoolean(v) != value)
 				{
 					SoomlaEditorScript.Instance.setSettingsValue("AndroidTestPurchases",value.ToString());
+					SoomlaEditorScript.DirtyEditor ();
+				}
+			}
+		}
+
+		public static bool PlaySsvValidation
+		{
+			get {
+				string value;
+				return SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlaySsvValidation", out value) ? Convert.ToBoolean(value) : false;
+			}
+			set
+			{
+				string v;
+				SoomlaEditorScript.Instance.SoomlaSettings.TryGetValue("PlaySsvValidation", out v);
+				if (Convert.ToBoolean(v) != value)
+				{
+					SoomlaEditorScript.Instance.setSettingsValue("PlaySsvValidation",value.ToString());
 					SoomlaEditorScript.DirtyEditor ();
 				}
 			}
