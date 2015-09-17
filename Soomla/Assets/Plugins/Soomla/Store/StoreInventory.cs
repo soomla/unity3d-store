@@ -187,23 +187,43 @@ namespace Soomla.Store
             SoomlaUtils.LogError(TAG, "There is no virtual good equipped in " + category.Name + " category");
 	        return null;
 	    }
-		
-		/// <summary>
-		/// Retrieves the upgrade level of the virtual good with the given <c>goodItemId</c>.
-		/// For Example:
-		/// Let's say there's a strength attribute to one of the characters in your game and you provide
-		/// your users with the ability to upgrade that strength on a scale of 1-3.
-		/// This is what you've created:
-		/// 1. <c>SingleUseVG</c> for "strength".
-		/// 2. <c>UpgradeVG</c> for strength 'level 1'.
-		/// 3. <c>UpgradeVG</c> for strength 'level 2'.
-		/// 4. <c>UpgradeVG</c> for strength 'level 3'.
-		/// In the example, this function will retrieve the upgrade level for "strength" (1, 2, or 3).
-		/// </summary>
-		/// <param name="goodItemId">Good item identifier.</param>
-		/// <returns>The good upgrade level.</returns>
-		/// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
-		public static int GetGoodUpgradeLevel(string goodItemId) {
+
+
+        /// <summary>
+        /// Checks currently equipped good in given <c>category</c>
+        /// </summary>
+        /// <param name="string">Name of the category we want to check</param>
+        /// <returns>EquippableVG otherwise null</returns>
+        public static EquippableVG GetEquippedVirtualGood(string categoryName)
+        {
+            foreach (VirtualCategory category in StoreInfo.Categories)
+            {
+                if (category.Name == categoryName)
+                {
+                    return GetEquippedVirtualGood(category);
+                }
+            }
+
+            SoomlaUtils.LogError(TAG, "There is no category named " + categoryName);
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieves the upgrade level of the virtual good with the given <c>goodItemId</c>.
+        /// For Example:
+        /// Let's say there's a strength attribute to one of the characters in your game and you provide
+        /// your users with the ability to upgrade that strength on a scale of 1-3.
+        /// This is what you've created:
+        /// 1. <c>SingleUseVG</c> for "strength".
+        /// 2. <c>UpgradeVG</c> for strength 'level 1'.
+        /// 3. <c>UpgradeVG</c> for strength 'level 2'.
+        /// 4. <c>UpgradeVG</c> for strength 'level 3'.
+        /// In the example, this function will retrieve the upgrade level for "strength" (1, 2, or 3).
+        /// </summary>
+        /// <param name="goodItemId">Good item identifier.</param>
+        /// <returns>The good upgrade level.</returns>
+        /// <exception cref="VirtualItemNotFoundException">Thrown if the item is not found.</exception>
+        public static int GetGoodUpgradeLevel(string goodItemId) {
 			SoomlaUtils.LogDebug(TAG, "Checking " + goodItemId + " upgrade level");
 
 			VirtualGood good = (VirtualGood) StoreInfo.GetItemByItemId(goodItemId);
