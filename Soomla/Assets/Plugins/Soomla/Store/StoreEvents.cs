@@ -17,6 +17,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Soomla.Singletons;
 #if UNITY_WP8 && !UNITY_EDITOR
 using SoomlaWpStore;
 using SoomlaWpStore.events;
@@ -28,15 +29,20 @@ namespace Soomla.Store {
 	/// <summary>
 	/// This class provides functionality for event handling.
 	/// </summary>
-	public class StoreEvents : MonoBehaviour {
+	public class StoreEvents : CodeGeneratedSingleton {
 
 		private const string TAG = "SOOMLA StoreEvents";
 
-#if UNITY_EDITOR
-		public static StoreEvents Instance { get; private set; }
-#else
-		public static StoreEvents Instance = null;
-#endif
+	    public static StoreEvents Instance
+	    {
+	        get { return GetSynchronousCodeGeneratedInstance<StoreEvents>(); }
+	    }
+
+	    protected override bool DontDestroySingleton
+	    {
+	        get { return true; }
+	    }
+
 		#pragma warning disable 0414
 		private static StoreEventPusher sep = null;
 		#pragma warning restore 0414
@@ -46,20 +52,15 @@ namespace Soomla.Store {
 		private static extern void eventDispatcher_Init();
 #endif
 
+        /// <summary>
+        /// Initializes StoreEvents before the game starts.
+        /// </summary>
+	    protected override void InitAfterRegisteringAsSingleInstance()
+	    {
+	        base.InitAfterRegisteringAsSingleInstance();
 
-		/// <summary>
-		/// Initializes StoreEvents before the game starts.
-		/// </summary>
-		void Awake(){
-			if(Instance == null){ 	// making sure we only initialize one instance.
-				Instance = this;
-                gameObject.name = "StoreEvents";
-				GameObject.DontDestroyOnLoad(this.gameObject);
-				Initialize();
-			} else {				// Destroying unused instances.
-				GameObject.Destroy(this.gameObject);
-			}
-		}
+            Initialize();
+        }
 
 		public delegate void RunLaterDelegate();
 		public void RunLater(RunLaterDelegate runLaterDelegate) {
