@@ -36,7 +36,7 @@ unity3d-store is the Unity3d flavor of SOOMLA's Store Module.
 
 > If you're upgrading from a version below v1.7.x make sure you take soomla-unity3d-core again.
 
-[unity3d-store v1.10.1](https://www.assetstore.unity3d.com/en/#!/content/6103)
+[unity3d-store v1.10.2](https://www.assetstore.unity3d.com/en/#!/content/6103)
 
 #### From sources:
  - Clone this repository recursively: `git clone --recursive https://github.com/soomla/unity3d-store.git`

@@ -1,3 +1,8 @@
+### v1.10.2 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.10.1...v1.10.2)
+
+* Fixes
+  * Fixed editor cpu usage
+
 ### v1.10.1 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.10.0...v1.10.1)
 
 * Changes
