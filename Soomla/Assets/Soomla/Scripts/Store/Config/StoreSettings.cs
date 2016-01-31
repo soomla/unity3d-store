@@ -71,13 +71,15 @@ namespace Soomla.Store
 		GUIContent wp8TestModeLabel = new GUIContent("Simulate Store. (Don't forget to adapt IAPMock.xml to fit your IAPs)");
 
 		GUIContent iosSsvLabel = new GUIContent("Fraud Protection [?]:", "Check if you want to turn on purchases verification with SOOMLA Fraud Protection Service.");
-    	GUIContent iosVerifyOnServerFailureLabel = new GUIContent("Verify On Server Failure [?]:", "Check if you want your purchases get validated if server failure happens.");
+		GUIContent iosVerifyOnServerFailureLabel = new GUIContent("Verify On Server Failure [?]:", "Check if you want your purchases get validated if server failure happens.");
 
 		GUIContent frameworkVersion = new GUIContent("Store Version [?]", "The SOOMLA Framework Store Module version. ");
 
 		public void OnEnable() {
 			// Generating AndroidManifest.xml
 //			ManifestTools.GenerateManifest();
+			handlePlayBPJars(!GPlayBP);
+			handleAmazonBPJars(!AmazonBP);
 		}
 
 		public void OnModuleGUI() {
@@ -136,7 +138,7 @@ namespace Soomla.Store
 				SoomlaManifestTools.GenerateManifest();
 				handlePlayBPJars(true);
 				handleAmazonBPJars(true);
-				}
+			}
 
 
 			GPlayBP = EditorGUILayout.ToggleLeft(playLabel, GPlayBP);
@@ -214,8 +216,8 @@ namespace Soomla.Store
 		}
 
 
-        public void OnWP8GUI()
-        {
+		public void OnWP8GUI()
+		{
 			EditorGUILayout.HelpBox("Store Settings", MessageType.None);
 
 			WP8SimulatorBuild = EditorGUILayout.ToggleLeft(wp8SimulatorModeLabel, WP8SimulatorBuild);
@@ -223,7 +225,7 @@ namespace Soomla.Store
 			WP8TestMode = EditorGUILayout.ToggleLeft(wp8TestModeLabel, WP8TestMode);
          
 			EditorGUILayout.Space();
-        }
+		}
 
 
 
@@ -242,7 +244,7 @@ namespace Soomla.Store
 
 		private Dictionary<string, bool> bpUpdate = new Dictionary<string, bool>();
 		private static string bpRootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig/android/android-billing-services/";
-        private static string wp8RootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig/wp8/";
+		private static string wp8RootPath = Application.dataPath + "/WebPlayerTemplates/SoomlaConfig/wp8/";
 
 		public static void handlePlayBPJars(bool remove) {
 			try {
