@@ -1,3 +1,8 @@
+### v1.11.0 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.10.2...v1.11.0)
+
+* Changes
+  * Moved Soomla script folders from Assets/Plugins/Soomla to Assets/Soomla/Scripts
+
 ### v1.10.2 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.10.1...v1.10.2)
 
 * Fixes
