@@ -1,3 +1,8 @@
+### v1.11.1 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.11.0...v1.11.1)
+
+* Fixes
+  * Minor bugfixes
+
 ### v1.11.0 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.10.2...v1.11.0)
 
 * Changes
