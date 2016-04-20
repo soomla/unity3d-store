@@ -266,7 +266,7 @@ namespace Soomla.Store
 		/** These protected virtual functions will only run when in editor **/
 
 		virtual protected void _setStoreAssets(IStoreAssets storeAssets) {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_WEBGL
 			string storeJSON = IStoreAssetsToJSON(storeAssets);
 
 			KeyValueStorage.SetValue(keyMetaStoreInfo(), storeJSON);
