@@ -1,3 +1,12 @@
+### v1.11.2 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.11.1...v1.11.2)
+
+* Fixes
+  * Soomla Store Google Play crash at getPurchases fixed
+  * Change type of `marketPriceMicros` variable to avoid type overflow
+
+* Changes
+  * Change verification URL
+
 ### v1.11.1 [view commit logs](https://github.com/soomla/unity3d-store/compare/v1.11.0...v1.11.1)
 
 * Fixes
