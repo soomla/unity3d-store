@@ -45,9 +45,9 @@ namespace Soomla.Store {
 		/// <param name="method">The method to call in android-store.</param>
 		/// <param name="arg0">The method's AndroidJavaObject argument.</param>
 		/// <param name="arg1">The method's string argument.</param>
-		public static void CallVoid(AndroidJavaObject jniObject, string method, AndroidJavaObject arg0, string arg1) {
+		public static void CallVoid(AndroidJavaObject jniObject, string method, AndroidJavaObject arg0, bool arg1, string arg2) {
 			if(!Application.isEditor){
-				jniObject.Call(method, arg0, arg1);
+				jniObject.Call(method, arg0, arg1, arg2);
 				
 				checkExceptions();
 			}

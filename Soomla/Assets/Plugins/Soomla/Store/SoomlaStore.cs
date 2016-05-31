@@ -101,7 +101,10 @@ namespace Soomla.Store
 		/// <param name="productId">product id of the item to buy. This id is the one you set up on itunesconnect or Google Play developer console.</param>
 		/// <param name="payload">Some text you want to get back when the purchasing process is completed.</param>
 		public static void BuyMarketItem(string productId, string payload) {
-			instance._buyMarketItem(productId, payload);
+			instance._buyMarketItem(productId, false, payload);
+		}
+		public static void BuyMarketItem(string productId, bool isSubscription, string payload) {
+			instance._buyMarketItem(productId, isSubscription, payload);
 		}
 
 		/// <summary>
@@ -155,7 +158,7 @@ namespace Soomla.Store
 
 		protected virtual void _loadBillingService() { }
 
-		protected virtual void _buyMarketItem(string productId, string payload) {
+		protected virtual void _buyMarketItem(string productId, bool isSubscription, string payload) {
 #if UNITY_EDITOR
 			PurchasableVirtualItem item = StoreInfo.GetPurchasableItemWithProductId(productId);
 			if (item == null) {

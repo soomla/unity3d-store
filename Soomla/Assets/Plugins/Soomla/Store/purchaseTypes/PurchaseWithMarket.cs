@@ -30,7 +30,7 @@ namespace Soomla.Store
 		/// The market item associated with the item that needs to be purchased.
 		/// </summary>
 		public MarketItem MarketItem;
-		
+		public bool IsSubscription;
 		/// <summary>
 		/// Constructor.
 		/// Constructs a <c>PurchaseWithMarket</c> object by constructing a new <c>MarketItem</c> object
@@ -38,10 +38,11 @@ namespace Soomla.Store
 		/// </summary>
 		/// <param name="productId">Product id as it appears in the Market.</param>
 		/// <param name="price">Price in the Market.</param>
-		public PurchaseWithMarket (string productId, double price) :
+		public PurchaseWithMarket (string productId, double price, bool isSubscription) :
 			base()
 		{
 			this.MarketItem = new MarketItem(productId, price);
+			this.IsSubscription = isSubscription;
 		}
 		
 		/// <summary>
@@ -52,6 +53,7 @@ namespace Soomla.Store
 			base()
 		{
 			this.MarketItem = marketItem;
+			this.IsSubscription = false;
 		}
 
 		/// <summary>
@@ -70,7 +72,7 @@ namespace Soomla.Store
 			JSONObject eventJSON = new JSONObject();
 			eventJSON.AddField("itemId", AssociatedItem.ItemId);
 			StoreEvents.Instance.onItemPurchaseStarted(eventJSON.print(), true);
-			SoomlaStore.BuyMarketItem(MarketItem.ProductId, payload);
+			SoomlaStore.BuyMarketItem(MarketItem.ProductId, IsSubscription, payload);
 		}
 
 		/// <summary>
