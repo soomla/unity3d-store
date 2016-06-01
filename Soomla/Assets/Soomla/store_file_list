@@ -5,7 +5,7 @@ Assets/Plugins/iOS/Soomla/libUnityiOSStore.a
 Assets/Plugins/WP8/Soomla/IAPMock.xml
 Assets/Plugins/WP8/Soomla/wp-store.dll
 Assets/Plugins/WP8/Soomla/Placeholder/wp-store.dll
-Assets/Plugins/Soomla/Store
+Assets/Soomla/Scripts/Store
 Assets/Soomla/store_file_list
 Assets/Soomla/Editor/build-tools/Soomla_StoreRunner.py
 Assets/WebPlayerTemplates/SoomlaConfig/android/android-billing-services
