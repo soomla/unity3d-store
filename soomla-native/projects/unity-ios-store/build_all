@@ -5,6 +5,6 @@ cd $DIR
 
 rm -rf build
 
-xcodebuild -configuration Release -sdk iphoneos -project UnityiOSStore.xcodeproj -target UnityiOSStore clean build CREATING_UNIVERSAL_DIR=$PWD/build/release
+xcodebuild OTHER_CFLAGS="-fembed-bitcode" -configuration Release -sdk iphoneos -project UnityiOSStore.xcodeproj -target UnityiOSStore clean build CREATING_UNIVERSAL_DIR=$PWD/build/release
 
 cd - > /dev/null
