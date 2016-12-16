@@ -1,3 +1,6 @@
+# Looking for great devs who want maintain and moderate this project !!
+# If you want to take over... contact us at os@soom.la
+
 *This project is a part of The [SOOMLA](http://www.soom.la) Framework, which is a series of open source initiatives with a joint goal to help mobile game developers do more together. SOOMLA encourages better game design, economy modeling, social engagement, and faster development.*
 
 Haven't you ever wanted an in-app purchase one liner that looks like this ?!
