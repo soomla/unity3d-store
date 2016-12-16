@@ -88,7 +88,6 @@ namespace Soomla.Store
 
 		public void OnInfoGUI() {
 			SoomlaEditorScript.RemoveSoomlaModuleButton(frameworkVersion, currentModuleVersion, "Store");
-			SoomlaEditorScript.LatestVersionField ("unity3d-store", currentModuleVersion, "New version available!", "http://library.soom.la/fetch/unity3d-store-only/latest?cf=unity");
 			EditorGUILayout.Space();
 		}
 
