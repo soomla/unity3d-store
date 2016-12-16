@@ -151,12 +151,12 @@ namespace Soomla.Store {
 		/// Starts a purchase process in the market.
 		/// </summary>
 		/// <param name="productId">id of the item to buy.</param>
-		protected override void _buyMarketItem(string productId, string payload) {
+		protected override void _buyMarketItem(string productId, bool isSubscription, string payload) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniPurchasableItem = AndroidJNIHandler.CallStatic<AndroidJavaObject>(
 								new AndroidJavaClass("com.soomla.store.data.StoreInfo"), "getPurchasableItem", productId)) {
 				AndroidJNIHandler.CallVoid(jniSoomlaStore, "buyWithMarket", 
-				                           jniPurchasableItem.Call<AndroidJavaObject>("getPurchaseType").Call<AndroidJavaObject>("getMarketItem"), 
+				                           jniPurchasableItem.Call<AndroidJavaObject>("getPurchaseType").Call<AndroidJavaObject>("getMarketItem"), isSubscription, 
 				                           payload);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
